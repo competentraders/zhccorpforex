@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw Funds | ZHC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #0C1218;
+            --secondary-dark: #151F28;
+            --accent-green: #10b981;
+            --secondary-gold: #FFD700;
+        }
+        body { background-color: var(--primary-dark); font-family: 'Inter', sans-serif; }
+        .bg-primary-dark { background-color: var(--primary-dark); }
+        .bg-secondary-dark { background-color: var(--secondary-dark); }
+        .text-secondary-gold { color: var(--secondary-gold); }
+        .text-accent-green { color: var(--accent-green); }
+        .input-style { background-color: #0C1218; border: 1px solid #1f2937; color: white; padding: 0.75rem; border-radius: 0.5rem; transition: border-color 0.15s; }
+        .input-style:focus { border-color: var(--accent-green); outline: none; }
+        
+        /* Modal styles */
+        #withdrawalModal { backdrop-filter: blur(5px); }
+        .modal-content { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Ensure the button content is perfectly centered and fixed height */
+        #submitWithdrawal {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 52px; /* Fixed height to prevent button jump */
+        }
+        #loadingSpinner {
+            color: var(--primary-dark); /* Ensures contrast against the gold background */
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen">
+
+    <div class="max-w-4xl mx-auto px-4 py-10">
+        <h1 class="text-4xl font-extrabold mb-2 text-secondary-gold text-center">Withdraw Funds</h1>
+        <p class="text-gray-400 mb-10 text-center">Choose your preferred withdrawal method and finalize your transfer.</p>
+
+        <div class="space-y-8">
+            <!-- Withdrawal Method Selector -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button data-method="crypto" class="method-tab bg-accent-green text-primary-dark font-bold py-2 px-6 rounded-lg shadow-lg transition duration-200 hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-700">
+                    <i class="fab fa-bitcoin mr-2"></i> Crypto
+                </button>
+                <button data-method="creditCard" class="method-tab bg-gray-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-200 hover:bg-gray-700">
+                    <i class="far fa-credit-card mr-2"></i> Credit Card
+                </button>
+                <button data-method="giftCard" class="method-tab bg-gray-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-200 hover:bg-gray-700">
+                    <i class="fas fa-gift mr-2"></i> Gift Card
+                </button>
+                <button data-method="directTransfer" class="method-tab bg-gray-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-200 hover:bg-gray-700">
+                    <i class="fas fa-university mr-2"></i> Direct Transfer
+                </button>
+            </div>
+
+            <!-- Form Container -->
+            <form id="withdrawalForm" class="bg-secondary-dark p-6 sm:p-8 rounded-xl shadow-2xl space-y-6">
+
+                <!-- Crypto Withdrawal (Default) -->
+                <div id="cryptoForm" class="method-form space-y-4">
+                    <h2 class="text-xl font-bold text-accent-green border-b border-gray-700 pb-2 mb-4">Crypto Withdrawal</h2>
+                    <div>
+                        <label for="cryptoAmount" class="block text-sm font-medium text-gray-400 mb-1">Amount ($USD)</label>
+                        <input type="number" id="cryptoAmount" placeholder="Min $50" class="w-full input-style" required>
+                    </div>
+                    <div>
+                        <label for="cryptoCoin" class="block text-sm font-medium text-gray-400 mb-1">Select Coin</label>
+                        <select id="cryptoCoin" class="w-full input-style" required>
+                            <option value="BTC">Bitcoin (BTC)</option>
+                            <option value="TRX">Tron (TRX)</option>
+                            <option value="USDT">Tether (USDT)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="cryptoAddress" class="block text-sm font-medium text-gray-400 mb-1">Recipient Wallet Address</label>
+                        <input type="text" id="cryptoAddress" placeholder="Enter wallet address" class="w-full input-style" required>
+                    </div>
+                </div>
+
+                <!-- Credit Card Withdrawal -->
+                <div id="creditCardForm" class="method-form space-y-4 hidden">
+                    <h2 class="text-xl font-bold text-accent-green border-b border-gray-700 pb-2 mb-4">Credit Card Withdrawal</h2>
+                    <div>
+                        <label for="cardAmount" class="block text-sm font-medium text-gray-400 mb-1">Amount ($USD)</label>
+                        <input type="number" id="cardAmount" placeholder="Min $100" class="w-full input-style" required>
+                    </div>
+                    <div>
+                        <label for="cardNumber" class="block text-sm font-medium text-gray-400 mb-1">Card Number</label>
+                        <input type="text" id="cardNumber" placeholder="xxxx xxxx xxxx xxxx" class="w-full input-style" required>
+                    </div>
+                    <div class="flex space-x-4">
+                        <div class="flex-1">
+                            <label for="cardExpiry" class="block text-sm font-medium text-gray-400 mb-1">Expiry (MM/YY)</label>
+                            <input type="text" id="cardExpiry" placeholder="01/25" class="w-full input-style" required>
+                        </div>
+                        <div class="flex-1">
+                            <label for="cardCVC" class="block text-sm font-medium text-gray-400 mb-1">CVC</label>
+                            <input type="text" id="cardCVC" placeholder="123" class="w-full input-style" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gift Card Withdrawal -->
+                <div id="giftCardForm" class="method-form space-y-4 hidden">
+                    <h2 class="text-xl font-bold text-accent-green border-b border-gray-700 pb-2 mb-4">Gift Card Withdrawal</h2>
+                    <div>
+                        <label for="giftAmount" class="block text-sm font-medium text-gray-400 mb-1">Amount ($USD)</label>
+                        <input type="number" id="giftAmount" placeholder="Min $25" class="w-full input-style" required>
+                    </div>
+                    <div>
+                        <label for="giftCardType" class="block text-sm font-medium text-gray-400 mb-1">Gift Card Type</label>
+                        <select id="giftCardType" class="w-full input-style" required>
+                            <option value="Amazon">Amazon</option>
+                            <option value="Visa">Visa Prepaid</option>
+                            <option value="GooglePlay">Google Play</option>
+                            <option value="Apple">Apple/iTunes</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="giftRecipientEmail" class="block text-sm font-medium text-gray-400 mb-1">Recipient Email</label>
+                        <input type="email" id="giftRecipientEmail" placeholder="email@example.com" class="w-full input-style" required>
+                    </div>
+                </div>
+
+                <!-- Direct Transfer Withdrawal -->
+                <div id="directTransferForm" class="method-form space-y-4 hidden">
+                    <h2 class="text-xl font-bold text-accent-green border-b border-gray-700 pb-2 mb-4">Direct Bank Transfer</h2>
+                    <div>
+                        <label for="bankAmount" class="block text-sm font-medium text-gray-400 mb-1">Amount ($USD)</label>
+                        <input type="number" id="bankAmount" placeholder="Min $500" class="w-full input-style" required>
+                    </div>
+                    <div>
+                        <label for="bankName" class="block text-sm font-medium text-gray-400 mb-1">Bank Name</label>
+                        <input type="text" id="bankName" placeholder="e.g., Chase Bank" class="w-full input-style" required>
+                    </div>
+                    <div>
+                        <label for="accountNumber" class="block text-sm font-medium text-gray-400 mb-1">Account Number / IBAN</label>
+                        <input type="text" id="accountNumber" placeholder="Enter account details" class="w-full input-style" required>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitWithdrawal" class="w-full py-3 mt-6 bg-secondary-gold text-primary-dark font-extrabold rounded-lg shadow-xl hover:bg-yellow-400 transition duration-150 relative disabled:opacity-75 disabled:cursor-not-allowed">
+                    <span id="buttonText" class="text-lg font-bold">Submit Withdrawal</span>
+                    <!-- New Tailwind Native SVG Spinner -->
+                    <svg id="loadingSpinner" class="animate-spin h-7 w-7 hidden" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Modal for Confirmation/Error -->
+    <div id="withdrawalModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center p-4 z-50">
+        <div class="modal-content bg-secondary-dark p-6 rounded-xl shadow-2xl max-w-sm w-full text-center border-t-4 border-red-500">
+            <i class="fas fa-exclamation-triangle text-red-500 text-4xl mb-4"></i>
+            <h3 class="text-xl font-bold text-white mb-2">Withdrawal Failed</h3>
+            <!-- CONFIRMED ERROR MESSAGE -->
+            <p id="modalMessage" class="text-gray-300 mb-6">not enough funds please deposit</p>
+            <button onclick="document.getElementById('withdrawalModal').classList.add('hidden')" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('withdrawalForm');
+            const submitButton = document.getElementById('submitWithdrawal');
+            const buttonText = document.getElementById('buttonText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const modal = document.getElementById('withdrawalModal');
+            const methodTabs = document.querySelectorAll('.method-tab');
+            const methodForms = document.querySelectorAll('.method-form');
+
+            // --- Tab Switching Logic (Omitted for brevity, kept functional) ---
+            methodTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const method = tab.getAttribute('data-method');
+                    
+                    methodTabs.forEach(t => {
+                        t.classList.remove('bg-accent-green', 'text-primary-dark');
+                        t.classList.add('bg-gray-600', 'text-white');
+                    });
+                    tab.classList.remove('bg-gray-600', 'text-white');
+                    tab.classList.add('bg-accent-green', 'text-primary-dark');
+
+                    methodForms.forEach(f => f.classList.add('hidden'));
+                    document.getElementById(method + 'Form').classList.remove('hidden');
+                });
+            });
+
+            // --- Submission and Rotation Logic (10 seconds) ---
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // 1. Enter Loading State
+                submitButton.disabled = true;
+                
+                // Hide Text, Show Big, Rotating Spinner (using native Tailwind animation)
+                buttonText.classList.add('hidden');
+                loadingSpinner.classList.remove('hidden');
+
+                // 2. Wait 10 seconds (Simulation Time)
+                await new Promise(resolve => setTimeout(resolve, 10000));
+
+                // 3. Exit Loading State
+                loadingSpinner.classList.add('hidden');
+                buttonText.classList.remove('hidden');
+                submitButton.disabled = false;
+
+                // 4. Display Error Message
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+        });
+    </script>
+</body>
+</html>
+

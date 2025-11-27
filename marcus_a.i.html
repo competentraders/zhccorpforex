@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcus AI Trading Robot | ZHC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #0C1218;
+            --secondary-dark: #151F28;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --secondary-gold: #FFD700;
+        }
+        body { background-color: var(--primary-dark); font-family: 'Inter', sans-serif; }
+        .bg-primary-dark { background-color: var(--primary-dark); }
+        .bg-secondary-dark { background-color: var(--secondary-dark); }
+        .text-secondary-gold { color: var(--secondary-gold); }
+        .text-accent-green { color: var(--accent-green); }
+        .text-accent-red { color: var(--accent-red); }
+        .chart-container { min-height: 400px; height: 70vh; max-height: 800px; }
+    </style>
+</head>
+<body class="text-white min-h-screen">
+
+    <div class="px-4 py-6 sm:px-6 lg:px-8 max-w-full mx-auto">
+        <h1 class="text-3xl font-extrabold mb-2 text-secondary-gold text-center">Marcus AI Trading Robot</h1>
+        <p class="text-gray-400 mb-6 text-center border-b border-gray-700 pb-3">Automated, self-adjusting trading powered by Artificial Intelligence.</p>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Main Chart Area (Col 1 & 2) -->
+            <div class="lg:col-span-2 bg-secondary-dark p-4 rounded-xl shadow-2xl">
+                <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
+                    <h2 id="currentAssetDisplay" class="text-2xl font-bold text-accent-green">BTC/USD (AI Primary Asset)</h2>
+                    <div id="priceStatus" class="flex items-center space-x-2 text-xl font-mono">
+                        <span id="currentPrice" class="text-white">65000.00</span>
+                        <span id="priceChange" class="text-accent-green">+0.50%</span>
+                    </div>
+                </div>
+
+                <div class="chart-container relative">
+                    <canvas id="tradingChart" class="w-full h-full rounded-lg bg-primary-dark border border-gray-700"></canvas>
+                </div>
+                
+                <p class="text-sm text-gray-500 mt-4 text-center">Charts for BTC, ETH, SOL, BNB, XRP, and ADA are running in the background.</p>
+            </div>
+
+            <!-- AI Status & Trade Log (Col 3) -->
+            <div class="lg:col-span-1 bg-secondary-dark p-6 rounded-xl shadow-2xl space-y-4">
+                <div class="text-center pb-2 border-b border-gray-700">
+                    <i class="fas fa-robot text-secondary-gold text-4xl mb-2 animate-pulse"></i>
+                    <h2 class="text-xl font-bold text-secondary-gold">AI Trade Log</h2>
+                    <p id="aiStatus" class="text-sm text-accent-green">Status: Analyzing Market...</p>
+                </div>
+
+                <!-- Trade History -->
+                <div class="h-[60vh] overflow-y-auto space-y-2 text-xs" id="tradeHistory">
+                    <!-- Trade entries will be inserted here by JS -->
+                    <p class="text-gray-500 text-center pt-4">Waiting for first AI signal...</p>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-gray-700">
+                    <button id="toggleAI" class="w-full py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition">
+                        <i class="fas fa-pause mr-2"></i> Stop AI Trading
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const ASSETS = [
+            { symbol: 'BTC/USD', name: 'Bitcoin', price: 65000.00, start: 65000.00, color: '#f7931a', history: [] },
+            { symbol: 'ETH/USD', name: 'Ethereum', price: 3500.00, start: 3500.00, color: '#627eea', history: [] },
+            { symbol: 'SOL/USD', name: 'Solana', price: 150.00, start: 150.00, color: '#9945ff', history: [] },
+            { symbol: 'BNB/USD', name: 'Binance Coin', price: 600.00, start: 600.00, color: '#f3ba2f', history: [] },
+            { symbol: 'XRP/USD', name: 'Ripple', price: 0.5200, start: 0.5200, color: '#0062a8', history: [] },
+            { symbol: 'ADA/USD', name: 'Cardano', price: 0.4500, start: 0.4500, color: '#0033ad', history: [] },
+        ];
+        const MAX_CHART_POINTS = 100;
+        const AI_TRADING_ASSET = ASSETS[0]; // Marcus AI focuses on BTC
+        const AI_WINDOW_SIZE = 20; // Look back 20 points for average
+        const AI_THRESHOLD_PERCENT = 0.05; // 0.05% deviation from average to trigger trade
+
+        // --- State ---
+        let currentAsset = AI_TRADING_ASSET;
+        let chartContext, chartCanvas;
+        let tradeCounter = 1;
+        let isAITrading = true;
+        let openTrades = [];
+
+        // --- Core Simulation Functions ---
+
+        function initializeChart() {
+            chartCanvas = document.getElementById('tradingChart');
+            if (!chartCanvas) return;
+            chartContext = chartCanvas.getContext('2d');
+            
+            function resizeCanvas() {
+                const rect = chartCanvas.parentElement.getBoundingClientRect();
+                chartCanvas.width = rect.width;
+                chartCanvas.height = rect.height;
+                drawChart();
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas(); 
+            
+            // Initialize data points for all assets
+            ASSETS.forEach(asset => {
+                for (let i = 0; i < MAX_CHART_POINTS; i++) {
+                    asset.history.push(asset.price + (Math.random() - 0.5) * 0.0001);
+                }
+            });
+            
+            // Start the simulation loop (fast update for smoothness)
+            setInterval(updateSimulation, 100); 
+            // Start the AI trading logic (slower, simulates signal delay)
+            setInterval(aiTradingLogic, 3000); 
+
+            document.getElementById('toggleAI').addEventListener('click', toggleAITrading);
+        }
+
+        function updateSimulation() {
+            ASSETS.forEach(asset => {
+                // Random walk with slight noise
+                const volatility = asset.start > 100 ? 5 : 0.001; 
+                const change = (Math.random() - 0.5) * volatility; 
+                
+                asset.price += change;
+                
+                // Add new point and trim history
+                asset.history.push(asset.price);
+                if (asset.history.length > MAX_CHART_POINTS) {
+                    asset.history.shift();
+                }
+            });
+
+            // Update UI elements for the displayed asset
+            const newPrice = currentAsset.price;
+            const lastPrice = currentAsset.history[currentAsset.history.length - 2] || currentAsset.start;
+
+            // Update price and change display
+            document.getElementById('currentPrice').textContent = newPrice.toFixed(newPrice > 1 ? 2 : 4);
+            const percentChange = (newPrice - lastPrice) / lastPrice * 100;
+            const priceChangeEl = document.getElementById('priceChange');
+            priceChangeEl.textContent = `${percentChange.toFixed(2)}%`;
+            
+            if (percentChange > 0) {
+                priceChangeEl.className = 'text-xl font-mono text-accent-green';
+            } else if (percentChange < 0) {
+                priceChangeEl.className = 'text-xl font-mono text-accent-red';
+            } else {
+                priceChangeEl.className = 'text-xl font-mono text-white';
+            }
+            
+            drawChart();
+        }
+
+        function drawChart() {
+            if (!chartContext || !chartCanvas || currentAsset.history.length === 0) return;
+
+            chartContext.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+            
+            // Scaling calculations
+            const prices = currentAsset.history;
+            const minPrice = Math.min(...prices.slice(10));
+            const maxPrice = Math.max(...prices.slice(10));
+            const range = maxPrice - minPrice;
+            
+            const paddingY = chartCanvas.height * 0.1;
+            const effectiveHeight = chartCanvas.height - 2 * paddingY;
+            const stepX = chartCanvas.width / (prices.length - 1);
+            
+            // Draw Grid/Labels
+            chartContext.fillStyle = '#374151'; 
+            chartContext.font = '10px Inter, sans-serif';
+            for (let i = 0; i <= 4; i++) {
+                const y = paddingY + i * (effectiveHeight / 4);
+                chartContext.beginPath();
+                chartContext.moveTo(0, y);
+                chartContext.lineTo(chartCanvas.width, y);
+                chartContext.strokeStyle = '#1f2937'; 
+                chartContext.stroke();
+                const price = maxPrice - (i * range / 4);
+                chartContext.fillText(price.toFixed(currentAsset.price > 1 ? 2 : 4), 5, y - 2);
+            }
+
+            // Draw the Line and Gradient
+            chartContext.beginPath();
+            
+            prices.forEach((price, index) => {
+                let y = effectiveHeight - ((price - minPrice) / range) * effectiveHeight + paddingY;
+                if (range < 0.00001) y = chartCanvas.height / 2;
+
+                const x = index * stepX;
+
+                if (index === 0) {
+                    chartContext.moveTo(x, y);
+                } else {
+                    chartContext.lineTo(x, y);
+                }
+            });
+            
+            chartContext.save(); 
+            chartContext.strokeStyle = currentAsset.color || '#10b981';
+            chartContext.lineWidth = 2;
+            chartContext.stroke();
+            chartContext.restore();
+            
+            // Draw the latest price marker
+            let lastY = effectiveHeight - ((prices[prices.length - 1] - minPrice) / range) * effectiveHeight + paddingY;
+            if (range < 0.00001) lastY = chartCanvas.height / 2;
+
+            chartContext.beginPath();
+            chartContext.arc(chartCanvas.width - 1, lastY, 5, 0, Math.PI * 2, false);
+            chartContext.fillStyle = '#FFD700'; // secondary-gold
+            chartContext.shadowColor = '#FFD700';
+            chartContext.shadowBlur = 8;
+            chartContext.fill();
+            chartContext.shadowBlur = 0;
+        }
+
+        // --- AI Trading Logic ---
+        
+        function getAverage(history) {
+            const relevantHistory = history.slice(-AI_WINDOW_SIZE);
+            if (relevantHistory.length === 0) return 0;
+            const sum = relevantHistory.reduce((a, b) => a + b, 0);
+            return sum / relevantHistory.length;
+        }
+
+        function aiTradingLogic() {
+            if (!isAITrading) return;
+            const tradeHistoryEl = document.getElementById('tradeHistory');
+            const currentPrice = AI_TRADING_ASSET.price;
+            const history = AI_TRADING_ASSET.history;
+            const avgPrice = getAverage(history);
+            const deviation = ((currentPrice - avgPrice) / avgPrice) * 100;
+
+            // 1. Check for Sell Signal (Price significantly higher than average)
+            if (deviation > AI_THRESHOLD_PERCENT) {
+                if (openTrades.filter(t => t.type === 'BUY').length > 0) {
+                    // Close a long trade (take profit/stop loss)
+                    closeTrade('BUY', currentPrice);
+                    document.getElementById('aiStatus').textContent = 'Status: Closing LONG position for profit.';
+                } else if (openTrades.filter(t => t.type === 'SELL').length === 0 && Math.random() < 0.8) {
+                    // Open a new short trade
+                    executeTrade('SELL', currentPrice);
+                    document.getElementById('aiStatus').textContent = 'Status: High deviation detected. Entering SHORT.';
+                }
+            } 
+            // 2. Check for Buy Signal (Price significantly lower than average)
+            else if (deviation < -AI_THRESHOLD_PERCENT) {
+                 if (openTrades.filter(t => t.type === 'SELL').length > 0) {
+                    // Close a short trade
+                    closeTrade('SELL', currentPrice);
+                    document.getElementById('aiStatus').textContent = 'Status: Closing SHORT position.';
+                } else if (openTrades.filter(t => t.type === 'BUY').length === 0 && Math.random() < 0.8) {
+                    // Open a new long trade
+                    executeTrade('BUY', currentPrice);
+                    document.getElementById('aiStatus').textContent = 'Status: Low deviation detected. Entering LONG.';
+                }
+            } 
+            // 3. Maintenance/Random Close (Simulate stop loss/take profit)
+            else if (openTrades.length > 0 && Math.random() < 0.15) {
+                // Randomly close an open trade 
+                const tradeToClose = openTrades[0];
+                closeTrade(tradeToClose.type, currentPrice, true);
+                document.getElementById('aiStatus').textContent = 'Status: Executing Risk Management Protocol.';
+            } else {
+                 document.getElementById('aiStatus').textContent = `Status: Monitoring Market... (Deviation: ${deviation.toFixed(3)}%)`;
+            }
+            
+            // Update Open Trades List
+            updateOpenTradesDisplay();
+        }
+
+        function executeTrade(type, entryPrice) {
+            const trade = {
+                id: tradeCounter++,
+                type: type, // 'BUY' or 'SELL'
+                asset: AI_TRADING_ASSET.symbol,
+                entryPrice: entryPrice,
+                entryTime: new Date().toLocaleTimeString(),
+                units: 0.05 + Math.random() * 0.15 // Random units
+            };
+            openTrades.push(trade);
+            logTrade(trade.id, type, 'OPEN', entryPrice);
+        }
+
+        function closeTrade(typeToClose, exitPrice, isRandomClose = false) {
+            const index = openTrades.findIndex(t => t.type === typeToClose);
+            if (index === -1) return;
+
+            const trade = openTrades.splice(index, 1)[0];
+            const profit = (trade.type === 'BUY' ? (exitPrice - trade.entryPrice) : (trade.entryPrice - exitPrice)) * trade.units;
+            
+            logTrade(trade.id, trade.type, 'CLOSED', exitPrice, profit, isRandomClose);
+        }
+
+        function logTrade(id, type, status, price, profit = 0, isMaintenance = false) {
+            const tradeHistoryEl = document.getElementById('tradeHistory');
+            const isClosing = status === 'CLOSED';
+            const profitColor = profit >= 0 ? 'text-accent-green' : 'text-accent-red';
+            const actionColor = type === 'BUY' ? 'bg-accent-green' : 'bg-accent-red';
+            const logType = isClosing ? 'Trade Closed' : 'Trade Opened';
+
+            // Create log entry element
+            const logEntry = document.createElement('div');
+            logEntry.className = `p-2 rounded-lg shadow-md border ${isClosing ? 'border-gray-600' : 'border-secondary-gold'} transition-opacity duration-300`;
+            logEntry.innerHTML = `
+                <div class="flex justify-between items-center text-xs font-mono">
+                    <span class="${actionColor} text-primary-dark font-bold px-2 py-0.5 rounded-full">${type}</span>
+                    <span class="text-gray-400">${logType} #${id}</span>
+                </div>
+                <div class="mt-1 flex justify-between text-white">
+                    <span class="text-gray-400">@ ${price.toFixed(AI_TRADING_ASSET.price > 1 ? 2 : 4)}</span>
+                    ${isClosing ? `<span class="${profitColor} font-bold">${profit >= 0 ? '+' : ''}$${profit.toFixed(2)}</span>` : ''}
+                </div>
+                ${isMaintenance && isClosing ? '<p class="text-xs text-yellow-500 mt-1">Maintenance Close/Simulated Stop Loss</p>' : ''}
+            `;
+            
+            // Remove initial placeholder if present
+            if (tradeHistoryEl.querySelector('p.text-gray-500')) {
+                tradeHistoryEl.innerHTML = '';
+            }
+
+            tradeHistoryEl.prepend(logEntry); // Add to the top
+            
+            // Remove oldest entries to prevent overflow/performance issues
+            while (tradeHistoryEl.children.length > 50) {
+                tradeHistoryEl.removeChild(tradeHistoryEl.lastChild);
+            }
+        }
+        
+        function updateOpenTradesDisplay() {
+            // Placeholder for displaying open trades (currently just in the log)
+            // If we had a dedicated table for open positions, we would update it here.
+        }
+
+        function toggleAITrading() {
+            isAITrading = !isAITrading;
+            const button = document.getElementById('toggleAI');
+            const statusEl = document.getElementById('aiStatus');
+
+            if (isAITrading) {
+                button.classList.remove('bg-green-600');
+                button.classList.add('bg-red-600');
+                button.innerHTML = '<i class="fas fa-pause mr-2"></i> Stop AI Trading';
+                statusEl.innerHTML = 'Status: AI Resumed Analysis...';
+                statusEl.classList.remove('text-red-500');
+                statusEl.classList.add('text-accent-green');
+            } else {
+                button.classList.remove('bg-red-600');
+                button.classList.add('bg-green-600');
+                button.innerHTML = '<i class="fas fa-play mr-2"></i> Start AI Trading';
+                statusEl.innerHTML = 'Status: AI Paused.';
+                statusEl.classList.remove('text-accent-green');
+                statusEl.classList.add('text-red-500');
+            }
+        }
+
+        window.onload = initializeChart;
+    </script>
+</body>
+</html>
+

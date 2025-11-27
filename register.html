@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Zhee Hong FX</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#111827',
+                        'accent-green': '#10b981',
+                        'secondary-gold': '#FFD700',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .form-input {
+            appearance: none;
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            background-color: #1f2937;
+            color: white;
+            transition: all 0.15s;
+        }
+        .form-input:focus {
+            outline: none;
+            ring: 2px;
+            ring-offset: 2px;
+            --tw-ring-color: #FFD700;
+            border-color: #FFD700;
+        }
+    </style>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen font-sans py-12">
+
+    <div class="w-full max-w-2xl bg-gray-900 rounded-xl shadow-2xl p-6 sm:p-10 border-t-4 border-accent-green">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white tracking-tight">
+                Start Your Guaranteed Profit Journey
+            </h1>
+            <p class="text-gray-400 mt-2">Create your elite trading account today.</p>
+        </div>
+
+        <form id="registerForm" onsubmit="handleRegistration(event)">
+            <div class="space-y-6">
+
+                <!-- Name Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="firstName" class="block text-sm font-medium text-gray-300">First Name <span class="text-red-500">*</span></label>
+                        <input id="firstName" type="text" required class="form-input">
+                    </div>
+                    <div>
+                        <label for="lastName" class="block text-sm font-medium text-gray-300">Last Name <span class="text-red-500">*</span></label>
+                        <input id="lastName" type="text" required class="form-input">
+                    </div>
+                    <div>
+                        <label for="otherName" class="block text-sm font-medium text-gray-300">Other Name (Optional)</label>
+                        <input id="otherName" type="text" class="form-input">
+                    </div>
+                </div>
+
+                <!-- Email Fields -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300">Email Address <span class="text-red-500">*</span></label>
+                    <input id="email" type="email" required class="form-input">
+                </div>
+                <div>
+                    <label for="confirmEmail" class="block text-sm font-medium text-gray-300">Confirm Email Address <span class="text-red-500">*</span></label>
+                    <input id="confirmEmail" type="email" required class="form-input">
+                </div>
+
+                <!-- Password Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-300">Password <span class="text-red-500">*</span></label>
+                        <input id="password" type="password" required class="form-input">
+                    </div>
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-300">Confirm Password <span class="text-red-500">*</span></label>
+                        <input id="confirmPassword" type="password" required class="form-input">
+                    </div>
+                </div>
+
+                <!-- Nationality & Phone -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="nationality" class="block text-sm font-medium text-gray-300">Nationality <span class="text-red-500">*</span></label>
+                        <select id="nationality" required class="form-input"></select>
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-300">Phone Number <span class="text-red-500">*</span></label>
+                        <div class="flex">
+                            <input id="countryCode" type="text" value="+65" readonly class="w-20 form-input mr-2 bg-gray-700 cursor-not-allowed text-gray-400">
+                            <input id="phone" type="tel" required class="flex-grow form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gender -->
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-300">Gender <span class="text-red-500">*</span></label>
+                    <select id="gender" required class="form-input">
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Prefer not to say</option>
+                    </select>
+                </div>
+
+                <!-- Security Verification Field -->
+                <div class="bg-gray-700 p-4 rounded-lg border border-secondary-gold">
+                    <label class="block text-sm font-medium text-secondary-gold mb-2">Security Verification</label>
+                    <div class="flex items-center space-x-4">
+                        <div id="securityCodeDisplay" class="text-2xl font-extrabold text-accent-green bg-gray-900 px-4 py-2 rounded-lg w-32 text-center select-none">123456</div>
+                        <input id="securityCodeInput" type="text" placeholder="Enter code" maxlength="6" class="form-input w-40">
+                        <button type="button" onclick="verifySecurityCode()" id="verifyButton" class="flex-shrink-0 bg-gray-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-150">
+                            Verify
+                        </button>
+                        <span id="verificationStatus" class="text-sm font-semibold">Pending...</span>
+                    </div>
+                </div>
+
+                <!-- Submission Button -->
+                <div>
+                    <button type="submit" id="submitButton" disabled class="w-full flex justify-center py-3 px-4 rounded-lg shadow-sm text-sm font-medium bg-gray-600 text-gray-300 cursor-not-allowed">
+                        Create Account
+                    </button>
+                    <p id="errorMessage" class="mt-3 text-center text-sm text-red-500 font-medium hidden">Please complete all fields and verify the security code.</p>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // --- Data Structure for Nationality Select ---
+        const countryData = [
+            // Asia
+            { name: "Singapore (SGD)", code: "+65", continent: "Asia" },
+            { name: "Japan (JPY)", code: "+81", continent: "Asia" },
+            { name: "China (CNY)", code: "+86", continent: "Asia" },
+            { name: "India (INR)", code: "+91", continent: "Asia" },
+            { name: "UAE (AED)", code: "+971", continent: "Asia" },
+            // Europe
+            { name: "Germany (EUR)", code: "+49", continent: "Europe" },
+            { name: "UK (GBP)", code: "+44", continent: "Europe" },
+            { name: "France (EUR)", code: "+33", continent: "Europe" },
+            { name: "Switzerland (CHF)", code: "+41", continent: "Europe" },
+            // Americas (Atlantic continent is ambiguous, using The Americas for clarity)
+            { name: "USA (USD)", code: "+1", continent: "Americas" },
+            { name: "Canada (CAD)", code: "+1", continent: "Americas" },
+            { name: "Brazil (BRL)", code: "+55", continent: "Americas" },
+            // Africa
+            { name: "South Africa (ZAR)", code: "+27", continent: "Africa" },
+            { name: "Nigeria (NGN)", code: "+234", continent: "Africa" },
+            // Oceania
+            { name: "Australia (AUD)", code: "+61", continent: "Oceania" },
+        ];
+        
+        // This simulates a 'backend' storage for the registered user credentials.
+        // It is defined globally in the script scope so the login page can "access" it.
+        // In a real environment, this data would be stored in a database.
+        let __registered_user_data = {}; 
+        let currentSecurityCode = '';
+        let isCodeVerified = false;
+
+        // --- Utility Functions ---
+
+        function generateSecurityCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        function updateSecurityCode() {
+            currentSecurityCode = generateSecurityCode();
+            document.getElementById('securityCodeDisplay').textContent = currentSecurityCode;
+            
+            // Reset verification status
+            isCodeVerified = false;
+            document.getElementById('verificationStatus').textContent = 'Pending...';
+            document.getElementById('verificationStatus').className = 'text-sm font-semibold text-gray-400';
+            document.getElementById('submitButton').disabled = true;
+            document.getElementById('submitButton').className = 'w-full flex justify-center py-3 px-4 rounded-lg shadow-sm text-sm font-medium bg-gray-600 text-gray-300 cursor-not-allowed';
+            document.getElementById('securityCodeInput').value = '';
+            
+            console.log('New Security Code:', currentSecurityCode);
+        }
+
+        function verifySecurityCode() {
+            const inputCode = document.getElementById('securityCodeInput').value;
+            const statusElement = document.getElementById('verificationStatus');
+            const submitButton = document.getElementById('submitButton');
+
+            if (inputCode === currentSecurityCode) {
+                isCodeVerified = true;
+                statusElement.textContent = 'Verified!';
+                statusElement.className = 'text-sm font-semibold text-accent-green';
+                
+                // Enable button and apply active styling
+                submitButton.disabled = false;
+                submitButton.className = 'w-full flex justify-center py-3 px-4 rounded-lg shadow-sm text-sm font-medium text-gray-900 bg-secondary-gold hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-gold transition duration-150';
+            } else {
+                isCodeVerified = false;
+                statusElement.textContent = 'Invalid Code. Try again.';
+                statusElement.className = 'text-sm font-semibold text-accent-red';
+                
+                // Disable button and apply disabled styling
+                submitButton.disabled = true;
+                submitButton.className = 'w-full flex justify-center py-3 px-4 rounded-lg shadow-sm text-sm font-medium bg-gray-600 text-gray-300 cursor-not-allowed';
+            }
+        }
+
+        function populateNationalityDropdown() {
+            const select = document.getElementById('nationality');
+            select.innerHTML = '<option value="" disabled selected>Select Nationality</option>';
+
+            const continents = [...new Set(countryData.map(item => item.continent))];
+            
+            continents.forEach(continent => {
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = continent;
+                
+                countryData.filter(item => item.continent === continent).forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.name;
+                    option.textContent = `${country.name} (${country.code})`;
+                    optgroup.appendChild(option);
+                });
+                select.appendChild(optgroup);
+            });
+
+            // Set default phone code to Singapore (+65)
+            select.addEventListener('change', (e) => {
+                const selectedCountryName = e.target.value;
+                const country = countryData.find(c => c.name === selectedCountryName.split(' (')[0]);
+                if (country) {
+                    document.getElementById('countryCode').value = country.code;
+                }
+            });
+        }
+
+        // --- Core Validation and Submission ---
+        function handleRegistration(event) {
+            event.preventDefault(); // Stop default form submission
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.classList.add('hidden');
+
+            const email = document.getElementById('email').value;
+            const confirmEmail = document.getElementById('confirmEmail').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // 1. Check required fields
+            const requiredFields = ['firstName', 'lastName', 'email', 'confirmEmail', 'password', 'confirmPassword', 'nationality', 'phone', 'gender'];
+            const allFilled = requiredFields.every(id => document.getElementById(id).value.trim() !== '');
+
+            if (!allFilled) {
+                errorElement.textContent = 'All mandatory fields must be filled.';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            // 2. Check email match
+            if (email !== confirmEmail) {
+                errorElement.textContent = 'Email and Confirm Email must match.';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            // 3. Check password match
+            if (password !== confirmPassword) {
+                errorElement.textContent = 'Password and Confirm Password must match.';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            // 4. Check security verification
+            if (!isCodeVerified) {
+                errorElement.textContent = 'Please successfully verify the security code.';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+            
+            // --- SIMULATED SUCCESSFUL REGISTRATION ---
+            
+            // Store credentials globally for the login page to validate against
+            // This is the simulation of the backend database storage
+            if (typeof window.__registered_user_data === 'undefined') {
+                window.__registered_user_data = {};
+            }
+            window.__registered_user_data[email] = {
+                password: password,
+                firstName: document.getElementById('firstName').value,
+                phone: document.getElementById('countryCode').value + document.getElementById('phone').value,
+                isLoggedIn: true 
+            };
+            
+            console.log("Registration Successful. Stored Data:", window.__registered_user_data[email]);
+
+            // Redirect to the dashboard page
+            window.location.href = 'Dashboard_forex.html';
+        }
+
+        // --- Initialization on Load ---
+        window.onload = function() {
+            populateNationalityDropdown();
+            updateSecurityCode(); // Initial code generation
+            setInterval(updateSecurityCode, 20000); // Change code every 20 seconds
+        };
+    </script>
+
+</body>
+</html>
+

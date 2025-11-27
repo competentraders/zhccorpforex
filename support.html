@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Center | ZHC Corp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #0C1218;
+            --secondary-dark: #1F2937; /* Slightly lighter gray for contrast */
+            --accent-green: #34D399; /* Brighter green */
+            --secondary-gold: #FCD34D; /* Brighter gold/yellow */
+            --whatsapp-bg: #E0E7FF; /* Light blue/gray background for chat area */
+            --chat-bubble-user: #10B981; /* Primary green for user */
+            --chat-bubble-bot: #F9FAFB; /* Off-white for bot */
+        }
+        body { 
+            background-color: var(--primary-dark); 
+            font-family: 'Inter', sans-serif; 
+        }
+        .card-glow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 0 40px -10px rgba(52, 211, 153, 0.2);
+            transition: all 0.3s ease-in-out;
+        }
+        .card-glow:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 0 60px -5px rgba(52, 211, 153, 0.4);
+        }
+
+        /* Chat Specifics */
+        .chat-container { height: 75vh; max-height: 800px; }
+        #chatMessages {
+            overflow-y: auto;
+            background-color: var(--whatsapp-bg); 
+            background-image: url('https://placehold.co/600x400/F3F4F6/10B981?text=ZHC+Support+Pattern'); 
+            flex-grow: 1;
+        }
+        .bubble-bot {
+            background-color: var(--chat-bubble-bot);
+            color: #1F2937;
+            border-radius: 1.5rem 1.5rem 1.5rem 0.5rem;
+            max-width: 80%;
+            align-self: flex-start;
+        }
+        .bubble-user {
+            background-color: var(--chat-bubble-user);
+            color: white;
+            border-radius: 1.5rem 1.5rem 0.5rem 1.5rem;
+            max-width: 80%;
+            align-self: flex-end;
+        }
+        .float-button {
+            background-color: var(--accent-green);
+        }
+
+        @media (max-width: 640px) {
+            .chat-container { height: 80vh; }
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen">
+
+    <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <header class="text-center mb-16">
+            <h1 class="text-5xl font-extrabold mb-4 text-secondary-gold">Dedicated Support Center</h1>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto">Get instant answers from our AI ChatBot or contact a human specialist directly via our dedicated email channels.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            
+            <!-- Contact Information Card (1/3 width on desktop) -->
+            <div class="lg:col-span-1 bg-secondary-dark p-8 rounded-3xl card-glow h-full">
+                <h2 class="text-3xl font-bold border-b border-gray-700 pb-4 mb-6 text-accent-green">Direct Contact & Resources</h2>
+
+                <!-- Email List -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4 text-white"><i class="fas fa-headset mr-2 text-secondary-gold"></i> Email Support Channels</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="p-3 bg-gray-800 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center border border-gray-700">
+                            <span class="font-medium text-sm">General Inquiries:</span>
+                            <span class="text-sm font-mono text-accent-green mt-1 sm:mt-0">imarket247weekly@gmail.com</span>
+                        </li>
+                        <li class="p-3 bg-gray-800 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center border border-gray-700">
+                            <span class="font-medium text-sm">Executive / CEO Office:</span>
+                            <span class="text-sm font-mono text-accent-green mt-1 sm:mt-0">marcuszeeleehong@gmail.com</span>
+                        </li>
+                        <li class="p-3 bg-gray-800 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center border border-gray-700">
+                            <span class="font-medium text-sm">Asia Pacific Desk:</span>
+                            <span class="text-sm font-mono text-accent-green mt-1 sm:mt-0">visitasia53@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Other Links -->
+                <div class="pt-6 border-t border-gray-700">
+                    <h3 class="text-xl font-semibold mb-4 text-white"><i class="fas fa-book-open mr-2 text-secondary-gold"></i> Self-Service</h3>
+                    <a href="#" class="block text-gray-400 hover:text-accent-green transition font-medium"><i class="fas fa-file-contract mr-2"></i> Terms & Documentation</a>
+                    <a href="#" class="block text-gray-400 hover:text-accent-green transition mt-2 font-medium"><i class="fas fa-code-branch mr-2"></i> API Status & Changelog</a>
+                </div>
+            </div>
+
+            <!-- WhatsApp Simulator Chatbot (2/3 width on desktop) -->
+            <div id="chatbotSection" class="lg:col-span-2 bg-secondary-dark rounded-3xl card-glow flex flex-col chat-container overflow-hidden">
+                <!-- Chat Header -->
+                <div class="bg-accent-green p-5 flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fab fa-whatsapp text-3xl text-accent-green"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-extrabold text-white">ZHC ChatBot (AI Assistant)</h2>
+                        <p class="text-sm text-white/90">Online 24/7. Ready to answer your questions on company focus, awards, and leadership.</p>
+                    </div>
+                </div>
+
+                <!-- Chat Messages Area -->
+                <div id="chatMessages" class="flex flex-col space-y-4">
+                    <!-- Initial Bot Message -->
+                    <div class="bubble-bot p-4 shadow-lg mt-4 ml-4">
+                        Hello! Welcome to ZHC Support. I'm here to assist you with quick information about our platform, leadership, and partnerships. What can I help you find today?
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="p-4 bg-gray-800 flex items-center shadow-inner">
+                    <input type="text" id="chatInput" placeholder="Ask me about Marcus Zhee Lee Hong, our Mission, or Awards..." class="flex-grow bg-gray-900 border border-gray-700 focus:ring-2 focus:ring-accent-green text-white p-4 rounded-full transition" onkeydown="handleKey(event)">
+                    <button id="sendButton" onclick="sendMessage()" class="ml-3 w-12 h-12 rounded-full float-button hover:bg-green-600 transition flex items-center justify-center text-white text-xl">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- Floating Contact Widget Container (New implementation) -->
+    <div class="fixed bottom-6 left-6 z-50 flex items-end space-x-3">
+        <!-- Message Bubble (Hidden on extra-small screens to preserve space) -->
+        <div class="hidden sm:block bg-secondary-dark p-3 rounded-xl shadow-2xl text-sm max-w-xs text-left">
+            <p class="text-white font-medium mb-1 flex items-center">
+                <i class="fas fa-headset mr-2 text-accent-green"></i> Customer Service (Woman)
+            </p>
+            <p class="text-gray-300">Hello how may we help you? Please contact <span class="text-accent-green font-mono">marcuszeeleehong@gmail.com</span></p>
+        </div>
+        
+        <!-- WhatsApp Button (Scrolls to Chatbot Section) -->
+        <a href="#chatbotSection" class="p-4 float-button text-white rounded-full shadow-2xl transition duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-accent-green/50" onclick="document.getElementById('chatInput').focus()">
+            <i class="fab fa-whatsapp text-3xl"></i>
+        </a>
+    </div>
+
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Simple Knowledge Base for the simulated chatbot
+        const knowledgeBase = {
+            'ceo': "Our CEO is Marcus Zhee Lee Hong, the founder and pioneer of our AI trading system. He has a background in Computational Finance from MIT.",
+            'marcus': "Marcus Zhee Lee Hong is the Founder and CEO. He leads our vision for institutional-grade AI trading tools for all users.",
+            'focus': "Our strategic focus is built on Core Values like Innovation, Trust & Security, Transparency, and User Empowerment.",
+            'mission': "Our mission is to empower every user with intelligent, AI-driven tools that simplify complex markets and maximize investment potential securely and ethically.",
+            'vision': "Our vision is to be the world's most trusted and indispensable AI financial platform.",
+            'sponsors': "We have three main sponsorship tiers: Apex Circle (Foundational), Quantum Alliance (R&D), and Global Connect (Outreach).",
+            'tiers': "The sponsorship tiers are Apex Circle, Quantum Alliance, and Global Connect.",
+            'awards': "Our recent awards include 'Best AI Trading Platform' (Q3 2025) and recognition as 'Top 10 Innovators in Security' (Q1 2025).",
+            'achievements': "Check the Awards page for a full timeline. We focus on excellence in AI, security, and user experience.",
+            'withdrawal': "The standard system error when you try to withdraw without enough balance is: 'not enough funds please deposit'.",
+            'partners': "We collaborate in key areas like Real-Time Data Aggregation, Blockchain Infrastructure, Institutional Liquidity, and Enterprise Cybersecurity.",
+            'who are you': "I am the ZHC Support AI, a specialized assistant built using a large language model framework, designed to give you instant information about ZHC Corp's offerings and structure.",
+            'gemini': "I am the ZHC Support AI, a specialized assistant built using a large language model framework, designed to give you instant information about ZHC Corp's offerings and structure.",
+            'default': "I'm sorry, I don't have information on that specific topic. Try asking about our CEO, mission, sponsors, or awards!",
+        };
+
+        function addMessage(text, isUser) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `p-4 shadow-lg ${isUser ? 'bubble-user ml-auto' : 'bubble-bot mr-auto'}`;
+            messageElement.textContent = text;
+            chatMessages.appendChild(messageElement);
+            
+            // Scroll to the bottom of the chat
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function getBotResponse(input) {
+            const lowerInput = input.toLowerCase().trim();
+
+            if (lowerInput.length < 3) return knowledgeBase['default'];
+
+            for (const key in knowledgeBase) {
+                if (lowerInput.includes(key)) {
+                    return knowledgeBase[key];
+                }
+            }
+            return knowledgeBase['default'];
+        }
+
+        async function sendMessage() {
+            const userText = chatInput.value;
+            if (userText === '') return;
+
+            // 1. Display user message
+            addMessage(userText, true);
+            chatInput.value = '';
+
+            // Simulate bot typing delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // 2. Generate and display bot response
+            const botResponse = getBotResponse(userText);
+            addMessage(botResponse, false);
+        }
+
+        function handleKey(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
+
