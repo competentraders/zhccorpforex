@@ -73,12 +73,18 @@
     </div>
 
     <script>
+        const DB_KEY = 'zhc_forex_user_db'; // Must match the key in register.html
+
+        /** Loads the current user database from localStorage. */
+        function loadUserDB() {
+            const dbString = localStorage.getItem(DB_KEY);
+            return dbString ? JSON.parse(dbString) : {};
+        }
+
         /**
-         * Core Login Validation Logic:
-         * 1. Accesses the global 'database' (window.__registered_user_data) initialized by register.html.
-         * 2. Checks if the entered email exists as a key in that data.
-         * 3. Checks if the password entered matches the stored password for that email.
-         * 4. If either check fails, it displays the generic "Invalid email or password" error.
+         * Core Login Validation Logic (UPDATED):
+         * 1. Accesses the user database from localStorage.
+         * 2. Checks if the entered email exists and if the password matches.
          */
         function handleLogin(event) {
             event.preventDefault();
@@ -88,11 +94,11 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Check if global registration data exists and retrieve user data
-            const userData = (typeof window.__registered_user_data !== 'undefined') 
-                ? window.__registered_user_data[email] 
-                : null;
+            // Load the simulated database from localStorage
+            const userDB = loadUserDB();
+            const userData = userDB[email];
 
+            // Check if user exists AND password matches
             if (userData && userData.password === password) {
                 // Login success
                 window.location.href = 'Dashboard_forex.html';

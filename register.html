@@ -147,39 +147,46 @@
     </div>
 
     <script>
-        // --- Data Structure for Nationality Select ---
-        const countryData = [
-            // Asia
-            { name: "Singapore (SGD)", code: "+65", continent: "Asia" },
-            { name: "Japan (JPY)", code: "+81", continent: "Asia" },
-            { name: "China (CNY)", code: "+86", continent: "Asia" },
-            { name: "India (INR)", code: "+91", continent: "Asia" },
-            { name: "UAE (AED)", code: "+971", continent: "Asia" },
-            // Europe
-            { name: "Germany (EUR)", code: "+49", continent: "Europe" },
-            { name: "UK (GBP)", code: "+44", continent: "Europe" },
-            { name: "France (EUR)", code: "+33", continent: "Europe" },
-            { name: "Switzerland (CHF)", code: "+41", continent: "Europe" },
-            // Americas (Atlantic continent is ambiguous, using The Americas for clarity)
-            { name: "USA (USD)", code: "+1", continent: "Americas" },
-            { name: "Canada (CAD)", code: "+1", continent: "Americas" },
-            { name: "Brazil (BRL)", code: "+55", continent: "Americas" },
-            // Africa
-            { name: "South Africa (ZAR)", code: "+27", continent: "Africa" },
-            { name: "Nigeria (NGN)", code: "+234", continent: "Africa" },
-            // Oceania
-            { name: "Australia (AUD)", code: "+61", continent: "Oceania" },
-        ];
-        
-        // This simulates a 'backend' storage for the registered user credentials.
-        // It is defined globally in the script scope so the login page can "access" it.
-        // In a real environment, this data would be stored in a database.
-        let __registered_user_data = {}; 
+        const DB_KEY = 'zhc_forex_user_db'; // Key for localStorage
         let currentSecurityCode = '';
         let isCodeVerified = false;
 
         // --- Utility Functions ---
 
+        /** Loads the current user database from localStorage. */
+        function loadUserDB() {
+            const dbString = localStorage.getItem(DB_KEY);
+            return dbString ? JSON.parse(dbString) : {};
+        }
+
+        /** Saves the updated user database to localStorage. */
+        function saveUserDB(db) {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+        }
+        
+        const countryData = [
+            // Asia
+            { name: "Singapore", code: "+65", continent: "Asia" },
+            { name: "Japan", code: "+81", continent: "Asia" },
+            { name: "China", code: "+86", continent: "Asia" },
+            { name: "India", code: "+91", continent: "Asia" },
+            { name: "UAE", code: "+971", continent: "Asia" },
+            // Europe
+            { name: "Germany", code: "+49", continent: "Europe" },
+            { name: "UK", code: "+44", continent: "Europe" },
+            { name: "France", code: "+33", continent: "Europe" },
+            { name: "Switzerland", code: "+41", continent: "Europe" },
+            // Americas 
+            { name: "USA", code: "+1", continent: "Americas" },
+            { name: "Canada", code: "+1", continent: "Americas" },
+            { name: "Brazil", code: "+55", continent: "Americas" },
+            // Africa
+            { name: "South Africa", code: "+27", continent: "Africa" },
+            { name: "Nigeria", code: "+234", continent: "Africa" },
+            // Oceania
+            { name: "Australia", code: "+61", continent: "Oceania" },
+        ];
+        
         function generateSecurityCode() {
             return Math.floor(100000 + Math.random() * 900000).toString();
         }
@@ -195,8 +202,6 @@
             document.getElementById('submitButton').disabled = true;
             document.getElementById('submitButton').className = 'w-full flex justify-center py-3 px-4 rounded-lg shadow-sm text-sm font-medium bg-gray-600 text-gray-300 cursor-not-allowed';
             document.getElementById('securityCodeInput').value = '';
-            
-            console.log('New Security Code:', currentSecurityCode);
         }
 
         function verifySecurityCode() {
@@ -215,7 +220,7 @@
             } else {
                 isCodeVerified = false;
                 statusElement.textContent = 'Invalid Code. Try again.';
-                statusElement.className = 'text-sm font-semibold text-accent-red';
+                statusElement.className = 'text-sm font-semibold text-red-500'; /* Changed from accent-red to Tailwind red-500 */
                 
                 // Disable button and apply disabled styling
                 submitButton.disabled = true;
@@ -252,9 +257,9 @@
             });
         }
 
-        // --- Core Validation and Submission ---
+        // --- Core Validation and Submission (UPDATED) ---
         function handleRegistration(event) {
-            event.preventDefault(); // Stop default form submission
+            event.preventDefault(); 
             const errorElement = document.getElementById('errorMessage');
             errorElement.classList.add('hidden');
 
@@ -294,23 +299,29 @@
                 return;
             }
             
+            // 5. Check if user already exists
+            let db = loadUserDB();
+            if (db[email]) {
+                 errorElement.textContent = 'This email is already registered. Please log in.';
+                 errorElement.classList.remove('hidden');
+                 return;
+            }
+
             // --- SIMULATED SUCCESSFUL REGISTRATION ---
             
-            // Store credentials globally for the login page to validate against
-            // This is the simulation of the backend database storage
-            if (typeof window.__registered_user_data === 'undefined') {
-                window.__registered_user_data = {};
-            }
-            window.__registered_user_data[email] = {
+            // Store credentials locally for the login page to validate against
+            db[email] = {
                 password: password,
                 firstName: document.getElementById('firstName').value,
                 phone: document.getElementById('countryCode').value + document.getElementById('phone').value,
-                isLoggedIn: true 
+                isLoggedIn: false // Mark as registered
             };
             
-            console.log("Registration Successful. Stored Data:", window.__registered_user_data[email]);
+            saveUserDB(db); // Save the updated database to localStorage
+            
+            console.log("Registration Successful. Stored Data for:", email);
 
-            // Redirect to the dashboard page
+            // Redirect to the login page (or dashboard, using the original target)
             window.location.href = 'Dashboard_forex.html';
         }
 
