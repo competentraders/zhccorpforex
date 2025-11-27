@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awards and Achievements | ZHC Corp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #0C1218;
+            --secondary-dark: #151F28;
+            --accent-green: #10b981;
+            --secondary-gold: #FFD700;
+        }
+        body { background-color: var(--primary-dark); font-family: 'Inter', sans-serif; }
+        .bg-secondary-dark { background-color: var(--secondary-dark); }
+        .text-secondary-gold { color: var(--secondary-gold); }
+
+        /* Timeline styles */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--secondary-dark);
+            margin-left: -2px;
+        }
+        .timeline-item {
+            padding: 10px 0;
+            position: relative;
+            width: 50%;
+        }
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 40px;
+            text-align: right;
+        }
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 40px;
+            text-align: left;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--secondary-gold);
+            top: 25px;
+            box-shadow: 0 0 0 3px var(--secondary-dark), inset 0 2px 0 rgba(0,0,0,.08), 0 3px 0 4px rgba(0,0,0,.05);
+            z-index: 10;
+        }
+        .timeline-item:nth-child(odd)::after {
+            right: -8px;
+        }
+        .timeline-item:nth-child(even)::after {
+            left: -8px;
+        }
+
+        /* Mobile Adjustments for Timeline */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 10px;
+                margin-left: 0;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 40px;
+                padding-right: 10px;
+            }
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                left: 0;
+                text-align: left;
+            }
+            .timeline-item:nth-child(odd)::after,
+            .timeline-item:nth-child(even)::after {
+                left: 2px;
+            }
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen">
+
+    <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <header class="text-center mb-16">
+            <h1 class="text-5xl font-extrabold mb-4 text-secondary-gold">Awards & Achievements</h1>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto">A testament to our dedication to excellence in FinTech, AI innovation, and user satisfaction.</p>
+        </header>
+
+        <!-- Timeline Section -->
+        <section class="timeline max-w-5xl mx-auto">
+            
+            <!-- Achievement 1 (Right Side on Desktop, Top on Mobile) -->
+            <div class="timeline-item">
+                <div class="bg-secondary-dark p-6 rounded-xl shadow-lg border-l-4 border-secondary-gold md:border-l-0 md:border-r-4">
+                    <span class="text-sm font-semibold text-accent-green">Q3 2025</span>
+                    <h3 class="text-2xl font-bold mt-1 mb-2">"Best AI Trading Platform"</h3>
+                    <p class="text-gray-400">Awarded by the Global FinTech Review for superior algorithm performance and lowest slippage rates in emerging markets.</p>
+                </div>
+            </div>
+
+            <!-- Achievement 2 (Left Side on Desktop, Bottom on Mobile) -->
+            <div class="timeline-item">
+                <div class="bg-secondary-dark p-6 rounded-xl shadow-lg border-l-4 border-accent-green">
+                    <span class="text-sm font-semibold text-secondary-gold">Q1 2025</span>
+                    <h3 class="text-2xl font-bold mt-1 mb-2">Top 10 Innovators in Security</h3>
+                    <p class="text-gray-400">Recognized by CyberSecure Magazine for our implementation of quantum-resistant encryption protocols for user fund storage.</p>
+                </div>
+            </div>
+
+            <!-- Achievement 3 (Right Side) -->
+            <div class="timeline-item">
+                <div class="bg-secondary-dark p-6 rounded-xl shadow-lg border-l-4 border-secondary-gold md:border-l-0 md:border-r-4">
+                    <span class="text-sm font-semibold text-accent-green">Q4 2024</span>
+                    <h3 class="text-2xl font-bold mt-1 mb-2">User Experience Gold Medal</h3>
+                    <p class="text-gray-400">Voted #1 for ease of use and interface design in the annual Forex Trading Survey, highlighting our commitment to user empowerment.</p>
+                </div>
+            </div>
+
+            <!-- Achievement 4 (Left Side) -->
+            <div class="timeline-item">
+                <div class="bg-secondary-dark p-6 rounded-xl shadow-lg border-l-4 border-accent-green">
+                    <span class="text-sm font-semibold text-secondary-gold">Q2 2024</span>
+                    <h3 class="text-2xl font-bold mt-1 mb-2">Seed Funding Milestone</h3>
+                    <p class="text-gray-400">Successfully closed our initial seed funding round, exceeding our target by 200% and validating our core AI technology.</p>
+                </div>
+            </div>
+            
+            <!-- Achievement 5 (Right Side) -->
+            <div class="timeline-item">
+                <div class="bg-secondary-dark p-6 rounded-xl shadow-lg border-l-4 border-secondary-gold md:border-l-0 md:border-r-4">
+                    <span class="text-sm font-semibold text-accent-green">Q4 2023</span>
+                    <h3 class="text-2xl font-bold mt-1 mb-2">Official Incorporation</h3>
+                    <p class="text-gray-400">ZHC Corp is officially established and begins R&D of the Marcus AI predictive engine.</p>
+                </div>
+            </div>
+
+        </section>
+        
+        <footer class="text-center pt-16 border-t border-gray-800 mt-16">
+            <p class="text-gray-500 text-lg">We look forward to many more milestones with the support of our incredible community.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
+
