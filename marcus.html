@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Oracle AI | Predictive Strategy Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#0B0E11', // Ultra-Dark Anthracite
+                        'secondary-dark': '#151C24', // Internal Panel Background
+                        'accent-emerald': '#00C896', // Deep Emerald Green (Profit/Success)
+                        'accent-sky': '#00C4FF', // Electric Sky Blue (AI/Forecast)
+                        'accent-gold': '#FFD700', // Gold (High Value Highlights)
+                        'accent-red': '#E53935', // Red (Negative/Hold)
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Roboto Mono', 'monospace'],
+                    },
+                    keyframes: {
+                        'pulse-sky': {
+                            '0%, 100%': { 'box-shadow': '0 0 10px 0 rgba(0, 196, 255, 0.4)' },
+                            '50%': { 'box-shadow': '0 0 20px 5px rgba(0, 196, 255, 0.8)' },
+                        }
+                    },
+                    animation: {
+                        'pulse-sky': 'pulse-sky 2s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: var(--primary-dark); }
+        .chart-container { min-height: 500px; height: 70vh; max-height: 800px; }
+    </style>
+</head>
+<body class="text-white font-sans min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10 border-b border-gray-800 pb-4">
+            <h1 class="text-4xl font-extrabold text-accent-sky tracking-wider">
+                <i class="fas fa-brain mr-3 text-accent-emerald"></i> The Oracle: Predictive Strategy Hub
+            </h1>
+            <p class="text-gray-400 mt-2 font-mono">Status: A.I. Model 5.0 Synced | Real-time Market Integration</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-1 space-y-6">
+                
+                <div class="bg-secondary-dark p-6 rounded-xl shadow-2xl border-t-4 border-accent-sky">
+                    <div class="flex items-center justify-between mb-4">
+                         <h2 class="text-xl font-bold text-accent-sky">BTC/USD: Next 24H Forecast</h2>
+                         <i class="fas fa-lock text-accent-emerald"></i>
+                    </div>
+
+                    <p class="uppercase text-gray-400 text-sm">AI Certainty Score</p>
+                    <span id="certaintyScore" class="text-6xl font-extrabold text-accent-sky font-mono animate-pulse-sky">98.2%</span>
+                    
+                    <div class="mt-4 pt-4 border-t border-gray-700">
+                        <p class="uppercase text-gray-400 text-sm">Predicted Strategy Outcome</p>
+                        <p id="predictedClose" class="text-2xl font-bold text-accent-emerald mt-1">
+                            $72,500 <span class="text-lg text-accent-emerald font-mono">(+4.5%)</span>
+                        </p>
+                    </div>
+
+                    <div class="mt-6 space-y-3">
+                         <button id="approveStrategy" class="w-full py-3 bg-accent-emerald text-primary-dark font-bold rounded-lg shadow-lg hover:bg-opacity-90 transition duration-200">
+                             <i class="fas fa-check-circle mr-2"></i> Approve Strategy & Deploy
+                         </button>
+                         <button id="holdStrategy" class="w-full py-3 bg-gray-700 text-white font-bold rounded-lg hover:bg-gray-600 transition duration-200">
+                             <i class="fas fa-times-circle mr-2"></i> Hold / Re-evaluate
+                         </button>
+                    </div>
+                </div>
+
+                <div class="bg-secondary-dark p-6 rounded-xl shadow-2xl">
+                    <h3 class="text-lg font-bold text-accent-gold mb-3">System Performance</h3>
+                    <div class="font-mono text-sm space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Total Capital Under Mgmt:</span>
+                            <span id="capitalManaged" class="text-accent-gold">$120M</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">YTD Win Rate:</span>
+                            <span id="winRate" class="text-accent-emerald">92.7%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Current Strategy:</span>
+                            <span id="currentStrategy" class="text-accent-sky">S-BTC-005 (LONG)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1 bg-secondary-dark p-4 rounded-xl shadow-2xl">
+                <h2 class="text-xl font-bold text-white mb-4 border-b border-gray-700 pb-2">
+                    Prediction Timeline <span class="text-accent-sky">(Next 24 Hours)</span>
+                </h2>
+                <div class="chart-container relative">
+                    <canvas id="predictionChart" class="w-full h-full rounded-lg bg-primary-dark border border-gray-700"></canvas>
+                    <div id="chartTooltip" class="absolute hidden bg-gray-900 text-white p-2 rounded-lg text-xs pointer-events-none shadow-xl border border-accent-sky font-mono"></div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-1 bg-secondary-dark p-6 rounded-xl shadow-2xl space-y-4">
+                <div class="text-center pb-2 border-b border-gray-700">
+                    <i class="fas fa-clipboard-list text-accent-emerald text-4xl mb-2"></i>
+                    <h2 class="text-xl font-bold text-accent-emerald">Strategy Execution Log</h2>
+                    <p class="text-sm text-gray-400">High-level strategy outcomes only.</p>
+                </div>
+
+                <div class="h-[60vh] overflow-y-auto space-y-3 font-mono text-xs" id="strategyHistory">
+                    <p class="text-gray-500 text-center pt-4">Awaiting first strategy closure...</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+
+    <script>
+        // --- Configuration ---
+        const CHART_HOURS = 24;
+        const INITIAL_PRICE = 68000.00;
+        const INITIAL_CERTAINTY = 0.982;
+
+        // --- State ---
+        let predictionData = [];
+        let priceData = [INITIAL_PRICE]; // Last real price point
+        let chartInstance;
+        let strategyCounter = 100;
+
+        // --- Core Simulation Functions ---
+
+        function generatePredictionData(startPrice) {
+            const data = [startPrice];
+            let trendFactor = Math.random() > 0.5 ? 1 : -1; // Initial trend bias
+            const trendMagnitude = Math.random() * 0.005 + 0.01; // 1% to 1.5% hourly bias
+
+            for (let i = 1; i <= CHART_HOURS; i++) {
+                // Apply noise and trend
+                let volatility = Math.random() * 0.005; 
+                let noise = (Math.random() - 0.5) * volatility * startPrice;
+                let trend = data[i-1] * trendMagnitude * trendFactor;
+
+                // Randomly flip trend bias
+                if (Math.random() < 0.1) {
+                    trendFactor *= -1;
+                }
+                
+                let nextPrice = data[i-1] + noise + trend;
+                data.push(nextPrice);
+            }
+            predictionData = data;
+            
+            // Update Strategy Console based on the end of the prediction
+            const finalPrice = predictionData[CHART_HOURS];
+            const change = (finalPrice - startPrice) / startPrice * 100;
+            document.getElementById('predictedClose').innerHTML = `
+                $${finalPrice.toFixed(2)} <span class="text-lg font-mono text-accent-emerald">(${change.toFixed(2)}%)</span>
+            `;
+            
+            // Randomly update certainty score (90% to 99.9%)
+            const newCertainty = (90 + Math.random() * 9.9).toFixed(1);
+            document.getElementById('certaintyScore').textContent = `${newCertainty}%`;
+
+            renderChart();
+        }
+        
+        function renderChart() {
+            const ctx = document.getElementById('predictionChart').getContext('2d');
+            const labels = ['Now', ...Array.from({ length: CHART_HOURS }, (_, i) => `+${i + 1}H`)];
+            const allData = priceData.concat(predictionData.slice(1)); 
+            
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            // Custom tooltip for chart
+            const externalTooltipHandler = (context) => {
+                const tooltipEl = document.getElementById('chartTooltip');
+                const tooltipModel = context.tooltip;
+
+                if (tooltipModel.opacity === 0) {
+                    tooltipEl.style.opacity = 0;
+                    return;
+                }
+
+                // Set caret Position
+                tooltipEl.classList.remove('hidden');
+                tooltipEl.style.opacity = 1;
+                tooltipEl.innerHTML = `
+                    <p class="text-accent-sky font-bold">${tooltipModel.title[0]}</p>
+                    <p class="text-sm">Forecast: ${tooltipModel.dataPoints[0].formattedValue}</p>
+                `;
+                
+                const position = context.chart.canvas.getBoundingClientRect();
+                tooltipEl.style.left = position.left + tooltipModel.caretX + 'px';
+                tooltipEl.style.top = position.top + tooltipModel.caretY - tooltipEl.offsetHeight - 10 + 'px';
+            };
+
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Price Forecast',
+                        data: allData,
+                        borderColor: '#00C4FF', // Electric Sky Blue
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        tension: 0.4,
+                        segment: {
+                            // Style the past data point differently (only the first one for simplicity)
+                            borderColor: (context) => context.p0DataIndex === 0 ? '#6B7280' : '#00C4FF',
+                            borderDash: (context) => context.p0DataIndex === 0 ? [5, 5] : [],
+                        },
+                        hitRadius: 10,
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            enabled: false,
+                            external: externalTooltipHandler,
+                            callbacks: {
+                                label: (context) => `$${context.parsed.y.toFixed(2)}`,
+                                title: (context) => context[0].label
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: { color: '#1F2937' },
+                            ticks: { color: '#E0E0E0', font: { family: 'Roboto Mono' }, callback: (value) => `$${value.toFixed(0)}` }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#9CA3AF', maxTicksLimit: 10, font: { family: 'Roboto Mono' } }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function logStrategyOutcome(profit, certainty) {
+            const historyEl = document.getElementById('strategyHistory');
+            const isWin = profit > 0;
+            const profitColor = isWin ? 'text-accent-emerald' : 'text-accent-red';
+            const statusText = isWin ? 'CLOSED (Success)' : 'CLOSED (Loss)';
+            const strategyID = `S-BTC-${strategyCounter++}`;
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `p-3 rounded-lg border ${isWin ? 'border-accent-emerald' : 'border-accent-red'} bg-gray-900 transition-opacity duration-300`;
+            logEntry.innerHTML = `
+                <div class="flex justify-between items-center text-xs font-mono">
+                    <span class="text-gray-400">${new Date().toLocaleTimeString()}</span>
+                    <span class="${profitColor} font-bold">${statusText}</span>
+                </div>
+                <div class="mt-1 flex justify-between text-white">
+                    <span class="text-accent-sky">${strategyID}</span>
+                    <span class="${profitColor} font-bold text-base">${profit >= 0 ? '+' : ''}$${profit.toFixed(2)}</span>
+                </div>
+            `;
+            
+            // Remove initial placeholder if present
+            if (historyEl.querySelector('p.text-gray-500')) {
+                historyEl.innerHTML = '';
+            }
+
+            historyEl.prepend(logEntry); 
+            
+            // Remove oldest entries
+            while (historyEl.children.length > 50) {
+                historyEl.removeChild(historyEl.lastChild);
+            }
+        }
+        
+        function simulateStrategyExecution() {
+             // 1. Simulate a Strategy Closure (with a high win rate based on high certainty)
+            const certainty = parseFloat(document.getElementById('certaintyScore').textContent);
+            
+            // Simulate 92% win rate: If certainty is >95, 95% chance of success
+            const winProbability = certainty / 100;
+            const isWin = Math.random() < winProbability;
+            
+            let profit;
+            if (isWin) {
+                // High profit for a win
+                profit = (Math.random() * 500) + 100; // $100 to $600
+            } else {
+                // Controlled loss
+                profit = -(Math.random() * 100) - 20; // -$20 to -$120
+            }
+
+            logStrategyOutcome(profit, certainty);
+
+            // 2. Advance the "real" price and generate a new prediction
+            const predictedEnd = predictionData[CHART_HOURS];
+            
+            // The "real" price moves slightly towards the prediction target
+            const delta = (predictedEnd - priceData[0]) / CHART_HOURS;
+            priceData[0] += delta * 5; // Move 5 hours worth of predicted delta
+            
+            // Now generate a completely new prediction from this new current price
+            generatePredictionData(priceData[0]); 
+        }
+
+        // --- Event Handlers ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial Chart setup
+            generatePredictionData(INITIAL_PRICE); 
+            
+            // Simulate strategy closure and new prediction every 10 seconds
+            setInterval(simulateStrategyExecution, 10000); 
+
+            // Basic UI interaction
+            document.getElementById('approveStrategy').addEventListener('click', () => {
+                alert('Strategy Approved! Deploying Strategy ' + document.getElementById('currentStrategy').textContent + ' with 98.2% certainty.');
+                document.getElementById('currentStrategy').textContent = 'S-BTC-006 (PENDING)';
+            });
+            document.getElementById('holdStrategy').addEventListener('click', () => {
+                alert('Strategy Held. AI is re-calculating parameters.');
+                document.getElementById('currentStrategy').textContent = 'S-BTC-006 (HELD)';
+            });
+        });
+    </script>
+</body>
+</html>
