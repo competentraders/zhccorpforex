@@ -3,153 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support Center | ZHC Corp</title>
+    <title>Global Support | ZHC Corp FX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary-dark: #0C1218;
-            --secondary-dark: #1F2937; /* Slightly lighter gray for contrast */
-            --accent-green: #34D399; /* Brighter green */
-            --secondary-gold: #FCD34D; /* Brighter gold/yellow */
-            --whatsapp-bg: #E0E7FF; /* Light blue/gray background for chat area */
-            --chat-bubble-user: #10B981; /* Primary green for user */
-            --chat-bubble-bot: #F9FAFB; /* Off-white for bot */
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#0A0F17',    // Even deeper dark background
+                        'secondary-dark': '#181F2C',  // Sidebar & main card background
+                        'tertiary-dark': '#0F131A',   // Chat message area background
+                        'accent-teal': '#00D09C',     // Primary Teal (Success/AI)
+                        'accent-blue': '#00C4FF',     // Secondary Sky Blue (Action/Link)
+                        'accent-gold': '#FFB74D',     // Highlight Gold
+                        
+                        // Chat Colors
+                        'chat-user': '#00C4FF',       // User bubble: Sky Blue
+                        'chat-bot': '#374151',        // Bot bubble: Dark Slate Gray
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Roboto Mono', 'monospace'],
+                    },
+                    keyframes: {
+                        'pulse-teal': {
+                            '0%, 100%': { 'box-shadow': '0 0 10px 0 rgba(0, 208, 156, 0.4)' },
+                            '50%': { 'box-shadow': '0 0 20px 5px rgba(0, 208, 156, 0.8)' },
+                        },
+                        'fade-in': {
+                            '0%': { opacity: 0, transform: 'translateY(10px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        }
+                    },
+                    animation: {
+                        'pulse-teal': 'pulse-teal 3s infinite',
+                        'fade-in': 'fade-in 0.5s ease-out forwards',
+                    }
+                }
+            }
         }
+    </script>
+    <style>
         body { 
             background-color: var(--primary-dark); 
             font-family: 'Inter', sans-serif; 
+            min-height: 100vh;
         }
-        .card-glow {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 0 40px -10px rgba(52, 211, 153, 0.2);
-            transition: all 0.3s ease-in-out;
+        .main-content-area {
+            min-height: calc(100vh - 80px); /* Adjust based on header/footer if any */
         }
-        .card-glow:hover {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 0 60px -5px rgba(52, 211, 153, 0.4);
+        .sidebar {
+            background-color: var(--secondary-dark);
         }
-
-        /* Chat Specifics */
-        .chat-container { height: 75vh; max-height: 800px; }
+        .support-card {
+            background-color: var(--secondary-dark);
+            border-left: 4px solid;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .support-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .chat-container { height: 65vh; max-height: 700px; } /* Adjusted for the new layout */
         #chatMessages {
             overflow-y: auto;
-            background-color: var(--whatsapp-bg); 
-            background-image: url('https://placehold.co/600x400/F3F4F6/10B981?text=ZHC+Support+Pattern'); 
+            background-color: var(--tertiary-dark);
             flex-grow: 1;
+            border-radius: 0.5rem;
         }
+        
+        /* Chat Bubble Styles */
         .bubble-bot {
-            background-color: var(--chat-bubble-bot);
-            color: #1F2937;
-            border-radius: 1.5rem 1.5rem 1.5rem 0.5rem;
-            max-width: 80%;
+            background-color: var(--chat-bot);
+            color: #E0E0E0;
+            border-radius: 0.75rem 0.75rem 0.75rem 0.25rem;
+            max-width: 75%;
             align-self: flex-start;
+            font-family: 'Roboto Mono', monospace;
+            animation: fade-in 0.3s ease-out forwards;
         }
         .bubble-user {
-            background-color: var(--chat-bubble-user);
-            color: white;
-            border-radius: 1.5rem 1.5rem 0.5rem 1.5rem;
-            max-width: 80%;
-            align-self: flex-end;
+            background-color: var(--chat-user);
+            color: var(--primary-dark);
+            border-radius: 0.75rem 0.75rem 0.25rem 0.75rem;
+            max-width: 75%;
+            font-weight: 600;
+            animation: fade-in 0.3s ease-out forwards;
         }
         .float-button {
-            background-color: var(--accent-green);
-        }
-
-        @media (max-width: 640px) {
-            .chat-container { height: 80vh; }
+            background-color: var(--accent-teal);
         }
     </style>
 </head>
-<body class="text-white min-h-screen">
+<body class="text-white">
 
-    <div class="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <header class="text-center mb-16">
-            <h1 class="text-5xl font-extrabold mb-4 text-secondary-gold">Dedicated Support Center</h1>
-            <p class="text-xl text-gray-400 max-w-3xl mx-auto">Get instant answers from our AI ChatBot or contact a human specialist directly via our dedicated email channels.</p>
-        </header>
+    <div class="flex min-h-screen">
+        <aside class="w-64 sidebar p-6 flex flex-col justify-between hidden lg:block">
+            <div>
+                <div class="mb-8 text-center">
+                    <span class="text-white text-3xl font-extrabold tracking-wide">ZHC <span class="text-accent-gold">Corp FX</span></span>
+                    <p class="text-gray-500 text-sm mt-1">Global Support</p>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#welcome" class="flex items-center space-x-3 text-gray-300 hover:text-accent-teal transition duration-150 text-lg font-medium">
+                        <i class="fas fa-home fa-lg w-6"></i> <span>Support Home</span>
+                    </a>
+                    <a href="#ai-assistant" class="flex items-center space-x-3 text-gray-300 hover:text-accent-teal transition duration-150 text-lg font-medium">
+                        <i class="fas fa-robot fa-lg w-6"></i> <span>AI Assistant</span>
+                    </a>
+                    <a href="#self-service" class="flex items-center space-x-3 text-gray-300 hover:text-accent-teal transition duration-150 text-lg font-medium">
+                        <i class="fas fa-book-open fa-lg w-6"></i> <span>Self-Service</span>
+                    </a>
+                    <a href="#human-support" class="flex items-center space-x-3 text-gray-300 hover:text-accent-teal transition duration-150 text-lg font-medium">
+                        <i class="fas fa-headset fa-lg w-6"></i> <span>Human Support</span>
+                    </a>
+                    <hr class="border-gray-700 my-4">
+                    <a href="#" class="flex items-center space-x-3 text-gray-300 hover:text-accent-gold transition duration-150 text-lg font-medium">
+                        <i class="fas fa-arrow-left fa-lg w-6"></i> <span>Back to Main Site</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            
-            <!-- Contact Information Card (1/3 width on desktop) -->
-            <div class="lg:col-span-1 bg-secondary-dark p-8 rounded-3xl card-glow h-full">
-                <h2 class="text-3xl font-bold border-b border-gray-700 pb-4 mb-6 text-accent-green">Direct Contact & Resources</h2>
+        <main class="flex-1 p-8 lg:p-12 main-content-area">
+            <header class="mb-10 text-center lg:text-left">
+                <h1 class="text-4xl sm:text-5xl font-extrabold mb-3 text-accent-blue" id="welcome">Welcome to ZHC Corp FX Support</h1>
+                <p class="text-lg text-gray-400 max-w-4xl mx-auto lg:mx-0">
+                    Your hub for instant answers and expert assistance. Choose your preferred support channel below.
+                </p>
+            </header>
 
-                <!-- Email List -->
-                <div class="mb-8">
-                    <h3 class="text-xl font-semibold mb-4 text-white"><i class="fas fa-headset mr-2 text-secondary-gold"></i> Email Support Channels</h3>
-                    <ul class="space-y-3 text-gray-300">
-                        <li class="p-3 bg-gray-800 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center border border-gray-700">
-                            <span class="font-medium text-sm">General Inquiries:</span>
-                            <span class="text-sm font-mono text-accent-green mt-1 sm:mt-0">imarket247weekly@gmail.com</span>
-                        </li>
-                        <li class="p-3 bg-gray-800 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center border border-gray-700">
-                            <span class="font-medium text-sm">Executive / CEO Office:</span>
-                            <span class="text-sm font-mono text-accent-green mt-1 sm:mt-0">marcuszeeleehong@gmail.com</span>
-                        </li>
-                        <li class="p-3 bg-gray-800 rounded-xl flex flex-col sm:flex-row justify-between items-start sm:items-center border border-gray-700">
-                            <span class="font-medium text-sm">Asia Pacific Desk:</span>
-                            <span class="text-sm font-mono text-accent-green mt-1 sm:mt-0">visitasia53@gmail.com</span>
-                        </li>
-                    </ul>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                
+                <div id="ai-assistant" class="support-card p-6 rounded-xl border-accent-teal shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <i class="fas fa-robot text-4xl text-accent-teal"></i>
+                            <h2 class="text-2xl font-bold text-white">AI Assistant</h2>
+                        </div>
+                        <p class="text-gray-400 mb-4">Get instant, accurate answers 24/7 on company details, services, and FAQs.</p>
+                    </div>
+                    <a href="#chatSection" class="inline-flex items-center text-accent-teal font-semibold hover:text-accent-blue transition group">
+                        Launch AI Chat <i class="fas fa-chevron-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
                 </div>
 
-                <!-- Other Links -->
-                <div class="pt-6 border-t border-gray-700">
-                    <h3 class="text-xl font-semibold mb-4 text-white"><i class="fas fa-book-open mr-2 text-secondary-gold"></i> Self-Service</h3>
-                    <a href="#" class="block text-gray-400 hover:text-accent-green transition font-medium"><i class="fas fa-file-contract mr-2"></i> Terms & Documentation</a>
-                    <a href="#" class="block text-gray-400 hover:text-accent-green transition mt-2 font-medium"><i class="fas fa-code-branch mr-2"></i> API Status & Changelog</a>
+                <div id="self-service" class="support-card p-6 rounded-xl border-accent-blue shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <i class="fas fa-book-open text-4xl text-accent-blue"></i>
+                            <h2 class="text-2xl font-bold text-white">Self-Service Portal</h2>
+                        </div>
+                        <p class="text-gray-400 mb-4">Access comprehensive documentation, FAQs, tutorials, and legal guides.</p>
+                    </div>
+                    <a href="#" class="inline-flex items-center text-accent-blue font-semibold hover:text-accent-teal transition group">
+                        Explore Knowledge Base <i class="fas fa-chevron-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+                <div id="human-support" class="support-card p-6 rounded-xl border-accent-gold shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <i class="fas fa-headset text-4xl text-accent-gold"></i>
+                            <h2 class="text-2xl font-bold text-white">Human Support</h2>
+                        </div>
+                        <p class="text-gray-400 mb-4">For complex issues or direct assistance, contact our expert support team.</p>
+                    </div>
+                    <a href="#" class="inline-flex items-center text-accent-gold font-semibold hover:text-accent-blue transition group">
+                        View Contact Options <i class="fas fa-chevron-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- WhatsApp Simulator Chatbot (2/3 width on desktop) -->
-            <div id="chatbotSection" class="lg:col-span-2 bg-secondary-dark rounded-3xl card-glow flex flex-col chat-container overflow-hidden">
-                <!-- Chat Header -->
-                <div class="bg-accent-green p-5 flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                        <i class="fab fa-whatsapp text-3xl text-accent-green"></i>
+            <section id="chatSection" class="bg-secondary-dark rounded-xl shadow-2xl flex flex-col chat-container overflow-hidden animate-fade-in">
+                <div class="bg-gradient-to-r from-accent-teal to-accent-blue p-5 flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-primary-dark rounded-full flex items-center justify-center shadow-xl">
+                        <i class="fas fa-robot text-xl text-accent-teal"></i>
                     </div>
                     <div>
-                        <h2 class="text-xl font-extrabold text-white">ZHC ChatBot (AI Assistant)</h2>
-                        <p class="text-sm text-white/90">Online 24/7. Ready to answer your questions on company focus, awards, and leadership.</p>
+                        <h2 class="text-xl font-extrabold text-primary-dark">ZHC AI Assistant <span class="text-sm font-light">(Sentinel v2.0)</span></h2>
+                        <p class="text-sm text-primary-dark/80 font-semibold">Online | Specializing in company focus, awards, and leadership data.</p>
                     </div>
                 </div>
 
-                <!-- Chat Messages Area -->
-                <div id="chatMessages" class="flex flex-col space-y-4">
-                    <!-- Initial Bot Message -->
+                <div id="chatMessages" class="flex flex-col space-y-4 p-4">
                     <div class="bubble-bot p-4 shadow-lg mt-4 ml-4">
-                        Hello! Welcome to ZHC Support. I'm here to assist you with quick information about our platform, leadership, and partnerships. What can I help you find today?
+                        Hello! Welcome to ZHC Corp FX Global Support. I'm the ZHC AI Assistant. I can provide instant, verified information about ZHC Corp's mission, awards, and leadership.
                     </div>
                 </div>
 
-                <!-- Chat Input -->
-                <div class="p-4 bg-gray-800 flex items-center shadow-inner">
-                    <input type="text" id="chatInput" placeholder="Ask me about Marcus Zhee Lee Hong, our Mission, or Awards..." class="flex-grow bg-gray-900 border border-gray-700 focus:ring-2 focus:ring-accent-green text-white p-4 rounded-full transition" onkeydown="handleKey(event)">
-                    <button id="sendButton" onclick="sendMessage()" class="ml-3 w-12 h-12 rounded-full float-button hover:bg-green-600 transition flex items-center justify-center text-white text-xl">
+                <div class="p-4 bg-gray-800 flex items-center shadow-inner border-t border-gray-700">
+                    <input type="text" id="chatInput" placeholder="Ask about the CEO, Mission, Awards, or Withdrawal Status..." class="flex-grow bg-primary-dark border border-gray-700 focus:ring-2 focus:ring-accent-teal text-white p-3 rounded-lg transition" onkeydown="handleKey(event)">
+                    <button id="sendButton" onclick="sendMessage()" class="ml-3 w-10 h-10 rounded-lg float-button hover:bg-teal-600 transition flex items-center justify-center text-primary-dark text-xl">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
-            </div>
-            
-        </div>
+            </section>
+        </main>
     </div>
     
-    <!-- Floating Contact Widget Container (New implementation) -->
-    <div class="fixed bottom-6 left-6 z-50 flex items-end space-x-3">
-        <!-- Message Bubble (Hidden on extra-small screens to preserve space) -->
-        <div class="hidden sm:block bg-secondary-dark p-3 rounded-xl shadow-2xl text-sm max-w-xs text-left">
-            <p class="text-white font-medium mb-1 flex items-center">
-                <i class="fas fa-headset mr-2 text-accent-green"></i> Customer Service (Woman)
-            </p>
-            <p class="text-gray-300">Hello how may we help you? Please contact <span class="text-accent-green font-mono">marcuszeeleehong@gmail.com</span></p>
-        </div>
-        
-        <!-- WhatsApp Button (Scrolls to Chatbot Section) -->
-        <a href="#chatbotSection" class="p-4 float-button text-white rounded-full shadow-2xl transition duration-300 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-accent-green/50" onclick="document.getElementById('chatInput').focus()">
-            <i class="fab fa-whatsapp text-3xl"></i>
-        </a>
-    </div>
-
-
     <script>
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
@@ -166,11 +221,11 @@
             'tiers': "The sponsorship tiers are Apex Circle, Quantum Alliance, and Global Connect.",
             'awards': "Our recent awards include 'Best AI Trading Platform' (Q3 2025) and recognition as 'Top 10 Innovators in Security' (Q1 2025).",
             'achievements': "Check the Awards page for a full timeline. We focus on excellence in AI, security, and user experience.",
-            'withdrawal': "The standard system error when you try to withdraw without enough balance is: 'not enough funds please deposit'.",
+            'withdrawal': "The standard system error when you try to withdraw without enough balance is: 'Error 404: not enough funds please deposit'.",
             'partners': "We collaborate in key areas like Real-Time Data Aggregation, Blockchain Infrastructure, Institutional Liquidity, and Enterprise Cybersecurity.",
-            'who are you': "I am the ZHC Support AI, a specialized assistant built using a large language model framework, designed to give you instant information about ZHC Corp's offerings and structure.",
-            'gemini': "I am the ZHC Support AI, a specialized assistant built using a large language model framework, designed to give you instant information about ZHC Corp's offerings and structure.",
-            'default': "I'm sorry, I don't have information on that specific topic. Try asking about our CEO, mission, sponsors, or awards!",
+            'who are you': "I am the ZHC AI Assistant, a specialized assistant built using an advanced LLM framework, designed to give you instant, verified information about ZHC Corp's offerings and structure.",
+            'gemini': "I am the ZHC AI Assistant, a specialized assistant built using an advanced LLM framework, designed to give you instant, verified information about ZHC Corp's offerings and structure. (My capabilities are restricted to ZHC internal data only.)",
+            'default': "Query not recognized. Please rephrase your question or try asking about our CEO, mission, sponsors, or awards.",
         };
 
         function addMessage(text, isUser) {
@@ -220,4 +275,3 @@
     </script>
 </body>
 </html>
-
