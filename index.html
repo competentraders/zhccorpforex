@@ -3,70 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zhee Hong FX- Elite Forex Trading Platform</title>
-    <!-- Load Tailwind CSS -->
+    <title>Zhee Hong FX - Elite AI Trading Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary-dark': '#111827', // Dark background for trading view
-                        'accent-green': '#10b981', // Positive/Buy color
-                        'accent-red': '#ef4444',   // Negative/Sell color
-                        'secondary-gold': '#FFD700', // Highlight color
+                        'primary-dark': '#081016', // Deep Midnight Blue
+                        'secondary-dark': '#111827', // Used for data panels
+                        'accent-primary': '#00D09C', // Luminous Teal (Positive/AI)
+                        'accent-secondary': '#FFB74D', // Sovereign Gold (Highlights/Guarantee)
+                        'accent-red': '#E53935', // Crimson Red (Negative)
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        mono: ['Space Mono', 'monospace'],
                     },
+                    keyframes: {
+                        'scroll-up': {
+                            '0%': { transform: 'translateY(0%)' },
+                            '100%': { transform: 'translateY(-100%)' },
+                        },
+                        'pulse-teal': {
+                            '0%, 100%': { 'box-shadow': '0 0 10px 0 rgba(0, 208, 156, 0.5)' },
+                            '50%': { 'box-shadow': '0 0 25px 5px rgba(0, 208, 156, 0.9)' },
+                        }
+                    },
+                    animation: {
+                        'scroll-log': 'scroll-up 120s linear infinite', // 120s scroll speed
+                        'pulse-teal': 'pulse-teal 2s infinite',
+                    }
                 }
             }
         }
     </script>
     <style>
-        /* Custom styles for high-contrast professional trading theme */
         body {
-            background-color: #1f2937; /* Slightly lighter dark background */
+            background-color: var(--primary-dark);
+            color: #E0E0E0;
         }
         .data-box {
-            background-color: #1f2937;
+            background-color: var(--secondary-dark);
             border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         }
-        .data-box:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        .gauge-ring {
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440; /* Start at 0% */
+            transition: stroke-dashoffset 1s ease-out;
         }
-        /* Style for the SVG chart area */
-        #tradingChart {
-            background-color: #1f2937;
-            border-top: 1px solid #374151;
+        /* Sentinel Log Styles */
+        .sentinel-log-container {
+            height: 300px;
+            overflow: hidden;
+            background-color: var(--secondary-dark);
+            border-radius: 0.75rem;
+            border: 1px solid #1f2937;
+        }
+        .sentinel-log-feed {
+            animation: scroll-up 120s linear infinite; /* Adjusted speed for 500+ items */
+        }
+        .log-entry {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px dashed #1f2937;
+            font-family: 'Space Mono', monospace;
         }
     </style>
 </head>
 <body class="font-sans text-white">
 
-    <!-- Navigation Bar -->
-    <header class="bg-primary-dark shadow-xl sticky top-0 z-50">
+    <header class="bg-primary-dark shadow-xl sticky top-0 z-50 border-b border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- Logo/Site Name -->
                 <div class="flex-shrink-0">
-                    <span class="text-white text-2xl font-bold tracking-tight">Zhee Hong <span class="text-secondary-gold">FX</span></span>
+                    <span class="text-white text-2xl font-bold tracking-tight">Zhee Hong <span class="text-accent-secondary">FX</span></span>
                 </div>
-                <!-- Navigation Links -->
                 <nav class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center">
-                    <a href="#market" class="text-gray-300 hover:text-secondary-gold px-3 py-2 rounded-md text-sm font-medium transition duration-150">Market View</a>
-                    <a href="#guarantee" class="text-gray-300 hover:text-secondary-gold px-3 py-2 rounded-md text-sm font-medium transition duration-150">Guaranteed Profit</a>
-                    <a href="#about" class="text-gray-300 hover:text-secondary-gold px-3 py-2 rounded-md text-sm font-medium transition duration-150">Founder</a>
+                    <a href="#sentinel-hub" class="text-gray-300 hover:text-accent-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">AI Hub</a>
+                    <a href="#crypto" class="text-gray-300 hover:text-accent-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">Crypto Feed</a>
+                    <a href="#guarantee" class="text-gray-300 hover:text-accent-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">Guarantee</a>
+                    <a href="#testimonials" class="text-gray-300 hover:text-accent-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">Hong FX</a>
                 </nav>
-                <!-- Auth Buttons -->
                 <div class="flex space-x-3">
                     <a href="login.html" class="bg-gray-700 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-gray-600 transition duration-150">
                         Login
                     </a>
-                    <a href="register.html" class="bg-accent-green text-primary-dark font-bold py-2 px-4 rounded-lg shadow-md hover:bg-green-400 transition duration-150">
+                    <a href="register.html" class="bg-accent-primary text-primary-dark font-bold py-2 px-4 rounded-lg shadow-md hover:bg-opacity-80 transition duration-150">
                         Register
                     </a>
                 </div>
@@ -76,131 +103,129 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-        <!-- Market Data & Trading View Section -->
-        <section class="mb-12" id="market">
-            <h1 class="text-3xl sm:text-4xl font-extrabold mb-6 text-white border-b border-gray-700 pb-3">
-                Live Market Overview <span class="text-accent-green text-sm font-medium"></span>
+        <section class="mb-12 bg-secondary-dark p-8 rounded-xl shadow-2xl border-t-4 border-accent-primary text-center">
+            <h1 class="text-3xl sm:text-4xl font-extrabold mb-4 text-accent-secondary">
+                Guaranteed Profit. AI Executed.
             </h1>
-
-            <!-- Key Metrics/Data Boxes -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <div class="data-box p-4 text-center">
-                    <p class="text-gray-400 text-sm">EUR/USD</p>
-                    <p class="text-xl font-bold text-accent-green mt-1" id="eurUsdPrice">1.08345</p>
-                    <p class="text-xs text-accent-green">+0.0012 (+0.11%)</p>
-                </div>
-                <div class="data-box p-4 text-center">
-                    <p class="text-gray-400 text-sm">USD/JPY</p>
-                    <p class="text-xl font-bold text-accent-red mt-1" id="usdJpyPrice">150.122</p>
-                    <p class="text-xs text-accent-red">-0.056 (-0.04%)</p>
-                </div>
-                <div class="data-box p-4 text-center">
-                    <p class="text-gray-400 text-sm">Zhee Hong Index</p>
-                    <p class="text-xl font-bold text-secondary-gold mt-1">4,250.88</p>
-                    <p class="text-xs text-secondary-gold">+45.21 (+1.07%)</p>
-                </div>
-                <div class="data-box p-4 text-center">
-                    <p class="text-gray-400 text-sm">Trade Volume (24h)</p>
-                    <p class="text-xl font-bold text-white mt-1">$4.5 Billion</p>
-                    <p class="text-xs text-gray-400">Total liquidity handled</p>
-                </div>
-            </div>
-
-            <!-- Chart Display (Using SVG for realistic, static visualization) -->
-            <div class="rounded-lg mb-10 overflow-hidden border border-gray-700 bg-primary-dark shadow-2xl">
-                <div class="flex flex-col sm:flex-row justify-between items-center p-3 border-b border-gray-700">
-                    <span class="text-lg font-bold">EUR/USD - H1 Candlestick Chart</span>
-                    <span class="text-sm text-gray-400">Analysis Time: 12:45:00 GMT+8</span>
-                </div>
-                <svg id="tradingChart" class="w-full" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet">
-                    
-                    <!-- Grid Lines (Horizontal) -->
-                    <line x1="50" y1="50" x2="750" y2="50" stroke="#374151" stroke-width="1" />
-                    <text x="10" y="55" fill="#9ca3af" font-size="16">1.0850</text>
-
-                    <line x1="50" y1="150" x2="750" y2="150" stroke="#374151" stroke-width="1" />
-                    <text x="10" y="155" fill="#9ca3af" font-size="16">1.0830</text>
-
-                    <line x1="50" y1="250" x2="750" y2="250" stroke="#374151" stroke-width="1" />
-                    <text x="10" y="255" fill="#9ca3af" font-size="16">1.0810</text>
-
-                    <line x1="50" y1="350" x2="750" y2="350" stroke="#374151" stroke-width="1" />
-                    <text x="10" y="355" fill="#9ca3af" font-size="16">1.0790</text>
-
-                    <!-- Main Chart Area (Candlesticks) -->
-                    <!-- Green Candlesticks (Up) -->
-                    <rect x="70" y="200" width="10" height="150" fill="#10b981" /> <!-- Wick -->
-                    <rect x="68" y="250" width="14" height="50" fill="#10b981" /> <!-- Body -->
-
-                    <rect x="150" y="100" width="10" height="200" fill="#10b981" /> <!-- Wick -->
-                    <rect x="148" y="140" width="14" height="100" fill="#10b981" /> <!-- Body -->
-
-                    <rect x="310" y="120" width="10" height="130" fill="#10b981" /> <!-- Wick -->
-                    <rect x="308" y="160" width="14" height="60" fill="#10b981" /> <!-- Body -->
-
-                    <!-- Red Candlesticks (Down) -->
-                    <rect x="230" y="180" width="10" height="120" fill="#ef4444" /> <!-- Wick -->
-                    <rect x="228" y="240" width="14" height="40" fill="#ef4444" /> <!-- Body (Note: Body starts high, ends low) -->
-
-                    <rect x="390" y="100" width="10" height="150" fill="#ef4444" /> <!-- Wick -->
-                    <rect x="388" y="120" width="14" height="80" fill="#ef4444" /> <!-- Body -->
-
-                    <rect x="470" y="190" width="10" height="180" fill="#ef4444" /> <!-- Wick -->
-                    <rect x="468" y="220" width="14" height="100" fill="#ef4444" /> <!-- Body -->
-                    
-                    <rect x="550" y="50" width="10" height="250" fill="#10b981" /> <!-- Wick -->
-                    <rect x="548" y="100" width="14" height="100" fill="#10b981" /> <!-- Body -->
-
-                    <!-- Current Live Candle (Green) -->
-                    <rect x="630" y="100" width="10" height="200" fill="#10b981" /> <!-- Wick -->
-                    <rect x="628" y="180" width="14" height="80" fill="#10b981" /> <!-- Body -->
-                    
-                    <!-- Volume Bars (Simulated, below the main chart) -->
-                    <g transform="translate(0, 360)">
-                        <rect x="68" y="30" width="14" height="50" fill="#1f2937" />
-                        <rect x="148" y="20" width="14" height="60" fill="#1f2937" />
-                        <rect x="228" y="50" width="14" height="30" fill="#ef4444" />
-                        <rect x="308" y="40" width="14" height="40" fill="#10b981" />
-                        <rect x="388" y="60" width="14" height="20" fill="#ef4444" />
-                        <rect x="468" y="10" width="14" height="70" fill="#ef4444" />
-                        <rect x="548" y="35" width="14" height="45" fill="#10b981" />
-                        <rect x="628" y="25" width="14" height="55" fill="#10b981" />
-                        <text x="10" y="70" fill="#9ca3af" font-size="16">Volume</text>
-                    </g>
-
-                    <!-- Time Axis Labels (Bottom) -->
-                    <text x="140" y="440" fill="#9ca3af" font-size="16">04:00</text>
-                    <text x="300" y="440" fill="#9ca3af" font-size="16">06:00</text>
-                    <text x="460" y="440" fill="#9ca3af" font-size="16">08:00</text>
-                    <text x="620" y="440" fill="#9ca3af" font-size="16">10:00</text>
-
-                </svg>
+            <p class="text-xl font-light mb-6 text-gray-300 max-w-4xl mx-auto">
+                Zhee Hong Sentinel AI guarantees verified profit on qualifying investments. Focus on your life, while our proprietary model v4.1.2 handles the markets.
+            </p>
+            <div class="inline-block bg-primary-dark p-4 rounded-xl shadow-inner border border-gray-700 animate-pulse-teal">
+                 <p class="text-sm uppercase text-accent-primary font-medium mb-1">Total Verified Profit Paid Out (Last 24 Hrs)</p>
+                 <span class="text-4xl font-bold text-accent-secondary" id="profitPayout">$1,854,000</span>
             </div>
         </section>
 
-        <!-- Guarantee Section (Core Proposition) -->
-        <section class="bg-primary-dark p-8 rounded-xl shadow-2xl mb-12 border-t-4 border-secondary-gold" id="guarantee">
-            <div class="text-center">
-                <h2 class="text-3xl font-extrabold mb-4 text-secondary-gold">The Zhee Hong Capital Guarantee</h2>
-                <p class="text-xl font-light mb-6 text-gray-300 max-w-3xl mx-auto">
-                    Invest a minimum of <span class="font-bold text-accent-green">$500</span> and receive a **guaranteed, verified profit** deposited into your account by **Saturday morning**, every week.
-                </p>
-                <a href="register.html" class="inline-block bg-accent-green text-primary-dark font-extrabold py-3 px-10 rounded-full shadow-xl hover:bg-green-400 transition duration-300 text-lg">
-                    Register Now & Claim Your Profit &rarr;
-                </a>
+        <section class="mb-12" id="sentinel-hub">
+            <h2 class="text-3xl font-extrabold mb-6 text-white border-b border-gray-700 pb-3">
+                The ZHC Hub: Core Performance 💻
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="lg:col-span-1 data-box p-8 flex flex-col items-center justify-center text-center border-b-4 border-accent-primary">
+                    <h3 class="text-2xl font-bold mb-4 text-accent-primary">AI Confidence Score</h3>
+                    <div class="relative w-48 h-48 mb-6">
+                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 160 160">
+                            <circle cx="80" cy="80" r="70" fill="none" stroke="#1f2937" stroke-width="20" />
+                            <circle class="gauge-ring" cx="80" cy="80" r="70" fill="none" stroke="url(#gradientTeal)" stroke-width="20" id="aiGaugeRing"/>
+                            
+                            <defs>
+                                <linearGradient id="gradientTeal" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#00D09C;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#00D09C;stop-opacity:0.5" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl font-extrabold text-accent-secondary" id="aiConfidence">98.7%</span>
+                    </div>
+                    <div class="font-mono text-sm space-y-1">
+                        <p class="text-accent-primary font-bold">LIVE STATUS: ACTIVE</p>
+                        <p class="text-gray-400">Model: <span class="text-white">v4.1.2 Low Latency</span></p>
+                        <p class="text-gray-400">Next Action: <span class="text-accent-primary" id="nextAction">AUD/USD - Signal: Buy (0:08)</span></p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 grid grid-cols-2 gap-4">
+                    <div class="data-box p-6 border-l-4 border-accent-primary">
+                        <p class="text-gray-400 text-sm flex items-center mb-1"><i class="fas fa-users mr-2"></i> Active Traders (Day)</p>
+                        <p class="text-3xl font-extrabold text-accent-primary" id="activeTraders">24,500</p>
+                        <p class="text-xs text-gray-400">Verified Global Clients</p>
+                    </div>
+                    <div class="data-box p-6 border-l-4 border-accent-secondary">
+                        <p class="text-gray-400 text-sm flex items-center mb-1"><i class="fas fa-hand-holding-usd mr-2"></i> Guaranteed Payouts (Monthly)</p>
+                        <p class="text-3xl font-extrabold text-accent-secondary" id="monthlyWithdrawals">$4.8M</p>
+                        <p class="text-xs text-gray-400">Total Funds Disbursed</p>
+                    </div>
+                    <div class="data-box p-6 border-l-4 border-gray-600">
+                        <p class="text-gray-400 text-sm flex items-center mb-1"><i class="fas fa-wallet mr-2"></i> Trade Volume (24h)</p>
+                        <p class="text-3xl font-extrabold text-white">$4.5 Billion</p>
+                        <p class="text-xs text-gray-400">Total Liquidity Handled</p>
+                    </div>
+                    <div class="data-box p-6 border-l-4 border-gray-600">
+                        <p class="text-gray-400 text-sm flex items-center mb-1"><i class="fas fa-chart-line mr-2"></i> Zhee Hong Index</p>
+                        <p class="text-3xl font-extrabold text-white">4,250.88</p>
+                        <p class="text-xs text-accent-primary">+45.21 (+1.07%)</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Owner Section (Retained for trust) -->
+        <hr class="border-gray-800 my-10" />
+
+        <section class="mb-12" id="crypto">
+            <h2 class="text-3xl font-extrabold mb-6 text-white border-b border-gray-700 pb-3">
+                Digital Assets Real-Time Feed ₿
+            </h2>
+            <div class="data-box p-6 rounded-xl shadow-2xl overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-800">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Asset</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price (USD)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">24h Change</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">AI Risk Score</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-800" id="cryptoTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <hr class="border-gray-800 my-10" />
+
+        <section class="py-10" id="testimonials">
+            <h2 class="text-3xl font-bold text-center mb-10 text-accent-secondary">The Sentinel Log: Verified Client Testimonials 🔐</h2>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-secondary-dark p-6 rounded-xl border-l-4 border-accent-secondary">
+                    <p class="text-2xl font-bold mb-3 text-accent-secondary">Data Stream Status:</p>
+                    <p class="font-mono text-sm text-gray-300">
+                        <span class="text-accent-primary">LOG_STATUS: ALIVE</span><br>
+                        <span class="text-accent-primary">RECORDS: 500+</span><br>
+                        <span class="text-gray-400">DATA_INTEGRITY: SECURE</span>
+                    </p>
+                    <a href="register.html" class="mt-6 inline-block bg-accent-primary text-primary-dark font-extrabold py-2 px-6 rounded-lg shadow-lg hover:bg-opacity-80 transition duration-300">
+                        Start Your Own Log Entry &rarr;
+                    </a>
+                </div>
+                <div class="sentinel-log-container shadow-xl">
+                    <div class="sentinel-log-feed" id="testimonialFeed">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-800 my-10" />
+
         <section class="py-10" id="about">
-            <h2 class="text-3xl font-bold text-center mb-10 text-secondary-gold">Marcus Zhee Lee Hong: Founder & Strategist</h2>
-            <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-12 p-6 bg-primary-dark rounded-xl">
+            <h2 class="text-3xl font-bold text-center mb-10 text-accent-primary">Marcus Zhee Lee Hong: Founder & Strategist</h2>
+            <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-12 p-6 bg-secondary-dark rounded-xl border-b-4 border-accent-secondary">
                 <div class="md:w-1/4 flex justify-center">
-                    <!-- Placeholder for the owner's photo -->
-                    <img src="https://placehold.co/150x150/FFD700/111827?text=Marcus+Z.L.H." alt="Portrait of Marcus Zhee Lee Hong" class="rounded-full border-4 border-gray-700 shadow-xl w-32 h-32 object-cover">
+                    <img src="https://placehold.co/150x150/FFB74D/081016?text=Marcus+Z.L.H." alt="Portrait of Marcus Zhee Lee Hong" class="rounded-full border-4 border-gray-700 shadow-xl w-32 h-32 object-cover">
                 </div>
                 <div class="md:w-3/4 text-center md:text-left">
-                    <p class="text-xl font-medium mb-3">Based in Singapore, Marcus Zhee Lee Hong is a leading figure in quantitative Forex trading.</p>
+                    <p class="text-xl font-medium mb-3">Based in Singapore, Marcus Zhee Lee Hong is the strategist behind the Sentinel AI.</p>
                     <p class="text-md leading-relaxed text-gray-400">
                         His proprietary trading algorithms, refined over a decade, form the bedrock of Zhee Hong Capital's success. This expertise is the only reason we can confidently offer a market-leading, guaranteed profit commitment to our valued investors.
                     </p>
@@ -210,43 +235,155 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-primary-dark text-gray-500 py-8 mt-12">
+    <footer class="bg-primary-dark text-gray-500 py-8 mt-12 border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p>&copy; <span id="currentYear"></span> Zhee Hong Capital. Marcus Zhee Lee Hong Enterprise, Singapore.</p>
-            <p class="mt-2 text-xs text-red-500">Risk Warning: Trading contains inherent risks. The "Guaranteed Profit" applies only to qualifying investments under specific client agreements. Please read the terms before investing.</p>
+            <p class="mt-2 text-xs text-accent-red">Risk Warning: Trading contains inherent risks. The "Guaranteed Profit" applies only to qualifying investments under specific client agreements. Please read the terms before investing.</p>
         </div>
     </footer>
 
-    <!-- JavaScript for simulated dynamic data (Faking the backend) -->
     <script>
-        // Set current year in footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // --- 1. Metrics and Gauge Simulation ---
+        let aiConfidence = 98.7;
+        let dailyTraders = 24500;
+        let monthlyWithdrawals = 4800000;
+        let profitPayout = 1854000;
+        const instrumentPairs = ["EUR/USD", "GBP/JPY", "AUD/USD", "USD/CAD", "NZD/JPY"];
+        let nextActionIndex = 0;
 
-        // Simple function to simulate price updates
-        function updateMarketPrices() {
-            const eurUsdElement = document.getElementById('eurUsdPrice');
-            const usdJpyElement = document.getElementById('usdJpyPrice');
+        function updateMetrics() {
+            // AI Confidence: slight, positive wobble
+            aiConfidence = Math.min(99.9, aiConfidence + (Math.random() * 0.2 - 0.1));
+            document.getElementById('aiConfidence').textContent = aiConfidence.toFixed(1) + '%';
+            
+            // Update Gauge visual
+            const gaugeRing = document.getElementById('aiGaugeRing');
+            const circumference = 440; // 2 * pi * 70
+            // Map 98.7% (or 90% to 100%) to dash offset for visual effect
+            const percentage = (aiConfidence - 90) * 10; // Normalize to 0-100 for the visible range
+            const offset = circumference * (1 - (percentage / 100)); 
+            gaugeRing.style.strokeDashoffset = offset;
+            
+            // Active Traders
+            dailyTraders += Math.floor((Math.random() * 30 - 10)); 
+            document.getElementById('activeTraders').textContent = dailyTraders.toLocaleString();
 
-            // Generate small random fluctuations for EUR/USD
-            let currentEurUsd = parseFloat(eurUsdElement.textContent);
-            let newEurUsd = currentEurUsd + (Math.random() - 0.5) * 0.0001;
-            eurUsdElement.textContent = newEurUsd.toFixed(5);
-            eurUsdElement.classList.toggle('text-accent-green', newEurUsd > currentEurUsd);
-            eurUsdElement.classList.toggle('text-accent-red', newEurUsd < currentEurUsd);
+            // Withdrawals (Payouts)
+            monthlyWithdrawals += Math.floor(Math.random() * 15000); 
+            document.getElementById('monthlyWithdrawals').textContent = '$' + (monthlyWithdrawals / 1000000).toFixed(2) + 'M';
+            
+            // 24H Profit Payout
+            profitPayout += Math.floor(Math.random() * 10000);
+            document.getElementById('profitPayout').textContent = '$' + profitPayout.toLocaleString();
 
-            // Generate small random fluctuations for USD/JPY
-            let currentUsdJpy = parseFloat(usdJpyElement.textContent);
-            let newUsdJpy = currentUsdJpy + (Math.random() - 0.5) * 0.01;
-            usdJpyElement.textContent = newUsdJpy.toFixed(3);
-            usdJpyElement.classList.toggle('text-accent-green', newUsdJpy > currentUsdJpy);
-            usdJpyElement.classList.toggle('text-accent-red', newUsdJpy < currentUsdJpy);
+            // Next Action Update
+            nextActionIndex = (nextActionIndex + 1) % instrumentPairs.length;
+            const pair = instrumentPairs[nextActionIndex];
+            const signal = Math.random() > 0.5 ? 'Buy' : 'Sell';
+            const countdown = Math.floor(Math.random() * 10 + 5); 
+            document.getElementById('nextAction').textContent = `${pair} - Signal: ${signal} (0:${countdown.toString().padStart(2, '0')})`;
         }
 
-        // Update prices every 2 seconds to simulate "live" data
-        setInterval(updateMarketPrices, 2000);
-    </script>
+        // --- 2. Crypto Price List Simulation ---
+        let cryptoData = [
+            { name: 'Bitcoin (BTC)', price: 68000.00, volume: '5.2B' },
+            { name: 'Ethereum (ETH)', price: 4500.00, volume: '2.8B' },
+            { name: 'Solana (SOL)', price: 210.00, volume: '1.1B' },
+            { name: 'Chainlink (LINK)', price: 18.00, volume: '0.5B' },
+            { name: 'XRP (XRP)', price: 0.5500, volume: '0.7B' },
+        ];
+        
+        function getRiskScore(change) {
+            if (change > 2) return '<span class="text-accent-red font-bold">HIGH (7.5)</span>';
+            if (change < -1) return '<span class="text-accent-red font-bold">HIGH (6.2)</span>';
+            if (change > 0.5) return '<span class="text-accent-secondary">MODERATE (4.1)</span>';
+            return '<span class="text-accent-primary">LOW (2.8)</span>';
+        }
 
+        function updateCryptoPrices() {
+            const tableBody = document.getElementById('cryptoTableBody');
+            tableBody.innerHTML = '';
+
+            cryptoData = cryptoData.map(crypto => {
+                let change = (Math.random() - 0.5) * (crypto.price * 0.002); // 0.2% max change
+                let percentChange = (change / crypto.price) * 100;
+                let newPrice = crypto.price + change;
+                crypto.price = newPrice;
+                
+                const changeColor = percentChange >= 0 ? 'text-accent-primary' : 'text-accent-red';
+                const priceFormatted = newPrice >= 1 ? newPrice.toFixed(2) : newPrice.toFixed(4);
+
+                tableBody.innerHTML += `
+                    <tr>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-white">${crypto.name}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm ${changeColor} font-bold">$${priceFormatted}</td>
+                        <td class="px-6 py-3 whitespace-nowrap text-sm ${changeColor} font-mono">
+                            ${percentChange >= 0 ? '▲' : '▼'} ${percentChange.toFixed(2)}%
+                        </td>
+                         <td class="px-6 py-3 whitespace-nowrap text-sm">${getRiskScore(percentChange)}</td>
+                    </tr>
+                `;
+                return crypto;
+            });
+        }
+
+        // --- 3. Sentinel Log (Testimonial Feed) Simulation ---
+        const FIRST_NAMES = ["Liam", "Olivia", "Noah", "Emma", "Oliver", "Ava", "Elijah", "Sophia", "William", "Isabella", "James", "Charlotte", "Benjamin", "Amelia", "Lucas", "Mia", "Henry", "Evelyn", "Alexander", "Harper", "Ethan", "Abigail", "Jacob", "Emily", "Michael", "Ella"];
+        const COMMENTS = [
+            { text: "The guaranteed profit is absolutely real. Never been happier with an investment.", minProfit: 100, maxProfit: 500 },
+            { text: "Sentinel AI is flawless. I get my payout every Saturday morning.", minProfit: 200, maxProfit: 1000 },
+            { text: "My portfolio is up thanks to Marcus's strategy. Trust the process!", minProfit: 50, maxProfit: 200 },
+            { text: "Consistent, reliable returns. The best passive income source I've found.", minProfit: 150, maxProfit: 700 },
+            { text: "I was skeptical, but the Sentinel log proved me wrong. Payouts are instant.", minProfit: 300, maxProfit: 1500 },
+            { text: "Finally, stress-free trading. The AI score gives me full confidence.", minProfit: 75, maxProfit: 350 },
+            { text: "Highly recommend. Moved all my funds to ZHC.", minProfit: 250, maxProfit: 1200 },
+        ];
+        
+        function generateTestimonialHTML(index) {
+            const name = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)];
+            const commentObj = COMMENTS[Math.floor(Math.random() * COMMENTS.length)];
+            
+            // Randomly generate profit amount
+            const profit = Math.floor(Math.random() * (commentObj.maxProfit - commentObj.minProfit + 1)) + commentObj.minProfit;
+            const formattedProfit = profit.toLocaleString();
+            
+            const timestamp = new Date(Date.now() - Math.floor(Math.random() * 86400000)).toLocaleTimeString('en-US'); // Last 24 hours
+            const clientHash = `CLT-FX-${Math.floor(Math.random() * 9000) + 1000}`;
+
+            const commentText = commentObj.text.replace("profit", `<span class="text-accent-secondary">$${formattedProfit}</span> profit`);
+
+            return `
+                <div class="log-entry text-xs text-gray-400">
+                    [${timestamp}] | ${clientHash} | <span class="text-white">${commentText}</span>
+                    <span class="text-accent-primary float-right"> <i class="fas fa-check-circle"></i> VERIFIED </span>
+                </div>
+            `;
+        }
+        
+        function renderSentinelLog() {
+            const container = document.getElementById('testimonialFeed');
+            let htmlContent = '';
+            // Generate 550 entries (500+ requirement)
+            for (let i = 0; i < 550; i++) {
+                htmlContent += generateTestimonialHTML(i);
+            }
+            container.innerHTML = htmlContent;
+        }
+
+        // Initialization and Main Loop
+        window.onload = () => {
+            renderSentinelLog();
+            updateMetrics();
+            updateCryptoPrices();
+
+            // Run all dynamic updates every 2 seconds
+            setInterval(() => {
+                updateMetrics();
+                updateCryptoPrices();
+            }, 2000); 
+        };
+    </script>
 </body>
 </html>
-
