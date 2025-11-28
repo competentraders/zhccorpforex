@@ -343,7 +343,7 @@
             </div>
             
             <div class="disclaimer">
-                This is a front-end UI mock-up. Trading functionality is simulated; orders link to a deposit page.
+                This is the Original chart from Marcus A.I tips, without loss.
             </div>
         </div>
     </div>
@@ -437,8 +437,8 @@
                     // Update Order Panel
                     const symbol = this.dataset.symbol;
                     orderSymbolHeader2.textContent = `Trade: ${symbol}`;
-                    sellBtn2.innerHTML = `<i class="fas fa-arrow-down"></i> **SELL** (${this.dataset.bid})`;
-                    buyBtn2.innerHTML = `<i class="fas fa-arrow-up"></i> **BUY** (${this.dataset.ask})`;
+                    sellBtn2.innerHTML = `<i class="fas fa-arrow-down"></i> SELL (${this.dataset.bid})`;
+                    buyBtn2.innerHTML = `<i class="fas fa-arrow-up"></i> BUY (${this.dataset.ask})`;
 
                     // Reload the TradingView widget with the new symbol
                     document.getElementById('tradingview_widget_container_2').innerHTML = ''; 
