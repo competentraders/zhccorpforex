@@ -453,8 +453,8 @@
             const bidPrice = activeAsset.bid.toFixed(activeAsset.symbol.includes('JPY') ? 3 : 5);
             const askPrice = activeAsset.ask.toFixed(activeAsset.symbol.includes('JPY') ? 3 : 5);
             orderSymbolHeader2.textContent = `Trade: ${activeAsset.symbol}`;
-            sellBtn2.innerHTML = `<i class="fas fa-arrow-down"></i> **SELL** (${bidPrice})`;
-            buyBtn2.innerHTML = `<i class="fas fa-arrow-up"></i> **BUY** (${askPrice})`;
+            sellBtn2.innerHTML = `<i class="fas fa-arrow-down"></i> SELL (${bidPrice})`;
+            buyBtn2.innerHTML = `<i class="fas fa-arrow-up"></i> BUY (${askPrice})`;
         }
 
         // --- Initialization ---
