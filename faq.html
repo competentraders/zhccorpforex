@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Frequently Asked Questions | Zhccorpforex</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* Custom Configuration and Font Setup */
+        :root {
+            --color-primary: #1e3a8a; /* Deep Blue */
+            --color-secondary: #fcd34d; /* Gold/Amber Accent */
+            --color-dark: #0f172a; /* Slate Black */
+            --color-light: #f1f5f9; /* Light Gray */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-dark);
+            color: var(--color-light);
+            min-height: 100vh;
+        }
+        .bg-primary { background-color: var(--color-primary); }
+        .text-secondary { color: var(--color-secondary); }
+        
+        /* Styles for the Accordion */
+        .faq-question {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px; /* Large enough value to contain content */
+            padding-top: 1rem;
+            padding-bottom: 1.5rem;
+        }
+        .faq-item.active .faq-question {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .faq-item:not(.active) .faq-answer {
+             /* Ensure no padding when closed */
+             padding-top: 0;
+             padding-bottom: 0;
+        }
+    </style>
+    
+    <!-- Tailwind Configuration (Allows using custom colors easily) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#0f172a',
+                        'brand-primary': '#1e3a8a',
+                        'brand-secondary': '#fcd34d',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Header (Simple, matches brand aesthetic) -->
+    <header class="bg-brand-dark shadow-lg border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-start items-center">
+            <!-- Logo/Brand -->
+            <div class="text-2xl font-extrabold flex items-center">
+                <i class="fas fa-globe-americas text-brand-secondary mr-2"></i>
+                <span class="text-white">ZhcCorp</span><span class="text-brand-primary">Forex</span>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-bold ml-8 text-white">FAQ Center</h1>
+        </div>
+    </header>
+
+    <!-- Main FAQ Content -->
+    <main class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <h2 class="text-4xl font-extrabold text-center mb-4 text-white">Frequently Asked Questions</h2>
+        <p class="text-center text-gray-400 mb-10">
+            Find quick answers to common questions about accounts, trading, funding, and our commitment to regulation.
+        </p>
+
+        <!-- FAQ Categories and Accordions -->
+        <div id="faq-container" class="space-y-6">
+
+            <!-- Category: General & Regulation (Index Page) -->
+            <h3 class="text-2xl font-semibold border-b border-brand-primary pb-2 text-brand-secondary pt-6">General & Regulatory Compliance</h3>
+            
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">Is Zhccorpforex a highly regulated broker?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>Yes, absolutely. Zhccorpforex is licensed and strictly regulated by <span class="font-semibold text-white">(Specific Regulator Body, e.g., FCA, CySEC, or a relevant mock authority)</span>. Our adherence to stringent global financial standards ensures client fund segregation, transparent operations, and maximum protection for all traders. Compliance and security are our foundational commitments.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">How do I navigate the website and find key sections (Hamburger Menu)?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>The main navigation links (Home, Trading, Academy, etc.) are available in the top menu bar. On mobile devices, these are accessed via the <span class="font-semibold text-white">Hamburger Menu</span> icon (<i class="fas fa-bars mx-1"></i>) usually located in the top corner. Clicking this icon reveals a full list of all pages, including your Account Settings and the Deposit/Withdrawal links.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">How can I contact the support team?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>We offer 24/5 customer support via several channels: Live Chat (fastest response), Email (support@zhccorpforex.com), and Phone Support (<span class="font-semibold text-white">+1 (800) 555-0199</span>). Details are always available on the 'Contact Us' page.</p>
+                </div>
+            </div>
+
+            <!-- Category: Account Management & Access -->
+            <h3 class="text-2xl font-semibold border-b border-brand-primary pb-2 text-brand-secondary pt-6">Account, Login, and Registration</h3>
+            
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">What is the registration process?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <ol class="list-decimal list-inside space-y-2">
+                        <li>Click the 'Register' or 'Open Account' button.</li>
+                        <li>Complete the simple registration form with your name, email, and password.</li>
+                        <li>Submit identity verification documents (KYC) to comply with regulatory requirements (takes 1-2 business days).</li>
+                        <li>Once verified, your account is fully activated, and you can deposit and begin trading.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">I forgot my password. How do I recover it?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>On the <span class="font-semibold text-white">Login</span> screen, click the <span class="font-semibold text-white">'Forgot Password'</span> link. Enter the email address associated with your Zhccorpforex account. We will send you a secure link to reset your password instantly. Check your spam folder if you do not receive the email within a few minutes.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">Why am I having issues logging in?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>Please check the following:</p>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>Ensure your username (usually your email) and password are correct and check your Caps Lock key.</li>
+                        <li>Verify your internet connection.</li>
+                        <li>If you recently attempted too many times, your account may be temporarily locked for security. Wait 15 minutes or contact support immediately.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Category: Trading & Platform -->
+            <h3 class="text-2xl font-semibold border-b border-brand-primary pb-2 text-brand-secondary pt-6">Trading Dashboard & Platform</h3>
+
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">What features are available on the dashboard_forex page?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>The <span class="font-semibold text-white">Dashboard</span> is your central control panel. It includes:</p>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li><span class="font-semibold text-white">Account Overview:</span> Balance, Equity, Margin Level, P&L Summary.</li>
+                        <li><span class="font-semibold text-white">Trade History:</span> Detailed logs of all executed and closed positions.</li>
+                        <li><span class="font-semibold text-white">Deposit/Withdrawal:</span> Direct links to fund management sections.</li>
+                        <li><span class="font-semibold text-white">Active Trades Widget:</span> Real-time monitoring and modification of open positions.</li>
+                        <li><span class="font-semibold text-white">Analytical Tools:</span> Access to economic calendars, news feeds, and charting tools.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">How do I access different asset lists and analysis tools?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>You can manage assets through the <span class="font-semibold text-white">'Watchlist'</span> panel on the trading platform. All major navigation within the platform (e.g., changing chart timeframes, adding indicators, switching between Forex, Metals, and Indices) is accessed via the side menu or the <span class="font-semibold text-white">hamburger lists</span> icon within the trading terminal.</p>
+                </div>
+            </div>
+
+            <!-- Category: Funding & Bonuses -->
+            <h3 class="text-2xl font-semibold border-b border-brand-primary pb-2 text-brand-secondary pt-6">Deposits, Withdrawals, and Bonuses</h3>
+
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">How do I deposit funds into my account?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>Navigate to the <span class="font-semibold text-white">'Deposit'</span> section in your client dashboard. Select your preferred funding method (Credit Card, Bank Wire, E-Wallets), enter the amount, and follow the on-screen instructions. Deposits are usually credited instantly for cards/e-wallets.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">Is the withdrawal process easy, and how long does it take?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>We pride ourselves on <span class="font-semibold text-white">easy and swift withdrawals</span>. Requests are processed by our compliance team within 24 hours on business days.</p>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li><span class="font-semibold text-white">Processing Time:</span> 24 hours (Zhccorpforex internal review).</li>
+                        <li><span class="font-semibold text-white">Credit/Debit Cards:</span> 3-5 business days.</li>
+                        <li><span class="font-semibold text-white">E-Wallets:</span> Instant or up to 1 business day.</li>
+                        <li><span class="font-semibold text-white">Bank Wires:</span> 2-5 business days.</li>
+                    </ul>
+                    <p class="mt-2 text-brand-secondary">We return funds only to the original source of deposit for security and regulatory compliance.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">Tell me about the \$800 new registration bonus.</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>The <span class="font-semibold text-white">$800 New Registration Bonus</span> is a promotional trading credit applied to your account upon first successful deposit and full KYC verification. This is a trading bonus designed to increase your margin and potential profit volume.</p>
+                    <p class="mt-2 font-semibold">Important Terms:</p>
+                    <ul class="list-disc list-inside ml-4 mt-2">
+                        <li>The bonus itself cannot be withdrawn immediately.</li>
+                        <li>Profits generated using the bonus can be withdrawn once specified trading volume requirements are met.</li>
+                        <li>Please consult the full Bonus Terms & Conditions on our Promotions page for eligibility and withdrawal rules.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question flex justify-between items-center bg-slate-800 p-4 rounded-xl shadow-md hover:bg-slate-700/50 transition duration-150">
+                    <span class="font-medium text-white">Do you offer investment plans or copy trading?</span>
+                    <i class="fas fa-chevron-down text-brand-secondary transition-transform duration-300"></i>
+                </div>
+                <div class="faq-answer bg-slate-900/80 rounded-b-xl border-t border-brand-primary text-gray-300">
+                    <p>Yes, Zhccorpforex offers various structured investment opportunities and a sophisticated Copy Trading platform, allowing clients to mirror the trades of successful, verified traders. Details on our proprietary <span class="font-semibold text-white">Invest Plans</span> (including risk ratings and historical performance) are available in the dedicated 'Invest' section of the dashboard.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    
+    <!-- Footer (Matching the main page structure) -->
+    <footer class="bg-brand-dark border-t border-brand-primary pt-8 pb-4 mt-12">
+        <div class="text-center text-xs text-gray-500">
+            <p>Zhccorpforex is a trading name of ZhcCorp Forex Limited. Regulated Brokerage Firm.</p>
+            <p class="mt-1">&copy; 2025 Zhccorpforex. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Accordion Functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const icon = question.querySelector('i');
+
+                question.addEventListener('click', () => {
+                    // Close other open answers
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                            otherItem.querySelector('.faq-question i').classList.remove('fa-chevron-up');
+                            otherItem.querySelector('.faq-question i').classList.add('fa-chevron-down');
+                        }
+                    });
+
+                    // Toggle current answer
+                    item.classList.toggle('active');
+                    icon.classList.toggle('fa-chevron-up');
+                    icon.classList.toggle('fa-chevron-down');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
