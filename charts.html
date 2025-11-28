@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZHC Forex Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://s3.tradingview.com/tv.js"></script>
+    
+    <style>
+        /* General Reset and Vibrant Dark Theme */
+        body {
+            font-family: 'Open Sans', sans-serif; 
+            background: #0d101a; /* Even darker base */
+            color: #e0e6ed; 
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            /* Subtle background texture/gradient */
+            background-image: radial-gradient(circle at top left, #1e222d 0%, #0d101a 50%), 
+                              linear-gradient(to bottom right, #0d101a 0%, #07090e 100%);
+            background-blend-mode: multiply;
+        }
+
+        /* --- Header --- */
+        .terminal-header {
+            background-color: #1a1e26;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #2a2e39;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #00bcd4; /* Vibrant Cyan */
+            letter-spacing: 0.5px;
+        }
+        .logo i {
+            margin-right: 8px;
+            color: #4CAF50; /* A contrasting accent */
+        }
+
+        .user-info span {
+            margin-left: 20px;
+            font-size: 0.95em;
+            color: #b0b8c4;
+            font-weight: 600;
+        }
+        .user-info span i {
+            margin-right: 6px;
+            color: #00bcd4; /* Icon color */
+        }
+        .user-info span strong {
+            color: #f0f4f8; /* Make amounts stand out */
+        }
+
+        /* --- Main Layout: Grid Structure --- */
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px; 
+            grid-template-rows: 100%;
+            height: calc(100vh - 50px); /* Account for header height */
+        }
+
+        /* --- Panel Styling --- */
+        .panel {
+            background-color: #1a1e26; 
+            border-right: 1px solid #2a2e39; 
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Inner shadow for panels */
+        }
+        .panel:last-child {
+            border-right: none;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel-header {
+            padding: 12px 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: #fff;
+            background-color: #2a2e39;
+            border-bottom: 1px solid #3d4554;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+        }
+        .panel-header i {
+            margin-right: 10px;
+            color: #00bcd4; /* Icon color */
+        }
+
+
+        /* --- 1. Watchlist Panel (Left) --- */
+        .watchlist-container {
+            grid-column: 1;
+        }
+        
+        .asset-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: calc(100% - 50px); 
+        }
+        
+        .asset-item {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr; 
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #2a2e39;
+            transition: background-color 0.15s ease, color 0.15s ease;
+            font-size: 0.95em;
+        }
+        
+        .asset-item:hover {
+            background-color: #384252;
+        }
+
+        .asset-item.active {
+            background-color: #00bcd4; /* Active asset highlight */
+            color: #fff;
+        }
+        .asset-item.active .symbol,
+        .asset-item.active .bid,
+        .asset-item.active .ask {
+            color: #fff;
+        }
+        
+        .symbol { color: #e0e6ed; font-weight: 600; }
+        .bid { color: #26a69a; text-align: right; } /* Lighter Green */
+        .ask { color: #ef5350; text-align: right; } /* Lighter Red */
+
+        /* --- 2. Chart Area (Center) --- */
+        .chart-area {
+            grid-column: 2;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        #tradingview_widget_container_2 { 
+            height: 100%;
+            width: 100%;
+            border: none; /* TradingView widget handles its own border */
+        }
+
+        /* --- 3. Order Panel (Right) --- */
+        .order-panel {
+            grid-column: 3;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .order-section {
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed #3d4554;
+        }
+        .order-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            color: #b0b8c4;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            background-color: #2a2e39;
+            border: 1px solid #3d4554;
+            color: #e0e6ed;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield; 
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none; 
+            margin: 0;
+        }
+
+
+        .trade-button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .trade-btn {
+            flex: 1;
+            padding: 18px 0;
+            border: none;
+            color: #fff;
+            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .sell-btn { background-color: #ef5350; } 
+        .buy-btn { background-color: #26a69a; } 
+
+        .trade-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Order Type Tabs */
+        .order-type-tabs {
+            display: flex;
+            background-color: #2a2e39;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden; 
+        }
+        .order-type-tabs button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: none;
+            color: #b0b8c4;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-family: 'Open Sans', sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .order-type-tabs button.active-tab {
+            background-color: #00bcd4; /* Active tab color */
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            margin-top: 30px;
+            font-size: 0.75em;
+            text-align: center;
+            color: #5a647d;
+        }
+
+    </style>
+</head>
+<body>
+
+  <div class="terminal-header" style="background-color: #0d101a; border-bottom: none; box-shadow: none; padding: 10px 15px; align-items: flex-start;">
+    
+    <div style="font-family: 'Montserrat', sans-serif; font-size: 1.2em; font-weight: 700; color: #00bcd4; margin-top: 5px;">
+        <i class="fas fa-chart-line"></i>ZHC FX
+    </div>
+    
+    <div style="display: flex; gap: 15px; font-size: 0.9em; color: #f0f4f8;">
+        
+        <div style="text-align: right; line-height: 1.2;">
+            <div style="font-size: 0.7em; color: #b0b8c4; margin-bottom: 0px;"><i class="fas fa-wallet" style="color: #4CAF50; margin-right: 3px;"></i> Balance</div>
+            <div style="font-size: 1.1em; font-weight: 700; font-family: 'Montserrat', sans-serif;">$0.00</div>
+        </div>
+
+        <div style="text-align: right; line-height: 1.2;">
+            <div style="font-size: 0.7em; color: #b0b8c4; margin-bottom: 0px;"><i class="fas fa-money-bill-wave" style="color: #00bcd4; margin-right: 3px;"></i> Equity</div>
+            <div style="font-size: 1.1em; font-weight: 700; font-family: 'Montserrat', sans-serif;">$0.00</div>
+        </div>
+        
+        <div style="text-align: right; line-height: 1.2;">
+            <div style="font-size: 0.7em; color: #b0b8c4; margin-bottom: 0px;"><i class="fas fa-percent" style="color: #ef5350; margin-right: 3px;"></i> Margin</div>
+            <div style="font-size: 1.1em; font-weight: 700; font-family: 'Montserrat', sans-serif;">$0.00</div>
+        </div>
+
+    </div>
+</div>
+
+
+
+    <div class="main-content">
+
+        <div class="panel watchlist-container">
+            <div class="panel-header"><i class="fas fa-list"></i>Watchlist</div>
+            <ul class="asset-list" id="assetList2">
+                </ul>
+        </div>
+
+        <div class="chart-area">
+            <div id="tradingview_widget_container_2">
+                </div>
+        </div>
+
+        <div class="panel order-panel">
+            <div class="panel-header" id="orderSymbolHeader2"><i class="fas fa-cash-register"></i>Trade: EURUSD</div>
+
+            <div class="order-section">
+                <div class="order-type-tabs">
+                    <button class="active-tab">Market Order</button>
+                    <button>Limit Order</button>
+                </div>
+
+                <div class="input-group">
+                    <label for="lots-size2">Lots Size (0.01 - 100.00)</label>
+                    <input type="number" id="lots-size2" value="0.10" min="0.01" step="0.01">
+                </div>
+                
+                <div class="input-group">
+                    <label for="sl-price2">Stop Loss (SL)</label>
+                    <input type="number" id="sl-price2" value="" placeholder="e.g., 1.07500">
+                </div>
+
+                <div class="input-group">
+                    <label for="tp-price2">Take Profit (TP)</label>
+                    <input type="number" id="tp-price2" value="" placeholder="e.g., 1.09500">
+                </div>
+            </div>
+            
+            <div class="trade-button-group">
+                <a href="deposit.html" class="trade-btn sell-btn" id="sellBtn2"><i class="fas fa-arrow-down"></i> SELL (1.08250)</a>
+                <a href="deposit.html" class="trade-btn buy-btn" id="buyBtn2"><i class="fas fa-arrow-up"></i> BUY (1.08255)</a>
+            </div>
+            
+            <div class="disclaimer">
+                This is a front-end UI mock-up. Trading functionality is simulated; orders link to a deposit page.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- TradingView Widget Configuration (re-using the same function) ---
+        function loadTradingViewWidget2(symbol) {
+            new TradingView.widget({
+                "container_id": "tradingview_widget_container_2", 
+                "autosize": true,
+                "symbol": symbol, 
+                "interval": "5", 
+                "timezone": "exchange",
+                "theme": "dark",
+                "style": "1", // Candlesticks
+                "locale": "en",
+                "toolbar_bg": "#1a1e26", /* Match header background */
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "save_image": false,
+                "calendar": false,
+                "studies": [ "RSI@tv-basicstudies", "Moving Average Exponential@tv-basicstudies" ],
+                "support_host": "https://www.tradingview.com"
+            });
+        }
+
+        // --- Simulated Assets Data (Same as before) ---
+        const ASSETS_2 = [
+            { symbol: "EURUSD", bid: 1.08250, ask: 1.08255, tvSymbol: "FX:EURUSD" },
+            { symbol: "GBPUSD", bid: 1.25100, ask: 1.25105, tvSymbol: "FX:GBPUSD" },
+            { symbol: "USDJPY", bid: 147.550, ask: 147.555, tvSymbol: "FX:USDJPY" },
+            { symbol: "USDCAD", bid: 1.34500, ask: 1.34505, tvSymbol: "FX:USDCAD" },
+            { symbol: "AUDUSD", bid: 0.65500, ask: 0.65505, tvSymbol: "FX:AUDUSD" },
+            { symbol: "EURJPY", bid: 159.600, ask: 159.605, tvSymbol: "FX:EURJPY" },
+            { symbol: "XAUUSD", bid: 2050.50, ask: 2050.60, tvSymbol: "FX_IDC:XAUUSD" }, 
+            { symbol: "WTI_OIL", bid: 75.20, ask: 75.25, tvSymbol: "NYMEX:CL1!" }, 
+            { symbol: "BTCUSD", bid: 42000.00, ask: 42000.50, tvSymbol: "BINANCE:BTCUSDT" },
+            { symbol: "SPX500", bid: 4950.00, ask: 4950.50, tvSymbol: "FX_IDC:SPX500" },
+            { symbol: "NZDUSD", bid: 0.60500, ask: 0.60505, tvSymbol: "FX:NZDUSD" },
+            { symbol: "USDCHF", bid: 0.88500, ask: 0.88505, tvSymbol: "FX:USDCHF" },
+            { symbol: "EURAUD", bid: 1.63500, ask: 1.63505, tvSymbol: "FX:EURAUD" },
+            { symbol: "GBPJPY", bid: 184.500, ask: 184.505, tvSymbol: "FX:GBPJPY" },
+            { symbol: "AUDCAD", bid: 0.95500, ask: 0.95505, tvSymbol: "FX:AUDCAD" },
+            { symbol: "CADJPY", bid: 109.800, ask: 109.805, tvSymbol: "FX:CADJPY" },
+            { symbol: "GBPNZD", bid: 2.05000, ask: 2.05005, tvSymbol: "FX:GBPNZD" },
+            { symbol: "DAX40", bid: 16800.00, ask: 16801.00, tvSymbol: "FX_IDC:GR30" },
+            { symbol: "NDX100", bid: 17500.00, ask: 17501.00, tvSymbol: "FX_IDC:NAS100" },
+            { symbol: "ETHUSD", bid: 2200.00, ask: 2200.50, tvSymbol: "BINANCE:ETHUSDT" }
+        ];
+
+        let currentSymbol2 = "FX:EURUSD"; 
+
+        // --- Watchlist Rendering and Price Update Simulation ---
+        const assetList2 = document.getElementById('assetList2');
+        const orderSymbolHeader2 = document.getElementById('orderSymbolHeader2');
+        const sellBtn2 = document.getElementById('sellBtn2');
+        const buyBtn2 = document.getElementById('buyBtn2');
+
+        function updateWatchlistAndPrices2() {
+            assetList2.innerHTML = ''; 
+            
+            ASSETS_2.forEach(asset => {
+                // Simulate a small, random price movement
+                const randomChange = (Math.random() - 0.5) * 0.00005;
+                asset.bid += randomChange;
+                asset.ask += randomChange;
+                
+                // Keep prices formatted
+                const bidPrice = asset.bid.toFixed(asset.symbol.includes('JPY') ? 3 : 5);
+                const askPrice = asset.ask.toFixed(asset.symbol.includes('JPY') ? 3 : 5);
+
+                const listItem = document.createElement('li');
+                listItem.className = `asset-item ${asset.tvSymbol === currentSymbol2 ? 'active' : ''}`;
+                listItem.dataset.tvSymbol = asset.tvSymbol;
+                listItem.dataset.symbol = asset.symbol;
+                listItem.dataset.bid = bidPrice;
+                listItem.dataset.ask = askPrice;
+
+                listItem.innerHTML = `
+                    <span class="symbol">${asset.symbol}</span>
+                    <span class="bid">${bidPrice}</span>
+                    <span class="ask">${askPrice}</span>
+                `;
+
+                // Add click listener to change the chart and order panel
+                listItem.addEventListener('click', function() {
+                    document.querySelectorAll('.asset-item').forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+                    currentSymbol2 = this.dataset.tvSymbol;
+                    
+                    // Update Order Panel
+                    const symbol = this.dataset.symbol;
+                    orderSymbolHeader2.textContent = `Trade: ${symbol}`;
+                    sellBtn2.innerHTML = `<i class="fas fa-arrow-down"></i> **SELL** (${this.dataset.bid})`;
+                    buyBtn2.innerHTML = `<i class="fas fa-arrow-up"></i> **BUY** (${this.dataset.ask})`;
+
+                    // Reload the TradingView widget with the new symbol
+                    document.getElementById('tradingview_widget_container_2').innerHTML = ''; 
+                    loadTradingViewWidget2(currentSymbol2);
+                });
+
+                assetList2.appendChild(listItem);
+            });
+            
+            // Initial Order Panel Update (in case it wasn't clicked)
+            const activeAsset = ASSETS_2.find(a => a.tvSymbol === currentSymbol2) || ASSETS_2[0];
+            const bidPrice = activeAsset.bid.toFixed(activeAsset.symbol.includes('JPY') ? 3 : 5);
+            const askPrice = activeAsset.ask.toFixed(activeAsset.symbol.includes('JPY') ? 3 : 5);
+            orderSymbolHeader2.textContent = `Trade: ${activeAsset.symbol}`;
+            sellBtn2.innerHTML = `<i class="fas fa-arrow-down"></i> **SELL** (${bidPrice})`;
+            buyBtn2.innerHTML = `<i class="fas fa-arrow-up"></i> **BUY** (${askPrice})`;
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Load the default chart (EURUSD)
+            loadTradingViewWidget2(ASSETS_2[0].tvSymbol);
+            
+            // 2. Initialize and start the dynamic price updates every 1.5 seconds
+            updateWatchlistAndPrices2();
+            setInterval(updateWatchlistAndPrices2, 1500);
+
+            // 3. Add logic for Order Type tabs (for visual feedback)
+            document.querySelectorAll('.order-type-tabs button').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.order-type-tabs button').forEach(b => b.classList.remove('active-tab'));
+                    this.classList.add('active-tab');
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
