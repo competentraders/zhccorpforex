@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Call Simulator | ZHC Corp FX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#0A0F17',
+                        'secondary-dark': '#181F2C',
+                        'accent-teal': '#00D09C',
+                        'accent-blue': '#00C4FF',
+                        'status-red': '#E53935',
+                    },
+                    keyframes: {
+                        ring: {
+                            '0%': { transform: 'scale(0.8)', opacity: 1 },
+                            '100%': { transform: 'scale(1.5)', opacity: 0 },
+                        },
+                        speaking: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' }
+                        }
+                    },
+                    animation: {
+                        ring: 'ring 1.5s cubic-bezier(0, 0, 0.2, 1) infinite',
+                        speaking: 'speaking 0.5s ease-in-out infinite alternate',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background-color: var(--primary-dark); 
+            font-family: 'Inter', sans-serif; 
+        }
+        .softphone-display {
+            height: 500px;
+            max-height: 80vh;
+        }
+        .transcript-area {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding: 1rem;
+            background-color: #0F131A;
+            border-bottom: 1px solid #374151;
+        }
+        .user-text {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+        .bot-text {
+            color: #E0E0E0;
+            font-style: italic;
+        }
+        .mic-button {
+            transition: all 0.3s ease-in-out;
+        }
+        .is-speaking {
+            background-color: var(--status-red);
+            box-shadow: 0 0 10px rgba(229, 57, 53, 0.7);
+        }
+        .is-listening {
+             animation: ring 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        .bot-active-speaking {
+            background-color: var(--accent-teal);
+            animation: speaking 0.5s ease-in-out infinite alternate;
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen flex items-center justify-center">
+
+    <div class="max-w-3xl w-full bg-secondary-dark rounded-2xl shadow-2xl p-6 lg:p-10 border border-gray-700">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold mb-2 text-accent-teal">Virtual Voice Agent Simulation</h1>
+            <p class="text-gray-400">Practice your customer service script with the ZHC AI Voice Agent.</p>
+        </header>
+
+        <div class="softphone-display flex flex-col rounded-xl overflow-hidden border-2 border-accent-teal shadow-xl">
+            
+            <div class="bg-gray-800 p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i id="botIcon" class="fas fa-headset text-2xl text-accent-teal"></i>
+                    <div>
+                        <p class="font-bold text-lg">Agent: Maria (AI TTS)</p>
+                        <p id="callStatus" class="text-sm text-accent-teal font-medium">STATUS: Ready to Start Call</p>
+                    </div>
+                </div>
+                <div id="callTimer" class="text-xl font-mono text-white bg-gray-900 px-3 py-1 rounded">00:00</div>
+            </div>
+
+            <div id="transcriptArea" class="transcript-area space-y-3">
+                <p class="bot-text text-sm">
+                    <span class="text-accent-teal">[AI]</span>: Welcome to the ZHC training simulation. Press **CONNECT** to start the call.
+                </p>
+            </div>
+
+            <div class="p-4 bg-gray-800 flex items-center justify-around border-t border-gray-700">
+                
+                <button id="connectButton" onclick="toggleCall()" 
+                        class="px-6 py-3 rounded-full bg-accent-teal text-primary-dark font-bold shadow-lg hover:bg-teal-600 transition">
+                    <i class="fas fa-phone mr-2"></i> CONNECT
+                </button>
+                
+                <div class="relative">
+                    <div id="micRing" class="absolute inset-0 m-auto rounded-full w-16 h-16 bg-accent-blue/50 hidden"></div>
+                    <button id="micButton" onclick="simulateSpeech()" disabled
+                            class="mic-button w-16 h-16 rounded-full bg-gray-700 text-white text-2xl shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+
+                <button id="endButton" onclick="endCall('User Hung Up')" disabled
+                        class="px-6 py-3 rounded-full bg-status-red text-white font-bold shadow-lg opacity-50 hover:opacity-100 transition">
+                    <i class="fas fa-phone-slash mr-2"></i> END CALL
+                </button>
+            </div>
+
+        </div>
+        
+        <p class="text-center text-xs text-gray-500 mt-4">
+            *This simulation uses your browser's Text-to-Speech feature for the female voice greeting.
+        </p>
+        
+    </div>
+
+    <script>
+        const connectButton = document.getElementById('connectButton');
+        const endButton = document.getElementById('endButton');
+        const micButton = document.getElementById('micButton');
+        const micRing = document.getElementById('micRing');
+        const botIcon = document.getElementById('botIcon');
+        const callStatus = document.getElementById('callStatus');
+        const callTimer = document.getElementById('callTimer');
+        const transcriptArea = document.getElementById('transcriptArea');
+        
+        let isCallActive = false;
+        let timerInterval;
+        let seconds = 0;
+        let autoHangUpTimeout;
+
+        // --- TTS Setup (Browser's built-in voice) ---
+        const synth = window.speechSynthesis;
+        let femaleVoice = null;
+        
+        function findFemaleVoice() {
+            if (femaleVoice) return;
+            const voices = synth.getVoices();
+            // Tries to find a voice that sounds female and is English (or default)
+            femaleVoice = voices.find(voice => 
+                (voice.name.includes('Female') || voice.name.includes('Zira') || voice.name.includes('Google US')) && 
+                voice.lang.startsWith('en')
+            );
+            // Fallback to the first voice if no specific female voice is found
+            if (!femaleVoice) femaleVoice = voices.find(voice => voice.lang.startsWith('en')) || voices[0];
+        }
+        
+        // Populate voices once they load
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = findFemaleVoice;
+        }
+
+        function speak(text) {
+            findFemaleVoice(); // Ensure voice is loaded
+            if (!synth || !femaleVoice) {
+                console.warn("TTS not available or no English voice found.");
+                return;
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = femaleVoice;
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            
+            // Visual feedback for bot speaking
+            utterance.onstart = () => {
+                botIcon.classList.add('bot-active-speaking');
+                callStatus.textContent = 'STATUS: Agent Speaking...';
+            };
+            utterance.onend = () => {
+                botIcon.classList.remove('bot-active-speaking');
+                callStatus.textContent = 'STATUS: Call in Progress';
+                
+                // Set Auto Hang-Up timeout AFTER bot finishes speaking
+                setAutoHangUp();
+            };
+            
+            synth.speak(utterance);
+        }
+        
+        // --- Timer and Auto Hang-Up Logic ---
+        
+        function updateTimer() {
+            seconds++;
+            const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const secs = String(seconds % 60).padStart(2, '0');
+            callTimer.textContent = `${mins}:${secs}`;
+        }
+        
+        function setAutoHangUp() {
+             // Hang up after 10 seconds of silence/inactivity
+            clearTimeout(autoHangUpTimeout); 
+            autoHangUpTimeout = setTimeout(() => {
+                endCall('Timeout: No Response');
+            }, 10000); 
+        }
+        
+        function clearAutoHangUp() {
+            clearTimeout(autoHangUpTimeout);
+        }
+
+        function addTranscript(speaker, text) {
+            const p = document.createElement('p');
+            p.className = 'text-sm';
+            
+            if (speaker === 'user') {
+                p.innerHTML = `<span class="user-text">[YOU]</span>: ${text}`;
+            } else if (speaker === 'bot') {
+                p.innerHTML = `<span class="bot-text text-accent-teal">[AI]</span>: ${text}`;
+            } else if (speaker === 'system') {
+                p.innerHTML = `<span class="text-sm font-bold text-status-red">[SYSTEM]</span>: ${text}`;
+            }
+            
+            transcriptArea.appendChild(p);
+            transcriptArea.scrollTop = transcriptArea.scrollHeight; 
+        }
+
+        function toggleCall() {
+            if (!isCallActive) {
+                // START CALL
+                isCallActive = true;
+                seconds = 0;
+                transcriptArea.innerHTML = ''; // Clear old transcript
+                timerInterval = setInterval(updateTimer, 1000);
+                
+                // Update UI
+                connectButton.textContent = 'CONNECTED';
+                connectButton.disabled = true;
+                endButton.disabled = false;
+                endButton.classList.remove('opacity-50');
+                micButton.disabled = false;
+                micButton.classList.remove('bg-gray-700');
+                micButton.classList.add('bg-accent-blue');
+                
+                callStatus.textContent = 'STATUS: Connecting...';
+                
+                // 1. Speak the Greeting
+                const greeting = "Hello, how may I help you today?";
+                addTranscript('bot', greeting);
+                speak(greeting);
+
+            } else {
+                // This path should ideally be handled by endCall()
+            }
+        }
+
+        function endCall(reason) {
+            if (!isCallActive) return;
+            
+            clearAutoHangUp(); // Stop the timeout
+            isCallActive = false;
+            clearInterval(timerInterval);
+
+            // Update UI
+            connectButton.textContent = 'CONNECT';
+            connectButton.disabled = false;
+            endButton.disabled = true;
+            endButton.classList.add('opacity-50');
+            micButton.disabled = true;
+            micButton.classList.remove('bg-accent-blue');
+            micButton.classList.add('bg-gray-700');
+
+            micRing.classList.add('hidden');
+            micRing.style.animation = 'none';
+
+            callStatus.textContent = 'STATUS: Call Ended';
+            
+            addTranscript('system', `Call ended. Reason: ${reason}`);
+        }
+
+        function simulateSpeech() {
+            if (!isCallActive || micButton.classList.contains('is-speaking')) return;
+            
+            clearAutoHangUp(); // User spoke, so cancel the hang-up timeout
+
+            // Start User Speech Simulation
+            micButton.classList.add('is-speaking');
+            micRing.classList.remove('hidden');
+            micRing.classList.add('is-listening');
+            
+            callStatus.textContent = 'STATUS: Listening (Simulated STT)...';
+
+            // --- USER INPUT SIMULATION ---
+            const userSimulatedText = prompt("Simulate your spoken input (e.g., I need to withdraw funds):");
+
+            // Stop User Speech Simulation
+            micButton.classList.remove('is-speaking');
+            micRing.classList.add('hidden');
+            micRing.classList.remove('is-listening');
+            callStatus.textContent = 'STATUS: Processing AI Response...';
+
+            if (userSimulatedText) {
+                addTranscript('user', userSimulatedText);
+
+                // --- AI RESPONSE SIMULATION ---
+                setTimeout(() => {
+                    const aiResponse = getAiResponse(userSimulatedText);
+                    
+                    // Display text transcript
+                    addTranscript('bot', aiResponse);
+                    
+                    // Play the AI response audio
+                    speak(aiResponse); // Triggers TTS in the browser
+                    
+                }, 1000); // 1 second delay for AI processing
+            } else {
+                 // If the user cancelled the prompt, reset the hang-up timer
+                 callStatus.textContent = 'STATUS: Call in Progress';
+                 setAutoHangUp();
+            }
+        }
+        
+        // --- ENHANCED AI RESPONSE LOGIC ---
+        function getAiResponse(input) {
+            const lowerInput = input.toLowerCase();
+            
+            if (lowerInput.includes('withdraw') || lowerInput.includes('take out money')) {
+                return "Withdrawal requests must be submitted through your secure client portal. Please confirm your linked bank account and ensure you have sufficient margin. If you need further assistance, please state: transfer to human.";
+            }
+            if (lowerInput.includes('deposit') || lowerInput.includes('add funds')) {
+                return "Deposits can be made instantly via the funding tab in your account dashboard. We accept bank transfer, credit card, and several e-wallets. Are you having trouble accessing the deposit page?";
+            }
+            if (lowerInput.includes('forgot password') || lowerInput.includes('reset password')) {
+                return "I can send you a secure link for a password reset. For security, please check the primary email associated with your trading account. If you do not see the email within 5 minutes, please check your spam folder.";
+            }
+            if (lowerInput.includes('unable to register') || lowerInput.includes('cannot create account')) {
+                return "I apologize for the inconvenience. Registration issues are often due to incomplete identity verification documents or restricted geographic regions. Please make sure all forms are fully uploaded and legible.";
+            }
+            if (lowerInput.includes('ceo') || lowerInput.includes('marcus')) {
+                return "Our Chief Executive Officer is Marcus Zhee Lee Hong. He is not currently available, but I can provide you with information about his corporate vision and awards. Would you like me to do that?";
+            }
+            if (lowerInput.includes('transfer to human') || lowerInput.includes('speak to human')) {
+                return "Understood. I will now transfer your call to our human support desk. Please hold while I connect you to the next available specialist.";
+            }
+            if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
+                 return "Hello! How can I specifically assist you with your ZHC Corp FX experience today?";
+            }
+            
+            return "I'm sorry, I seem to have trouble understanding that specific request. Can you please state your query in a few simple words?";
+        }
+    </script>
+</body>
+</html>
