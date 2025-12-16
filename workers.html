@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZHCCORPFOREX - Competent Team Directory</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* Theme Configuration */
+        :root {
+            --color-dark-bg: #0A0F1A;     /* Deep Blue-Black */
+            --color-card-bg: #1B2130;     /* Dark Navy/Slate */
+            --color-primary: #3B82F6;     /* Electric Blue (Trust/FinTech) */
+            --color-accent: #10B981;      /* Emerald Green (Growth/Profit) */
+            --color-text-light: #E0E7FF;  /* Light Blue/White */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-dark-bg);
+            color: var(--color-text-light);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* Hero Wave Animation */
+        @keyframes wave-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-header {
+            background: linear-gradient(-45deg, #1B2130, #0A0F1A, #3B82F6, #1B2130);
+            background-size: 400% 400%;
+            animation: wave-animation 15s ease infinite;
+        }
+
+        /* Worker Card Animation */
+        .worker-card {
+            transition: transform 0.4s ease-out, box-shadow 0.4s ease-out;
+            border: 1px solid #1B2130;
+            position: relative;
+            overflow: hidden;
+            background: var(--color-card-bg);
+            opacity: 0; /* Hidden initially for fade-in effect */
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .worker-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(59, 130, 246, 0.4), 0 0 50px rgba(16, 185, 129, 0.2);
+            border-color: var(--color-primary);
+        }
+
+        /* Pseudo-element for hover glow */
+        .worker-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0) 70%);
+            transition: opacity 0.4s ease-out;
+            opacity: 0;
+            z-index: 0;
+        }
+
+        .worker-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Keyframes for staggered fade-in */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Apply staggered delay using JS, but this CSS sets the base */
+        
+        /* Floating Icon Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating-icon {
+            animation: float 5s ease-in-out infinite;
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#0A0F1A',
+                        'brand-card': '#1B2130',
+                        'brand-primary': '#3B82F6', 
+                        'brand-accent': '#10B981', 
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="bg-brand-dark/95 border-b border-gray-800 sticky top-0 shadow-xl z-40">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="text-3xl font-extrabold flex items-center">
+                <i class="fas fa-cubes text-brand-accent mr-2 floating-icon" style="animation-delay: 0.2s;"></i>
+                <span class="text-white">ZHC</span><span class="text-brand-primary">CORP</span><span class="text-brand-accent">FOREX</span>
+            </div>
+            <a href="index.html" class="text-brand-primary hover:text-white transition duration-200 font-medium text-sm sm:text-base border border-brand-primary px-4 py-2 rounded-lg hover:bg-brand-primary">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Main
+            </a>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION: Animated Header -->
+    <section class="hero-header py-16 sm:py-24 text-center text-white shadow-2xl">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-5xl sm:text-7xl font-black mb-4">
+                Our <span class="text-brand-accent">Competent</span> Workforce
+            </h1>
+            <p class="text-xl sm:text-2xl text-gray-300 font-light max-w-2xl mx-auto">
+                Meet the backbone of ZHCCORPFOREX—elite female strategists driving our global success.
+            </p>
+        </div>
+    </section>
+
+    <!-- WORKER CARDS GRID -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div id="worker-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            <!-- Cards will be generated here by JavaScript -->
+            
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-card border-t border-gray-800 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+            <p>&copy; 2026 ZHCCORPFOREX Global. All Rights Reserved. | Dedicated to Excellence.</p>
+        </div>
+    </footer>
+
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const workers = [
+            // --- Global/Other Branches (Initial 10) ---
+            { name: "Dr. Elara Vance", position: "Chief Strategy Officer", branch: "Global HQ (London)", image: "image1.jpg" },
+            { name: "Anya Petrova", position: "Senior Risk Analyst", branch: "Eastern Europe (Moscow)", image: "image2.jpg" },
+            { name: "Seraphina Lee", position: "Hedge Fund Portfolio Manager", branch: "APAC (Hong Kong)", image: "image3.jpg" },
+            { name: "Jasmine Kaur", position: "Lead Quantitative Modeler", branch: "India (Mumbai)", image: "image4.jpg" },
+            { name: "Chloé Dubois", position: "FX Market Specialist", branch: "Western Europe (Paris)", image: "image5.jpg" },
+            { name: "Keisha Adams", position: "Cryptocurrency Research Head", branch: "North America (New York)", image: "image6.jpg" },
+            { name: "Isabella Rossi", position: "Compliance & Governance Director", branch: "Mediterranean (Milan)", image: "image7.jpg" },
+            { name: "Yuki Tanaka", position: "FinTech Integration Lead", branch: "Japan (Tokyo)", image: "image8.jpg" },
+            { name: "Lena Müller", position: "Emerging Markets Strategist", branch: "Central Europe (Frankfurt)", image: "image9.jpg" },
+            { name: "Zara Khan", position: "Sport Capital Valuation Expert", branch: "Middle East (Dubai)", image: "image10.jpg" },
+            
+            // --- African Branches (New 5) ---
+            { name: "Ama Kumi", position: "West Africa Regional Director", branch: "Ghana (Accra)", image: "image11.jpg" },
+            { name: "Fatima Adebayo", position: "Capital Markets Strategist", branch: "Nigeria (Lagos)", image: "image12.jpg" },
+            { name: "Zola Nkosi", position: "Derivatives Trading Specialist", branch: "South Africa (Johannesburg)", image: "image13.jpg" },
+            { name: "Nadia Hassan", position: "MENA Regulatory Compliance", branch: "Egypt (Cairo)", image: "image14.jpg" },
+            { name: "Aisha Diallo", position: "FX Algorithmic Developer", branch: "Kenya (Nairobi)", image: "image15.jpg" }
+        ];
+
+        function createWorkerCard(worker, index) {
+            const delay = index * 0.1; // Staggered delay for animation
+            
+            // Determine if the worker is African for potential color distinction
+            const isAfrican = index >= 10; // Indices 10 through 14 are the new African workers
+            const titleColor = isAfrican ? 'text-brand-accent' : 'text-brand-primary';
+
+            const cardHtml = `
+                <div class="worker-card rounded-xl p-6 shadow-xl hover:shadow-2xl text-center z-10" style="animation-delay: ${delay}s;">
+                    <div class="relative inline-block mb-4">
+                        <!-- Placeholder Image (replace with actual worker photos if available) -->
+                        <img 
+                            src="${worker.image}" 
+                            alt="${worker.name}" 
+                            onerror="this.onerror=null; this.src='https://placehold.co/128x128/3B82F6/FFFFFF?text=PIC${index+1}';"
+                            class="w-32 h-32 object-cover rounded-full mx-auto border-4 border-brand-accent/50 hover:border-brand-primary transition duration-300">
+                        <div class="absolute bottom-0 right-0 bg-brand-accent rounded-full p-2 border-2 border-brand-card">
+                            <i class="fas fa-user-tie text-brand-dark text-lg"></i>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-white mb-1">${worker.name}</h3>
+                    <p class="${titleColor} font-semibold mb-3">${worker.position}</p>
+                    
+                    <div class="space-y-2 text-sm text-gray-400 border-t border-gray-700 pt-4 mt-4">
+                        <p class="flex items-center justify-center">
+                            <i class="fas fa-map-marker-alt text-brand-accent mr-2"></i> 
+                            ${worker.branch}
+                        </p>
+                        <p class="flex items-center justify-center">
+                            <i class="fas fa-globe text-brand-primary mr-2"></i> 
+                            <span class="text-xs uppercase tracking-wider">Global Operations</span>
+                        </p>
+                    </div>
+                    
+                    <!-- Interactive Button -->
+                    <button class="mt-5 w-full bg-brand-primary/20 text-brand-primary py-2 rounded-lg hover:bg-brand-primary hover:text-white transition duration-300 text-sm font-medium">
+                        View Profile
+                    </button>
+                </div>
+            `;
+            return cardHtml;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridContainer = document.getElementById('worker-grid');
+            if (gridContainer) {
+                gridContainer.innerHTML = workers.map(createWorkerCard).join('');
+            }
+        });
+    </script>
+</body>
+</html>
+

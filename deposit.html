@@ -33,14 +33,13 @@
 
     <div class="max-w-4xl mx-auto px-4 py-10">
         <h1 class="text-4xl font-extrabold mb-2 text-secondary-gold text-center">Deposit Funds</h1>
-        <p class="text-gray-400 mb-10 text-center">Transfer funds securely using the specified cryptocurrency addresses below.</p>
+        <p class="text-gray-400 mb-10 text-center">Transfer funds securely using the specified deposit methods below.</p>
 
         <div class="space-y-6">
             <p class="text-sm text-yellow-400 p-3 bg-yellow-900 bg-opacity-30 rounded-lg border border-yellow-700">
-                <i class="fas fa-exclamation-circle mr-2"></i> **IMPORTANT:**  Deposit to only these addresses, Thank you.
+                <i class="fas fa-exclamation-circle mr-2"></i> **IMPORTANT:** Deposit to only these addresses, Thank you.
             </p>
 
-            <!-- BTC Deposit Card -->
             <div class="crypto-card bg-secondary-dark p-6 rounded-xl shadow-2xl">
                 <div class="flex items-center justify-between mb-4 border-b border-gray-700 pb-2">
                     <h2 class="text-2xl font-bold text-accent-green"><i class="fab fa-bitcoin mr-2"></i> Bitcoin (BTC)</h2>
@@ -55,7 +54,6 @@
                 </div>
             </div>
 
-            <!-- USDT Deposit Card -->
             <div class="crypto-card bg-secondary-dark p-6 rounded-xl shadow-2xl">
                 <div class="flex items-center justify-between mb-4 border-b border-gray-700 pb-2">
                     <h2 class="text-2xl font-bold text-accent-green"><i class="fas fa-dollar-sign mr-2"></i> Tether (USDT)</h2>
@@ -70,7 +68,6 @@
                 </div>
             </div>
 
-            <!-- TRX Deposit Card -->
             <div class="crypto-card bg-secondary-dark p-6 rounded-xl shadow-2xl">
                 <div class="flex items-center justify-between mb-4 border-b border-gray-700 pb-2">
                     <h2 class="text-2xl font-bold text-accent-green"><i class="fas fa-cube mr-2"></i> Tron (TRX)</h2>
@@ -85,7 +82,27 @@
                 </div>
             </div>
             
-            <!-- Deposit Confirmation Button -->
+            <div class="crypto-card bg-secondary-dark p-6 rounded-xl shadow-2xl border-secondary-gold">
+                <div class="flex items-center justify-between mb-4 border-b border-gray-700 pb-2">
+                    <h2 class="text-2xl font-bold text-secondary-gold"><i class="fas fa-gift mr-2"></i> Gift Cards</h2>
+                    <span class="text-sm text-gray-500">Accepted: iTunes, Amazon, Google Play, Steam, etc.</span>
+                </div>
+                <p class="text-sm text-gray-400 mb-2">To deposit with a gift card, please follow these steps:</p>
+                <ol class="list-decimal list-inside text-gray-300 ml-4 space-y-2">
+                    <li>Purchase the gift card.</li>
+                    <li>**Scratch and clearly photograph the card's details (code, value, and receipt).**</li>
+                    <li>**Send the images to our confirmation email address:**
+                        <div class="mt-2 bg-primary-dark p-3 rounded-lg border border-secondary-gold break-all">
+                            <span id="giftCardEmail" class="font-mono text-sm text-secondary-gold flex-1">zhccorpforexltd@gmail.com</span>
+                            <button class="copy-btn text-secondary-gold hover:text-white transition ml-2" data-target="giftCardEmail" title="Copy Email">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ol>
+                <p class="mt-4 text-sm text-red-400">**NOTE:** Your account will be credited upon successful verification of the gift card details.</p>
+            </div>
+            
             <div class="mt-8 text-center">
                 <button id="confirmDeposit" class="py-3 px-12 bg-accent-green text-primary-dark font-extrabold rounded-lg shadow-xl hover:bg-green-600 transition duration-150 relative disabled:opacity-75 disabled:cursor-not-allowed">
                     <span id="buttonText">Confirm Deposit Sent</span>
@@ -95,7 +112,6 @@
         </div>
     </div>
 
-    <!-- Custom Modal for Confirmation/Error -->
     <div id="depositModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center p-4 z-50">
         <div class="modal-content bg-secondary-dark p-6 rounded-xl shadow-2xl max-w-sm w-full text-center border-t-4 border-red-500">
             <i class="fas fa-times-circle text-red-500 text-4xl mb-4"></i>
@@ -123,7 +139,9 @@
                     
                     // Copy text to clipboard
                     const tempInput = document.createElement('textarea');
-                    tempInput.value = addressElement.textContent.trim().replace(' (PLACEHOLDER)', '');
+                    // Get the text content, cleaning up any potential trailing whitespace
+                    const textToCopy = addressElement.textContent.trim();
+                    tempInput.value = textToCopy; 
                     document.body.appendChild(tempInput);
                     tempInput.select();
                     document.execCommand('copy');
@@ -131,9 +149,13 @@
 
                     // Provide feedback
                     const originalIcon = button.querySelector('i').className;
+                    const originalColor = button.style.color;
                     button.querySelector('i').className = 'fas fa-check text-accent-green';
+                    button.style.color = '#10b981'; // Ensure checkmark is green
+                    
                     setTimeout(() => {
                         button.querySelector('i').className = originalIcon;
+                        button.style.color = originalColor; // Restore original color
                     }, 2000);
                 });
             });
@@ -163,4 +185,3 @@
     </script>
 </body>
 </html>
-
