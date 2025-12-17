@@ -1,385 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZHCCORPFX Job Application - Secured</title>
-
-<style>
-/* 🎨 NEW COLORS */
-:root{
-    --main: #004d40; /* Deep Teal - Corporate */
-    --accent: #00e676; /* Bright Green - Modern Accent */
-    --light: #f5f8fa; /* Very Light Background */
-    --text: #333333;
-    --border-color: #cfd8dc;
-    --error: #d32f2f;
-}
-
-/* --- BASE STYLES --- */
-body{
-    margin:0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background:var(--light);
-    color:var(--text);
-}
-
-/* --- ANIMATIONS --- */
-.fade-in{
-    animation:fade 1.8s ease forwards;
-    opacity:0;
-}
-@keyframes fade{
-    to{opacity:1;}
-}
-
-.slide-up{
-    animation:up 1.2s ease forwards;
-    transform:translateY(30px);
-    opacity:0;
-}
-@keyframes up{
-    to{transform:translateY(0);opacity:1;}
-}
-
-/* 🔄 NEW BUTTON ANIMATION: PULSE/LOADING INDICATOR */
-.loading-pulse {
-    /* Base style for the indicator */
-    position: relative;
-    overflow: hidden;
-}
-.loading-pulse::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.4);
-    transform: translateX(-100%);
-    transition: none;
-    animation: pulse-swipe 1.5s infinite linear;
-}
-
-@keyframes pulse-swipe {
-    0% { transform: translateX(-100%); }
-    50% { transform: translateX(100%); }
-    100% { transform: translateX(100%); }
-}
-
-
-/* --- FORM STYLES --- */
-.form-input, .form-select, .form-button {
-    width: 100%;
-    padding: 14px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-}
-
-.form-input:focus, .form-select:focus {
-    border-color: var(--accent);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 230, 118, 0.2);
-}
-
-/* Validation Feedback Style */
-.form-input:invalid:not(:placeholder-shown),
-.form-select:invalid:not([value=""]) {
-    border-color: var(--error);
-}
-
-.error-message {
-    grid-column: 1 / -1;
-    color: var(--error);
-    font-weight: bold;
-    text-align: center;
-    padding: 10px;
-    border: 1px solid var(--error);
-    background: #ffebee;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    display: none; /* Hidden by default */
-}
-
-/* CV UPLOAD STYLES */
-.file-upload-label {
-    padding: 14px;
-    border: 2px dashed var(--accent);
-    background: #f0fff5;
-    border-radius: 6px;
-    cursor: pointer;
-    text-align: center;
-    color: var(--main);
-    font-weight: bold;
-    display: block;
-    transition: background 0.3s;
-}
-
-.file-upload-label:hover {
-    background: #e0f2f1;
-}
-
-/* INPUT GRID LAYOUT */
-#jobForm {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 25px;
-}
-
-/* Submit Button */
-.submit-button {
-    grid-column: 1 / -1;
-    background: var(--main);
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 4px 8px rgba(0, 77, 64, 0.3);
-}
-
-.submit-button:hover {
-    background: #00695c;
-    transform: translateY(-2px);
-}
-
-</style>
-</head>
-
-<body>
-
-<header class="fade-in" style="
-    background:var(--main);
-    padding:30px 20px;
-    color:white;
-    text-align:center;
-    font-size:32px;
-    font-weight:bold;
-    letter-spacing:1.5px;
-    box-shadow:0 6px 15px rgba(0,0,0,0.2);
-">
-    ZHCCORPFX <span style="font-weight:lighter; opacity:0.8;">— Job Application Portal</span>
-</header>
-
-<div class="slide-up" style="
-    background:white;
-    padding:15px;
-    color:var(--text);
-    text-align:center;
-    font-size:16px;
-    border-bottom:4px solid var(--accent);
-    font-weight:500;
-">
-    <p style="margin:0;"><span style="color:var(--main); font-weight:bold;">Salary: ₦200,000 per week, NYSC CERTIFICATE applicant 1,300,000 per Month.</span></p>
-    <p style="margin:5px 0 0 0; font-size:14px; opacity:0.8;">
-        Interview location and payment process details will be sent after application.
-    </p>
-</div>
-
-<div style="width:95%;max-width:1000px;margin:50px auto;">
-
-    <h2 class="slide-up" style="text-align:center;color:var(--main);margin-bottom:30px;font-size:28px;">
-        Complete Your Application Form
-    </h2>
-
-    <form id="jobForm" class="slide-up" onsubmit="return false;" style="
-        background:white;
-        padding:40px;
-        border-radius:10px;
-        box-shadow:0 6px 25px rgba(0,0,0,0.1);
-        border-left:8px solid var(--accent);
-    ">
-        <p id="formError" class="error-message">
-            Please fill out all required fields correctly before proceeding.
-        </p>
-
-        <input class="form-input" placeholder="First Name" type="text" pattern="[A-Za-z\s]{2,}" title="Minimum 2 letters, no numbers" required>
-        <input class="form-input" placeholder="Last Name" type="text" pattern="[A-Za-z\s]{2,}" title="Minimum 2 letters, no numbers" required>
-        <input class="form-input" placeholder="Email Address (Gmail Preferred)" type="email" pattern=".*@gmail\.com" title="Must be a valid @gmail.com address" required>
-        <input class="form-input" placeholder="Age" type="number" min="18" max="65" title="Must be between 18 and 65" required>
-        <input class="form-input" placeholder="Nationality" type="text" pattern="[A-Za-z\s]{3,}" required>
-        <input class="form-input" placeholder="Gender (Male/Female/Other)" type="text" pattern="[A-Za-z]{3,}" required>
-        <input class="form-input" placeholder="Any Relevant Skills" type="text" required>
-
-        <select class="form-select" required>
-            <option value="" disabled selected>Select Desired Work Tenure *</option>
-            <option value="Full Time">Full Time</option>
-            <option value="Part Time">Part Time</option>
-            <option value="Permanent Full Time">Permanent Full Time</option>
-        </select>
-
-        <label class="file-upload-label">
-            Upload CV (PDF) *
-            <input id="cvUpload" type="file" accept="application/pdf" required style="display:none;">
-        </label>
-        
-        <input class="form-input" placeholder="State of Origin" type="text" required>
-        <input class="form-input" placeholder="NYSC Status (Yes=Fill Date, No=Blank)" type="text">
-        <input class="form-input" placeholder="Date of Birth" type="date" required>
-        <input class="form-input" placeholder="Current Residential Address" type="text" pattern=".{5,}" title="Enter a valid street address" required>
-
-        <input class="form-input" placeholder="Next of Kin (Full Name)" type="text" pattern="[A-Za-z\s]{5,}" required>
-        <input class="form-input" placeholder="Secondary Email Address" type="email" title="Enter a valid email address">
-        <input class="form-input" placeholder="Mother's Name (Full Name)" type="text" pattern="[A-Za-z\s]{5,}" required>
-        <input class="form-input" placeholder="Father's Name (Full Name)" type="text" pattern="[A-Za-z\s]{5,}" required>
-
-        <button type="button" onclick="validateForm()" class="form-button submit-button">
-            SUBMIT APPLICATION & PROCEED TO PAYMENT
-        </button>
-    </form>
-</div>
-
-<div id="paymentPopup" style="
-    display:none;
-    position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
-    background:rgba(0,0,0,0.85);
-    justify-content:center;
-    align-items:center;
-    z-index:1000;
-">
-    <div style="
-        background:white;
-        width:90%;
-        max-width:400px;
-        padding:30px;
-        border-radius:12px;
-        text-align:center;
-        animation:fade 0.8s ease forwards;
-        box-shadow:0 10px 30px rgba(0,0,0,0.5);
-    ">
-
-        <h2 style="color:var(--main);margin-bottom:5px; border-bottom:2px solid var(--accent); padding-bottom:10px;">
-            Application Processing Fee
-        </h2>
-
-        <p style="margin-bottom:15px; font-size:15px; color:#555;">
-            A one-time fee is required to process your application and send the interview details.
-        </p>
-
-        <p style="font-size:14px; font-weight:bold; color:var(--main); margin-bottom:20px;">
-            Refund Policy: Your fee will be fully <span style="color:var(--accent);">REFUNDED</span> with your first salary payment.
-        </p>
-
-        <div style="background:#f9f9f9; padding:15px; border-radius:8px; border:1px solid var(--border-color);">
-            <p style="margin:0; font-size:14px; color:#777;">USDT (Tether) Address - ERC20/ETH Network</p>
-            <p style="
-                padding:10px;
-                background:#fff;
-                border-radius:6px;
-                font-weight:bold;
-                font-size:14px;
-                margin-top:8px;
-                border:2px solid var(--accent);
-                word-break: break-all;
-            ">
-                0x460dc8B711e57637D29B253E6DB70fD64946Da2e
-            </p>
-        </div>
-
-        <p style="margin-top:20px; font-size:17px;">
-            Nigeria/Africa: <b style="color:var(--main);">₦50,000</b><br>
-            Outside Africa:<b style="color:var(--main);">$150</b>
-        </p>
-
-        <button id="payBtn" onclick="paid()" style="
-            padding:14px 25px;
-            background:var(--accent);
-            color:var(--main);
-            border:none;
-            border-radius:8px;
-            margin-top:25px;
-            cursor:pointer;
-            font-size:16px;
-            font-weight:bold;
-            box-shadow:0 3px 6px rgba(0, 230, 118, 0.4);
-            transition: background 0.3s;
-        ">
-            I HAVE PAID
-        </button>
-    </div>
-</div>
-
-<div id="statusPopup" style="
-    display:none;
-    position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
-    background:rgba(0,0,0,0.7);
-    justify-content:center;
-    align-items:center;
-    z-index:1000;
-">
-    <div style="
-        background:white;
-        padding:30px;
-        width:90%;
-        max-width:350px;
-        border-radius:12px;
-        text-align:center;
-        box-shadow:0 10px 30px rgba(0,0,0,0.5);
-    ">
-        <h3 id="statusMsg" style="color:var(--main); margin-bottom:0;"></h3>
-        <p id="statusSubMsg" style="color:#e53935; font-weight:bold;">Please wait 30 seconds and try again.</p>
-    </div>
-</div>
-
-<script>
-// Function to validate all form inputs before opening the modal
-function validateForm() {
-    const form = document.getElementById('jobForm');
-    const errorDisplay = document.getElementById('formError');
-
-    // Check HTML5 validity
-    if (!form.checkValidity()) {
-        errorDisplay.style.display = 'block';
-        // Trigger default HTML5 validation messages
-        form.reportValidity();
-        return;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Terminal - Career Initialization</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    // Check CV upload manually since it's hidden
-    const cvInput = document.getElementById('cvUpload');
-    if (cvInput.files.length === 0) {
-        errorDisplay.innerText = 'Please upload your CV (PDF) to proceed.';
-        errorDisplay.style.display = 'block';
-        return;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-bg': '#05080A',
+                        'cyber-card': '#0D151C',
+                        'cyber-gold': '#FFD700',
+                        'cyber-cyan': '#00F2FF',
+                        'cyber-green': '#00FF88',
+                        'cyber-red': '#FF3131',
+                    },
+                    fontFamily: {
+                        brand: ['Orbitron', 'sans-serif'],
+                        ui: ['Rajdhani', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            font-family: 'Rajdhani', sans-serif; 
+            background: radial-gradient(circle at top right, #0D151C, #05080A);
+            background-attachment: fixed;
+            color: white;
+        }
+
+        .terminal-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .terminal-input:focus {
+            outline: none;
+            border-color: #00F2FF;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+        }
+
+        .neo-button {
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0% 30%);
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel {
+            background: rgba(13, 21, 28, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Pulse Animation for Checking Payment */
+        .loading-pulse {
+            position: relative;
+            overflow: hidden;
+        }
+        .loading-pulse::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.3), transparent);
+            animation: pulse-swipe 1.5s infinite linear;
+        }
+        @keyframes pulse-swipe {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+<body class="py-10 px-4">
+
+    <header class="max-w-4xl mx-auto text-center mb-12">
+        <div class="inline-block px-4 py-1 border border-cyber-cyan/30 text-[10px] font-brand text-cyber-cyan tracking-[0.4em] uppercase mb-4">
+            Secured Portal v4.2
+        </div>
+        <h1 class="text-4xl font-brand font-black italic tracking-tighter uppercase">
+            Career <span class="text-cyber-cyan">Initialization</span>
+        </h1>
+        
+        <div class="mt-8 glass-panel border-l-4 border-cyber-green p-4 inline-block text-left">
+            <p class="text-cyber-green font-bold uppercase text-xs tracking-widest mb-1">Compensation Package Matrix:</p>
+            <p class="text-white text-lg font-brand font-bold">₦200,000 / WEEKLY <span class="text-gray-500 mx-2">|</span> NYSC: ₦1,300,000 / MONTHLY</p>
+        </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto glass-panel p-8 relative">
+        <div class="absolute top-0 right-0 p-3 text-[10px] font-brand text-gray-600 uppercase">Input Sequence Required</div>
+        
+        <form id="jobForm" onsubmit="return false;" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <div id="formError" class="md:col-span-2 hidden bg-cyber-red/10 border border-cyber-red p-4 text-center font-brand text-xs text-cyber-red uppercase tracking-widest">
+                Critical Error: Incomplete Data Sequence
+            </div>
+
+            <input class="terminal-input p-4 text-sm" placeholder="FIRST NAME" type="text" pattern="[A-Za-z\s]{2,}" required>
+            <input class="terminal-input p-4 text-sm" placeholder="LAST NAME" type="text" pattern="[A-Za-z\s]{2,}" required>
+            
+            <div class="md:col-span-2">
+                <input class="w-full terminal-input p-4 text-sm" placeholder="SECURE EMAIL ADDRESS (GMAIL PREFERRED)" type="email" pattern=".*@gmail\.com" required>
+            </div>
+
+            <input class="terminal-input p-4 text-sm" placeholder="AGE (18-65)" type="number" min="18" max="65" required>
+            <input class="terminal-input p-4 text-sm" placeholder="NATIONALITY" type="text" required>
+            <input class="terminal-input p-4 text-sm" placeholder="GENDER" type="text" required>
+            <input class="terminal-input p-4 text-sm" placeholder="RELEVANT SKILLS" type="text" required>
+
+            <select class="terminal-input p-4 text-sm appearance-none" required>
+                <option value="" disabled selected>DESIRED WORK TENURE *</option>
+                <option value="Full Time">Full Time</option>
+                <option value="Part Time">Part Time</option>
+                <option value="Permanent Full Time">Permanent Full Time</option>
+            </select>
+
+            <label class="flex items-center justify-center border-2 border-dashed border-cyber-cyan/30 bg-cyber-cyan/5 p-4 cursor-pointer hover:bg-cyber-cyan/10 transition-all">
+                <span class="text-xs font-brand text-cyber-cyan uppercase tracking-widest">Upload CV (PDF)</span>
+                <input id="cvUpload" type="file" accept="application/pdf" required class="hidden">
+            </label>
+            
+            <input class="terminal-input p-4 text-sm" placeholder="STATE OF ORIGIN" type="text" required>
+            <input class="terminal-input p-4 text-sm" placeholder="NYSC STATUS / DATE" type="text">
+            <input class="terminal-input p-4 text-sm" placeholder="DATE OF BIRTH" type="date" required>
+            <input class="terminal-input p-4 text-sm md:col-span-2" placeholder="CURRENT RESIDENTIAL ADDRESS" type="text" required>
+
+            <input class="terminal-input p-4 text-sm" placeholder="NEXT OF KIN (FULL NAME)" type="text" required>
+            <input class="terminal-input p-4 text-sm" placeholder="SECONDARY EMAIL" type="email">
+            <input class="terminal-input p-4 text-sm" placeholder="MOTHER'S FULL NAME" type="text" required>
+            <input class="terminal-input p-4 text-sm" placeholder="FATHER'S FULL NAME" type="text" required>
+
+            <button type="button" onclick="validateForm()" class="md:col-span-2 neo-button bg-cyber-cyan text-black font-brand font-black py-5 uppercase tracking-[0.2em] hover:bg-white">
+                Initialize Application & Authentication
+            </button>
+        </form>
+    </div>
+
+    <div id="paymentPopup" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+        <div class="glass-panel max-w-sm w-full border-t-4 border-cyber-gold overflow-hidden">
+            <div class="p-8 text-center">
+                <i class="fas fa-microchip text-cyber-gold text-4xl mb-4"></i>
+                <h2 class="font-brand text-lg text-white font-bold uppercase tracking-tighter mb-4">Processing Protocol</h2>
+                
+                <p class="text-gray-400 text-xs leading-relaxed mb-6 uppercase tracking-wider">
+                    A one-time processing fee is required for security clearance. 
+                    <span class="text-cyber-green font-bold">REIMBURSEMENT</span> will occur with first cycle salary.
+                </p>
+
+                <div class="bg-black/50 border border-cyber-cyan/20 p-4 mb-6">
+                    <p class="text-[10px] text-cyber-cyan font-brand uppercase tracking-widest mb-2">USDT Address (ERC20/ETH)</p>
+                    <p class="text-[10px] text-white break-all font-mono border border-dashed border-white/10 p-2">
+                        0x460dc8B711e57637D29B253E6DB70fD64946Da2e
+                    </p>
+                </div>
+
+                <div class="flex justify-around mb-8 font-brand">
+                    <div class="text-center">
+                        <p class="text-[10px] text-gray-500 uppercase">Africa</p>
+                        <p class="text-lg text-white font-black">₦50,000</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[10px] text-gray-500 uppercase">Global</p>
+                        <p class="text-lg text-white font-black">$150</p>
+                    </div>
+                </div>
+
+                <button id="payBtn" onclick="paid()" class="w-full neo-button bg-cyber-gold text-black font-brand font-black py-4 uppercase tracking-widest">
+                    Confirm Payment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="statusPopup" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-black/95">
+        <div class="glass-panel p-10 text-center max-w-xs border border-cyber-red/50">
+            <i class="fas fa-triangle-exclamation text-cyber-red text-5xl mb-6"></i>
+            <h3 id="statusMsg" class="font-brand text-cyber-red font-black uppercase tracking-tighter text-xl mb-4"></h3>
+            <p id="statusSubMsg" class="text-xs text-gray-500 uppercase tracking-widest leading-loose">
+                Authentication Timeout.<br>Wait 30 seconds and retry sequence.
+            </p>
+            <button onclick="document.getElementById('statusPopup').style.display='none'" class="mt-8 text-cyber-cyan font-brand text-[10px] uppercase tracking-widest">Dismiss</button>
+        </div>
+    </div>
+
+    <script>
+    function validateForm() {
+        const form = document.getElementById('jobForm');
+        const errorDisplay = document.getElementById('formError');
+
+        if (!form.checkValidity()) {
+            errorDisplay.style.display = 'block';
+            form.reportValidity();
+            return;
+        }
+        
+        const cvInput = document.getElementById('cvUpload');
+        if (cvInput.files.length === 0) {
+            errorDisplay.innerText = 'CV UPLOAD SEQUENCE REQUIRED (PDF)';
+            errorDisplay.style.display = 'block';
+            return;
+        }
+
+        errorDisplay.style.display = 'none';
+        document.getElementById("paymentPopup").style.display = "flex";
     }
 
-    // If validation passes
-    errorDisplay.style.display = 'none';
-    openPayment();
-}
+    function paid() {
+        let btn = document.getElementById("payBtn");
+        btn.classList.add("loading-pulse");
+        btn.innerText = "AUTHENTICATING...";
+        btn.disabled = true;
 
-function openPayment(){
-    document.getElementById("paymentPopup").style.display = "flex";
-}
-
-// HANDLE PAYMENT CHECK with the new animation
-function paid(){
-    let btn = document.getElementById("payBtn");
-
-    // START LOADING ANIMATION
-    btn.classList.add("loading-pulse");
-    btn.innerText = "CHECKING PAYMENT...";
-    btn.disabled = true; // Disable button during check
-
-    // AFTER 20 SECONDS (simulated check)
-    setTimeout(()=>{
-        document.getElementById("paymentPopup").style.display = "none";
-        document.getElementById("statusPopup").style.display = "flex";
-        document.getElementById("statusMsg").innerText = "PAYMENT NOT CONFIRMED ❌";
-        
-        // RESET BUTTON
-        btn.classList.remove("loading-pulse");
-        btn.innerText = "I HAVE PAID";
-        btn.disabled = false;
-    }, 30000);
-}
-</script>
-
+        setTimeout(() => {
+            document.getElementById("paymentPopup").style.display = "none";
+            document.getElementById("statusPopup").style.display = "flex";
+            document.getElementById("statusMsg").innerText = "AUTH FAILED ❌";
+            
+            btn.classList.remove("loading-pulse");
+            btn.innerText = "Confirm Payment";
+            btn.disabled = false;
+        }, 30000);
+    }
+    </script>
 </body>
 </html>
