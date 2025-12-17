@@ -3,498 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Dashboard - Zhee Hong FX Trading</title>
+    <title>Elite Terminal - Zhee Hong FX</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary-dark': '#0C1218',      // Very dark background
-                        'secondary-dark': '#151F28',    // Card/panel background
-                        'accent-green': '#10b981',      // Buy/Profit color
-                        'accent-red': '#ef4444',        // Sell/Loss color
-                        'secondary-gold': '#FFD700',    // Brand accent/Active
-                        'gray-text': '#9CA3AF',
+                        'cyber-bg': '#05080A',
+                        'cyber-card': '#0D151C',
+                        'cyber-gold': '#FFD700',
+                        'cyber-cyan': '#00F2FF',
+                        'cyber-green': '#00FF88',
+                        'cyber-red': '#FF3131',
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        brand: ['Orbitron', 'sans-serif'],
+                        ui: ['Rajdhani', 'sans-serif'],
                     },
                 }
             }
         }
     </script>
+
     <style>
-        /* Custom CSS for Menu and Scrollbar */
-        .sidebar {
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
-        }
-        .sidebar.open {
-            transform: translateX(0);
-        }
-        .scroll-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        .scroll-container::-webkit-scrollbar-thumb {
-            background-color: #374151;
-            border-radius: 10px;
-        }
-        .scroll-container::-webkit-scrollbar-track {
-            background: #1f2937;
-        }
-        .menu-item {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            color: #9CA3AF;
-            transition: all 0.2s;
-        }
-        .menu-item:hover {
-            background-color: #1f2937;
-            color: white;
-        }
+        body { font-family: 'Rajdhani', sans-serif; background: radial-gradient(circle at top right, #0D151C, #05080A); }
+        .sidebar { transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); background: rgba(13, 21, 28, 0.98); backdrop-filter: blur(20px); }
+        .sidebar.open { transform: translateX(0); }
         
-        /* Banner Animation Keyframes */
-        @keyframes fadeAndPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.005); }
-        }
-        .pulsing-ad {
-            animation: fadeAndPulse 4s infinite ease-in-out;
+        .nav-glow { position: relative; overflow: hidden; }
+        .nav-glow::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0, 242, 255, 0.1), transparent); transition: 0.5s; }
+        .nav-glow:hover::after { left: 100%; }
+
+        .glass-terminal {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
 
-        .invest-button {
-            transition: all 0.2s ease-in-out;
+        .neo-button {
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0% 30%);
+            transition: all 0.3s ease;
         }
-        .invest-button:hover {
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-            transform: translateY(-2px);
-        }
-        /* Ensure canvas fully fills its container */
-        #forexChartCanvas {
-            width: 100%;
-            height: 100%;
-            display: block; 
-        }
+
+        .price-up { color: #00FF88; text-shadow: 0 0 10px rgba(0, 255, 136, 0.5); }
+        .price-down { color: #FF3131; text-shadow: 0 0 10px rgba(255, 49, 49, 0.5); }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="bg-primary-dark font-sans text-white min-h-screen overflow-x-hidden">
+<body class="text-white min-h-screen">
 
-    <div id="welcomePopup" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-80 px-4">
-        <div class="bg-secondary-dark border-2 border-secondary-gold rounded-2xl p-8 max-w-md w-full text-center shadow-2xl transform transition-all">
-            <div class="text-secondary-gold text-5xl mb-4">
-                <i class="fas fa-gift"></i>
-            </div>
-            <h2 class="text-2xl font-bold mb-4 text-white">Exclusive Offer!</h2>
-            <p class="text-gray-300 mb-6 leading-relaxed">
-                Welcome new users, a $10,000 Dollar has been credited to you ,and you can withdraw it immediately when you deposit $3000 ,this offer is for first timer.
-            </p>
-            <button onclick="closePopup()" class="w-full bg-secondary-gold text-primary-dark font-extrabold py-3 rounded-lg hover:bg-yellow-400 transition duration-200">
-                CLAIM NOW
-            </button>
+    <div id="welcomePopup" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 backdrop-blur-md">
+        <div class="glass-terminal rounded-none border-t-4 border-cyber-gold p-8 max-w-sm w-full text-center relative">
+            <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-cyber-gold text-black px-4 py-1 font-brand text-xs font-black uppercase">Priority Access</div>
+            <i class="fas fa-microchip text-cyber-gold text-5xl mb-6"></i>
+            <h2 class="font-brand text-xl font-bold mb-4 tracking-wider">OFFER DETECTED</h2>
+            <p class="text-gray-400 text-sm mb-8 leading-relaxed">System has allocated <span class="text-cyber-gold font-bold">$10,000</span> to your profile. Deposit <span class="text-white font-bold">$3,000</span> to initialize instant withdrawal protocols.</p>
+            <button onclick="closePopup()" class="w-full neo-button bg-cyber-gold text-black font-black py-4 uppercase tracking-tighter hover:bg-white">Execute Claim</button>
         </div>
     </div>
 
-    <div id="sidebar" class="sidebar fixed top-0 left-0 w-64 h-full bg-secondary-dark z-50 shadow-2xl overflow-y-auto scroll-container lg:static lg:w-64 lg:transform-none">
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 w-72 h-full z-50 border-r border-cyber-cyan/20 overflow-y-auto scroll-container lg:static lg:translate-x-0">
         <div class="p-6">
-            <div class="flex justify-between items-center mb-8 border-b border-gray-700 pb-4">
-                <h2 class="text-2xl font-extrabold text-secondary-gold">
-                    <i class="fas fa-lock text-accent-green mr-2"></i> USERS PROFILE MENU
-                </h2>
-                <button id="menuClose" class="lg:hidden text-gray-400 text-xl p-2 rounded-lg hover:bg-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="font-brand text-cyber-gold font-black text-xs tracking-widest uppercase">Elite Terminal</h2>
+                <button id="menuClose" class="lg:hidden text-cyber-cyan"><i class="fas fa-chevron-left"></i></button>
             </div>
             
-            <ul class="space-y-3">
-                <li><a href="profile.html" class="menu-item"><i class="fas fa-user mr-3"></i> User Profile</a></li>
-                <li><a href="referrals.html" class="menu-item"><i class="fas fa-share-alt mr-3"></i> Referrals</a></li>
-                <li><a href="dashboard.html" class="menu-item"><i class="fas fa-tachometer-alt mr-3"></i> Dashboard</a></li>
-                <li class="border-t border-gray-700 pt-3"></li>
-                <li><a href="wallet.html" class="menu-item"><i class="fas fa-wallet mr-3"></i> Wallet</a></li>
-
-
-                <li><a href="charts.html" class="menu-item"><i class="fas fa-wallet mr-3"></i> Forex Trade Terminal</a></li>
-
-                <li><a href="assets.html" class="menu-item"><i class="fas fa-money-bill-alt mr-3"></i> Assets</a></li>
-
-                <li><a href="withdraw.html" class="menu-item text-accent-red hover:text-red-400"><i class="fas fa-arrow-down mr-3"></i> Withdraw</a></li>
-                <li><a href="deposit.html" class="menu-item text-accent-green hover:text-green-400"><i class="fas fa-arrow-up mr-3"></i> Deposit</a></li>
-
-                <li class="border-t border-gray-700 pt-3"></li>
-                <li><a href="marcus.html" class="menu-item font-bold text-secondary-gold"><i class="fas fa-robot mr-3"></i> Marcus Zee A.I</a></li>
-
-
-
-
-                <li><a href="invest_list.html" class="menu-item"><i class="fas fa-list-ul mr-3"></i> Marcus Zee Invest List</a></li>
-
-
-
-
-                <li><a href="workers.html" class="menu-item"><i class="fas fa-list-ul mr-3"></i>Our Consistent Workers</a></li>
-
-
-
-<li><a href="apply.html" class="menu-item"><i class="fas fa-list-ul mr-3"></i> Application/Apply</a></li>
-
-
-
-                <li><a href="forex_trading.html" class="menu-item"><i class="fas fa-chart-line mr-3"></i> Forex Trading by Marcus</a></li>
-                <li class="border-t border-gray-700 pt-3"></li>
-
-
-<li><a href="voice.html" class="menu-item"><i class="fas fa-chart-line mr-3"></i> Talk To Maria A.I</a></li>
-                <li class="border-t border-gray-700 pt-3"></li>
-
-
-
-                <li><a href="about_marcus.html" class="menu-item"><i class="fas fa-info-circle mr-3"></i> About Marcus Zee</a></li>
-                <li><a href="focus.html" class="menu-item"><i class="fas fa-bullseye mr-3"></i> Our Focus</a></li>
-                <li><a href="sponsor.html" class="menu-item"><i class="fas fa-handshake mr-3"></i> Sponsor</a></li>
-                <li><a href="partners.html" class="menu-item"><i class="fas fa-users mr-3"></i> Partners</a></li>
-                <li><a href="awards.html" class="menu-item"><i class="fas fa-trophy mr-3"></i> Awards</a></li>
-                <li><a href="ceo.html" class="menu-item"><i class="fas fa-user-tie mr-3"></i> Founder and CEO</a></li>
-                <li class="border-t border-gray-700 pt-3"></li>
-                <li><a href="mailto:imarket247weekly@gmail.com" class="menu-item"><i class="fas fa-envelope mr-3"></i> Marcus Zee Direct Mail</a></li>
-
-
-
-                <li><a href="support.html" class="menu-item"><i class="fas fa-headphones mr-3"></i> Custom Support</a></li>
-
-
-<li><a href="regulated.html" class="menu-item"><i class="fas fa-headphones mr-3"></i> ⚓Regulated</a></li>
-
-
-
-<li><a href="faq.html" class="menu-item"><i class="fas fa-headphones mr-3"></i> 🧠FAQ</a></li>
-
-
-
-
-                <li><a href="https://www.facebook.com/profile.php?id=61584454134265" class="menu-item"><i class="fab fa-facebook mr-3"></i> Facebook Account</a></li>
+            <ul class="space-y-1 font-ui">
+                <li><a href="profile.html" class="menu-item nav-glow flex items-center p-3 rounded text-gray-400 hover:text-white"><i class="fas fa-user-circle w-8 text-cyber-cyan"></i> User Profile</a></li>
+                <li><a href="referrals.html" class="menu-item nav-glow flex items-center p-3 rounded text-gray-400 hover:text-white"><i class="fas fa-network-wired w-8 text-cyber-cyan"></i> Referrals</a></li>
+                <li><a href="dashboard.html" class="menu-item flex items-center p-3 rounded bg-cyber-cyan/10 text-cyber-cyan font-bold"><i class="fas fa-th-large w-8"></i> Dashboard</a></li>
                 
-                <li><a href="login.html" onclick="logout()" class="menu-item text-gray-400 hover:text-white"><i class="fas fa-sign-out-alt mr-3"></i> Log Out</a></li>
+                <li class="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent my-4"></li>
+                
+                <li><a href="wallet.html" class="menu-item nav-glow flex items-center p-3 rounded text-gray-400 hover:text-white"><i class="fas fa-credit-card w-8"></i> Wallet</a></li>
+                <li><a href="charts.html" class="menu-item nav-glow flex items-center p-3 rounded text-gray-400 hover:text-white"><i class="fas fa-terminal w-8"></i> Forex Trade Terminal</a></li>
+                <li><a href="assets.html" class="menu-item nav-glow flex items-center p-3 rounded text-gray-400 hover:text-white"><i class="fas fa-coins w-8"></i> Assets</a></li>
+                <li><a href="withdraw.html" class="menu-item flex items-center p-3 rounded text-cyber-red hover:bg-cyber-red/10"><i class="fas fa-upload w-8"></i> Withdraw</a></li>
+                <li><a href="deposit.html" class="menu-item flex items-center p-3 rounded text-cyber-green hover:bg-cyber-green/10"><i class="fas fa-download w-8"></i> Deposit</a></li>
+
+                <li class="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent my-4"></li>
+                
+                <li><a href="marcus.html" class="menu-item font-bold text-cyber-gold flex items-center p-3"><i class="fas fa-brain w-8"></i> Marcus Zee A.I</a></li>
+                <li><a href="invest_list.html" class="menu-item nav-glow flex items-center p-3 rounded text-gray-400 hover:text-white"><i class="fas fa-folder-open w-8"></i> Invest List</a></li>
+                <li><a href="workers.html" class="menu-item nav-glow flex items-center p-3 rounded text-gray-400 hover:text-white"><i class="fas fa-user-gear w-8"></i> Consistent Workers</a></li>
+                <li><a href="apply.html" class="menu-item nav-glow flex items-center p-3 rounded text-gray-400 hover:text-white"><i class="fas fa-pen-nib w-8"></i> Application/Apply</a></li>
+                <li><a href="forex_trading.html" class="menu-item nav-glow flex items-center p-3 rounded text-gray-400 hover:text-white"><i class="fas fa-wave-square w-8"></i> Forex Trading</a></li>
+
+                <li class="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent my-4"></li>
+                <li><a href="voice.html" class="menu-item text-fuchsia-400 flex items-center p-3"><i class="fas fa-headset w-8"></i> Talk To Maria A.I</a></li>
+                <li class="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent my-4"></li>
+
+                <li><a href="about_marcus.html" class="menu-item nav-glow flex items-center p-3 text-gray-400"><i class="fas fa-id-badge w-8"></i> About Marcus Zee</a></li>
+                <li><a href="focus.html" class="menu-item nav-glow flex items-center p-3 text-gray-400"><i class="fas fa-crosshairs w-8"></i> Our Focus</a></li>
+                <li><a href="sponsor.html" class="menu-item nav-glow flex items-center p-3 text-gray-400"><i class="fas fa-hand-holding-dollar w-8"></i> Sponsor</a></li>
+                <li><a href="partners.html" class="menu-item nav-glow flex items-center p-3 text-gray-400"><i class="fas fa-handshake w-8"></i> Partners</a></li>
+                <li><a href="awards.html" class="menu-item nav-glow flex items-center p-3 text-gray-400"><i class="fas fa-award w-8"></i> Awards</a></li>
+                <li><a href="ceo.html" class="menu-item nav-glow flex items-center p-3 text-gray-400"><i class="fas fa-crown w-8"></i> Founder and CEO</a></li>
+                
+                <li class="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent my-4"></li>
+                <li><a href="mailto:imarket247weekly@gmail.com" class="menu-item flex items-center p-3 text-gray-400"><i class="fas fa-at w-8"></i> Direct Mail</a></li>
+                <li><a href="support.html" class="menu-item flex items-center p-3 text-gray-400"><i class="fas fa-life-ring w-8"></i> Custom Support</a></li>
+                <li><a href="regulated.html" class="menu-item flex items-center p-3 text-gray-400"><i class="fas fa-file-shield w-8"></i> Regulated</a></li>
+                <li><a href="faq.html" class="menu-item flex items-center p-3 text-gray-400"><i class="fas fa-circle-question w-8"></i> FAQ</a></li>
+                <li><a href="https://www.facebook.com/profile.php?id=61584454134265" class="menu-item flex items-center p-3 text-blue-400"><i class="fab fa-facebook-f w-8"></i> Facebook</a></li>
+                <li class="pt-6"><a href="login.html" class="flex items-center p-3 text-gray-600 font-bold uppercase text-xs"><i class="fas fa-power-off w-8"></i> Terminate Session</a></li>
             </ul>
         </div>
-    </div>
+    </aside>
 
-    <div id="mainContent" class="lg:ml-64 transition-all duration-300 min-h-screen">
-
-        <header class="bg-secondary-dark shadow-lg sticky top-0 z-40">
-            <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                
-                <button id="menuToggle" class="lg:hidden text-white text-xl p-2 rounded-lg hover:bg-gray-700">
-                    <i class="fas fa-bars"></i>
-                </button>
-                
-                <span class="text-white text-2xl font-bold tracking-tight hidden sm:block">ZHC USERS Dashboard</span>
-
-                <div class="flex items-center space-x-3 text-right">
+    <div id="mainContent" class="flex-1 min-h-screen">
+        
+        <header class="sticky top-0 z-40 bg-cyber-bg/80 backdrop-blur-xl border-b border-cyber-cyan/10 p-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex items-center justify-between mb-4">
+                    <button id="menuToggle" class="w-12 h-12 flex items-center justify-center glass-terminal rounded-lg lg:hidden">
+                        <i class="fas fa-bars text-cyber-cyan"></i>
+                    </button>
                     
-                    <a href="deposit.html" class="bg-accent-green hover:bg-green-600 text-primary-dark font-semibold py-2 px-3 rounded-lg text-xs sm:text-sm transition duration-150 shadow-md whitespace-nowrap">
-                        <i class="fas fa-plus mr-1"></i> Deposit
-                    </a>
-
-                    <a href="withdraw.html" class="bg-accent-red hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-lg text-xs sm:text-sm transition duration-150 shadow-md whitespace-nowrap">
-                        <i class="fas fa-minus mr-1"></i> Withdraw
-                    </a>
-
-                    <div class="flex items-center space-x-2 bg-gray-800 p-2 rounded-xl shadow-inner border border-secondary-gold">
-                        <div class="text-sm font-medium text-gray-400 flex items-center">
-                            <i class="fas fa-wallet text-secondary-gold mr-2"></i>
-                            Balance:
+                    <div class="flex flex-col items-end">
+                        <span class="text-[10px] text-cyber-cyan font-brand uppercase tracking-widest">Available Capital</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-cyber-green animate-pulse"></div>
+                            <span id="currentBalance" class="text-2xl font-brand font-black text-white">$0.00</span>
                         </div>
-                        <span id="currentBalance" class="text-lg font-extrabold text-accent-green">$0.00</span>
                     </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <a href="deposit.html" class="flex-1 neo-button bg-cyber-green text-black font-black py-4 flex items-center justify-center gap-2 uppercase tracking-tighter">
+                        <i class="fas fa-plus"></i> Deposit
+                    </a>
+                    <a href="withdraw.html" class="flex-1 neo-button bg-cyber-red text-white font-black py-4 flex items-center justify-center gap-2 uppercase tracking-tighter">
+                        <i class="fas fa-minus"></i> Withdraw
+                    </a>
                 </div>
             </div>
         </header>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8">
-            <div class="bg-secondary-dark rounded-xl p-6 shadow-2xl border-l-4 border-accent-green">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold">EUR/USD Candlestick Chart (M5)</h3>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-3xl font-extrabold transition duration-200" id="forexPrice">1.08345</span>
-                        <span id="forexChange" class="text-base font-bold text-gray-400">(0.00%)</span>
+        <main class="p-4 max-w-7xl mx-auto space-y-6">
+            
+            <div class="glass-terminal border-l-4 border-cyber-red p-4 bg-cyber-red/5">
+                <div class="flex items-start gap-4">
+                    <i class="fas fa-circle-exclamation text-cyber-red mt-1"></i>
+                    <div>
+                        <h4 class="font-brand text-xs text-cyber-red font-bold uppercase tracking-tighter">Withdrawal Lock Active</h4>
+                        <p class="text-xs text-gray-400 mt-1 leading-relaxed">System requires a $3,000 baseline deposit to authenticate your $10,000 welcome grant for withdrawal.</p>
                     </div>
                 </div>
-                <div id="chartContainer" class="h-80 w-full bg-[#192734] rounded-lg border border-gray-700 p-2 relative overflow-hidden">
+            </div>
+
+            <div class="glass-terminal rounded-none p-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-2 bg-cyber-cyan/10 text-[10px] text-cyber-cyan font-brand uppercase">Live M5 Data</div>
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h3 class="font-brand text-lg text-white font-bold">EUR // USD</h3>
+                        <p class="text-xs text-cyber-cyan/60 tracking-widest uppercase">Forex Pair Terminal</p>
+                    </div>
+                    <div class="text-right">
+                        <div id="forexPrice" class="text-3xl font-brand font-black tracking-tighter transition-all duration-300">1.08345</div>
+                        <div id="forexChange" class="text-xs font-bold font-brand">(+0.04%)</div>
+                    </div>
+                </div>
+                <div id="chartContainer" class="h-56 w-full">
                     <canvas id="forexChartCanvas"></canvas>
-                    <p class="text-gray-500 text-xs absolute bottom-1 right-3">ZHC Marcus OHLC Data - New Candle Every 1.5s</p>
                 </div>
             </div>
-        </div>
 
+            <h2 class="font-brand text-sm text-cyber-gold font-bold uppercase tracking-widest flex items-center gap-3">
+                <span class="h-px flex-1 bg-cyber-gold/20"></span>
+                Investment Matrix
+                <span class="h-px flex-1 bg-cyber-gold/20"></span>
+            </h2>
 
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-0">
-            
-            <h1 class="text-3xl font-extrabold mb-4 text-secondary-gold">Elite Investor Portal</h1>
-            <p id="userNameDisplay" class="text-gray-400 mb-6">Welcome back, Investor! Your financial freedom awaits.</p>
-
-            <a href="withdraw.html">
-                <div class="pulsing-ad bg-accent-red bg-opacity-20 text-accent-red font-medium p-4 rounded-xl mb-8 border-l-4 border-accent-red shadow-2xl transition duration-300 hover:bg-opacity-30">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>
-                    URGENT: First-Timer Withdrawal Alert! To qualify for initial withdrawals, your first deposit must be above $3000. Your immediate withdrawal limit is set to $10,000. Click to deposit now.
+            <div id="planContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 </div>
-            </a>
 
-            <h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-2">Marcus Zee Guaranteed Investment Plans</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <template id="investmentCardTemplate">
-                    <div class="bg-secondary-dark rounded-xl p-6 shadow-xl flex flex-col justify-between border-t-4 hover:border-secondary-gold transition duration-300">
-                        <div class="text-center mb-4">
-                            <h3 class="text-xl font-extrabold mb-1 text-white plan-title"></h3>
-                            <p class="text-sm text-gray-400 plan-duration"></p>
-                        </div>
-                        <div class="space-y-3 mb-6">
-                            <div class="text-center bg-gray-700/50 p-3 rounded-lg">
-                                <p class="text-gray-text text-sm">Invest:</p>
-                                <p class="text-lg font-bold text-accent-green plan-invest-range"></p>
-                            </div>
-                            <div class="text-center bg-gray-700/50 p-3 rounded-lg">
-                                <p class="text-gray-text text-sm">Estimated Payout:</p>
-                                <p class="text-xl font-extrabold text-secondary-gold plan-withdraw-range"></p>
-                            </div>
-                        </div>
-                        <a href="deposit.html" class="invest-button w-full text-center bg-secondary-gold text-primary-dark font-bold py-3 rounded-lg hover:bg-yellow-400">
-                            Invest Now
-                        </a>
-                    </div>
-                </template>
-                
-            </div>
-            
-            <div class="mt-12">
-                <div class="bg-secondary-dark rounded-xl p-8 shadow-2xl border-4 border-secondary-gold text-center">
-                    <h2 class="text-3xl font-extrabold text-secondary-gold mb-2">Invest 4 Me - 3 Year Plan</h2>
-                    <p class="text-gray-400 text-lg mb-4">Let Marcus Zee A.I. manage your capital for unparalleled long-term growth.</p>
-                    <p class="text-5xl font-extrabold text-accent-green mb-6">
-                        <span class="text-3xl text-gray-400">+</span>10,000% ROI <span class="text-2xl text-white">Guaranteed</span>
-                    </p>
-                    <a href="deposit.html" class="invest-button inline-block bg-accent-green text-primary-dark font-bold py-4 px-8 rounded-full text-xl hover:bg-green-400 transition duration-150">
-                        Enroll Now & Secure Future
-                    </a>
-                </div>
-            </div>
-            
-            <div class="mt-12 mb-8">
-                <h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-2">Top Cryptocurrency Movers</h2>
-                <div class="bg-secondary-dark rounded-xl p-6 shadow-xl border-l-4 border-secondary-gold">
-                    <div id="cryptoList" class="space-y-3 scroll-container max-h-96 overflow-y-auto pr-2">
-                    </div>
-                </div>
+            <div class="glass-terminal border border-cyber-green/30 bg-cyber-green/5 p-8 text-center relative">
+                <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-cyber-green"></div>
+                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-cyber-green"></div>
+                <h3 class="font-brand text-xl text-white mb-2">MARCUS ZEE AI <span class="text-cyber-green">LEGACY</span></h3>
+                <p class="text-sm text-gray-400 mb-6 font-ui italic">Automated 3-Year Capital Multiplication Protocol</p>
+                <div class="text-5xl font-brand font-black text-cyber-green mb-8 tracking-tighter">10,000% <span class="text-xs uppercase">Target ROI</span></div>
+                <a href="deposit.html" class="inline-block neo-button bg-cyber-green text-black font-black px-12 py-4 uppercase">Initialize Plan</a>
             </div>
 
         </main>
 
-        <footer class="bg-secondary-dark mt-12 py-8 border-t border-gray-700">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
-                <p>&copy; <span id="currentYear"></span> Zhee Hong Capital. All rights reserved. Trading with Marcus Zee AI is managed for guaranteed returns.</p>
-                <div class="mt-4 space-x-6 text-xl">
-                    <a href="#" class="hover:text-secondary-gold"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="hover:text-secondary-gold"><i class="fab fa-tiktok"></i></a>
-                    <a href="mailto:imarket247weekly@gmail.com" class="hover:text-secondary-gold"><i class="fas fa-envelope"></i></a>
-                    <a href="support.html" class="hover:text-secondary-gold"><i class="fas fa-headset"></i></a>
-                </div>
-            </div>
+        <footer class="py-12 text-center">
+            <p class="font-brand text-[9px] text-gray-600 uppercase tracking-[0.5em]">&copy; 2025 Zhee Hong Capital // Neural Trade Division</p>
         </footer>
-
     </div>
 
+    <template id="investmentCardTemplate">
+        <div class="glass-terminal hover:border-cyber-cyan transition-all duration-500 p-6 flex flex-col justify-between group">
+            <div class="mb-6">
+                <h3 class="font-brand text-white plan-title"></h3>
+                <p class="text-[10px] text-cyber-cyan font-bold uppercase tracking-widest plan-duration mt-1"></p>
+            </div>
+            <div class="space-y-3 mb-8">
+                <div class="flex justify-between border-b border-white/5 pb-2">
+                    <span class="text-xs text-gray-500 uppercase">Limit</span>
+                    <span class="text-xs font-bold text-white plan-invest-range"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-xs text-gray-500 uppercase">Payout</span>
+                    <span class="text-sm font-black text-cyber-gold plan-withdraw-range"></span>
+                </div>
+            </div>
+            <a href="deposit.html" class="w-full border border-cyber-cyan/30 text-cyber-cyan text-center font-brand text-xs font-bold py-3 uppercase hover:bg-cyber-cyan hover:text-black transition-all">Launch Protocol</a>
+        </div>
+    </template>
+
     <script>
-        // NEW: Function to close the welcome popup
-        function closePopup() {
-            document.getElementById('welcomePopup').style.display = 'none';
-        }
+        function closePopup() { document.getElementById('welcomePopup').style.display = 'none'; }
 
         const investmentPlans = [
-            { title: "Weekly Return", duration: "7 Days Term", min: 500, max: 1000, roi: 0.20 },
-            { title: "Bi-Weekly Amount", duration: "14 Days Term", min: 1000, max: 5000, roi: 0.45 },
-            { title: "Monthly", duration: "30 Days Term", min: 5000, max: 15000, roi: 1.00 },
-            { title: "3 Month Term", duration: "90 Days Term", min: 15000, max: 50000, roi: 3.50 },
-            { title: "6 Month Term", duration: "180 Days Term", min: 50000, max: 100000, roi: 8.00 },
-            { title: "1 Year Term", duration: "365 Days Term", min: 100000, max: 500000, roi: 20.00 },
+            { title: "Weekly Return", duration: "7 Days", min: 500, max: 1000, roi: 0.20 },
+            { title: "Bi-Weekly Amount", duration: "14 Days", min: 1000, max: 5000, roi: 0.45 },
+            { title: "Monthly", duration: "30 Days", min: 5000, max: 15000, roi: 1.00 },
+            { title: "3 Month Term", duration: "90 Days", min: 15000, max: 50000, roi: 3.50 },
+            { title: "6 Month Term", duration: "180 Days", min: 50000, max: 100000, roi: 8.00 },
+            { title: "1 Year Term", duration: "365 Days", min: 100000, max: 500000, roi: 20.00 },
         ];
-
-        let cryptoPairs = [
-            { name: "BTC/USD", price: 65000.00, change: 0.03 },
-            { name: "ETH/USD", price: 3800.00, change: -0.015 },
-            { name: "SOL/USD", price: 150.00, change: 0.05 },
-            { name: "XRP/USD", price: 0.52, change: -0.005 },
-            { name: "ADA/USD", price: 0.45, change: 0.02 },
-        ];
-        
-        const MAX_CANDLES = 40;
-        let candleHistory = [];
-        let currentPrice = 1.08345;
-        let initialPrice = 1.08345;
-
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(amount);
-        }
-        
-        function formatForexPrice(price) {
-            return price.toFixed(5);
-        }
-
-        function initializeCandleHistory() {
-            for (let i = 0; i < MAX_CANDLES; i++) {
-                currentPrice += (Math.random() - 0.5) * 0.0001;
-                candleHistory.push({
-                    open: currentPrice,
-                    high: currentPrice + 0.00005,
-                    low: currentPrice - 0.00005,
-                    close: currentPrice + (Math.random() - 0.5) * 0.0001
-                });
-            }
-            currentPrice = candleHistory[candleHistory.length - 1].close;
-        }
-
-        function generateNewCandle() {
-            if (candleHistory.length >= MAX_CANDLES) {
-                candleHistory.shift();
-            }
-            const lastClose = candleHistory.length > 0 ? candleHistory[candleHistory.length - 1].close : currentPrice;
-            const volatility = 0.00015;
-            const open = lastClose + (Math.random() - 0.5) * volatility * 0.1;
-            const bias = (Math.random() < 0.5) ? -1 : 1;
-            const closeChange = (Math.random() * volatility * 1.5) * bias;
-            let close = open + closeChange;
-            const bodyMin = Math.min(open, close);
-            const bodyMax = Math.max(open, close);
-            const highWick = Math.random() * volatility * 0.7;
-            const lowWick = Math.random() * volatility * 0.7;
-            const high = bodyMax + highWick;
-            const low = bodyMin - lowWick;
-            currentPrice = close;
-            const newCandle = { open, high, low, close };
-            candleHistory.push(newCandle);
-            updateForexUi(open, close);
-            requestAnimationFrame(drawCandlestickChart);
-        }
-
-        function updateForexUi(open, close) {
-            const priceElement = document.getElementById('forexPrice');
-            const changeElement = document.getElementById('forexChange');
-            const isBullish = close > open;
-            const color = isBullish ? 'var(--tw-colors-accent-green)' : 'var(--tw-colors-accent-red)';
-            const totalChange = ((currentPrice - initialPrice) / initialPrice) * 100;
-            priceElement.textContent = formatForexPrice(currentPrice);
-            priceElement.style.color = color;
-            changeElement.textContent = `${totalChange >= 0 ? '+' : ''}${totalChange.toFixed(2)}%`;
-            changeElement.className = `text-base font-bold ${isBullish ? 'text-accent-green' : 'text-accent-red'}`;
-        }
-
-        function drawCandlestickChart() {
-            const canvas = document.getElementById('forexChartCanvas');
-            const container = document.getElementById('chartContainer');
-            if (!canvas || !container) return;
-            canvas.width = container.clientWidth || 600;
-            canvas.height = container.clientHeight || 320;
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (candleHistory.length === 0) return;
-            const visibleCandles = candleHistory.slice(-MAX_CANDLES);
-            let maxPrice = -Infinity;
-            let minPrice = Infinity;
-            visibleCandles.forEach(c => {
-                maxPrice = Math.max(maxPrice, c.high);
-                minPrice = Math.min(minPrice, c.low);
-            });
-            const priceRangeBuffer = (maxPrice - minPrice) * 0.05;
-            maxPrice += priceRangeBuffer;
-            minPrice -= priceRangeBuffer;
-            const priceRange = maxPrice - minPrice;
-            if (priceRange <= 0) return;
-            const padding = 10;
-            const priceLabelWidth = 60; 
-            const chartAreaInnerWidth = canvas.width - (2 * padding) - priceLabelWidth; 
-            const chartAreaHeight = canvas.height - (2 * padding);
-            const candleSpacing = chartAreaInnerWidth / MAX_CANDLES;
-            const candleWidth = Math.max(3, candleSpacing * 0.75);
-            const gap = candleSpacing - candleWidth;
-            const greenColor = '#10b981';
-            const redColor = '#ef4444';
-            const getY = (price) => {
-                const normalizedY = (price - minPrice) / priceRange; 
-                return padding + chartAreaHeight * (1 - normalizedY);
-            };
-            visibleCandles.forEach((candle, index) => {
-                const x = padding + index * candleSpacing + (gap / 2);
-                let bodyY1 = getY(candle.open);
-                let bodyY2 = getY(candle.close);
-                let color = candle.close >= candle.open ? greenColor : redColor;
-                let bodyTop = Math.min(bodyY1, bodyY2);
-                let bodyBottom = Math.max(bodyY1, bodyY2);
-                let bodyHeight = Math.max(1, bodyBottom - bodyTop);
-                ctx.strokeStyle = color;
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(x + candleWidth / 2, getY(candle.high));
-                ctx.lineTo(x + candleWidth / 2, getY(candle.low));
-                ctx.stroke();
-                ctx.fillStyle = color;
-                ctx.fillRect(x, bodyTop, candleWidth, bodyHeight);
-            });
-            ctx.strokeStyle = '#FFFFFF15';
-            ctx.setLineDash([5, 5]); 
-            ctx.beginPath();
-            const currentY = getY(currentPrice);
-            ctx.moveTo(padding, currentY);
-            ctx.lineTo(canvas.width - priceLabelWidth, currentY); 
-            ctx.stroke();
-            ctx.setLineDash([]); 
-        }
-        
-        function updateCryptoPrices() {
-            const listContainer = document.getElementById('cryptoList');
-            if (!listContainer) return;
-            listContainer.innerHTML = ''; 
-            cryptoPairs.forEach(pair => {
-                const volatility = pair.price * 0.012; 
-                const randomChange = (Math.random() - 0.5) * volatility;
-                pair.price += randomChange;
-                const item = document.createElement('div');
-                item.className = 'flex justify-between items-center p-3 rounded-lg bg-gray-700/50';
-                item.innerHTML = `<span class="font-medium">${pair.name}</span><span>${formatCurrency(pair.price)}</span>`;
-                listContainer.appendChild(item);
-            });
-        }
 
         function renderInvestmentPlans() {
-            const container = document.querySelector('.grid.gap-6');
+            const container = document.getElementById('planContainer');
             const template = document.getElementById('investmentCardTemplate');
-            if (!container || !template) return;
-            container.innerHTML = ''; 
             investmentPlans.forEach(plan => {
                 const card = template.content.cloneNode(true);
                 card.querySelector('.plan-title').textContent = plan.title;
-                card.querySelector('.plan-duration').textContent = `Duration: ${plan.duration}`;
-                card.querySelector('.plan-invest-range').textContent = formatCurrency(plan.min) + ' - ' + formatCurrency(plan.max);
-                card.querySelector('.plan-withdraw-range').textContent = formatCurrency(plan.min * (1+plan.roi)) + ' - ' + formatCurrency(plan.max * (1+plan.roi));
+                card.querySelector('.plan-duration').textContent = `Term: ${plan.duration}`;
+                card.querySelector('.plan-invest-range').textContent = `$${plan.min} - $${plan.max}`;
+                card.querySelector('.plan-withdraw-range').textContent = `$${(plan.max * (1 + plan.roi)).toLocaleString()}`;
                 container.appendChild(card);
             });
         }
 
-        window.onload = function() {
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-            renderInvestmentPlans();
-            initializeCandleHistory();
-            requestAnimationFrame(drawCandlestickChart);
-            updateCryptoPrices();
-            setInterval(generateNewCandle, 1500); 
-            setInterval(updateCryptoPrices, 3000); 
+        let candleHistory = [];
+        const MAX_CANDLES = 25;
+        let currentPrice = 1.08345;
+
+        function updateForex() {
+            const open = currentPrice;
+            currentPrice += (Math.random() - 0.5) * 0.0006;
+            if(candleHistory.length > MAX_CANDLES) candleHistory.shift();
+            candleHistory.push({o: open, c: currentPrice});
             
-            const sidebar = document.getElementById('sidebar');
-            document.getElementById('menuToggle').onclick = () => sidebar.classList.add('open');
-            document.getElementById('menuClose').onclick = () => sidebar.classList.remove('open');
+            const priceEl = document.getElementById('forexPrice');
+            priceEl.textContent = currentPrice.toFixed(5);
+            priceEl.className = `text-3xl font-brand font-black tracking-tighter ${currentPrice >= open ? 'price-up' : 'price-down'}`;
+            drawChart();
+        }
+
+        function drawChart() {
+            const canvas = document.getElementById('forexChartCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            const spacing = canvas.width / MAX_CANDLES;
+            const min = Math.min(...candleHistory.map(c => Math.min(c.o, c.c))) * 0.9998;
+            const max = Math.max(...candleHistory.map(c => Math.max(c.o, c.c))) * 1.0002;
+
+            candleHistory.forEach((c, i) => {
+                const isBull = c.c >= c.o;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = isBull ? '#00FF88' : '#FF3131';
+                ctx.fillStyle = isBull ? '#00FF88' : '#FF3131';
+                const y1 = canvas.height - (c.o-min)/(max-min)*canvas.height;
+                const y2 = canvas.height - (c.c-min)/(max-min)*canvas.height;
+                ctx.fillRect(i * spacing, Math.min(y1, y2), spacing * 0.6, Math.max(2, Math.abs(y1-y2)));
+            });
+        }
+
+        window.onload = () => {
+            renderInvestmentPlans();
+            for(let i=0; i<MAX_CANDLES; i++) updateForex();
+            setInterval(updateForex, 2000);
+            document.getElementById('menuToggle').onclick = () => document.getElementById('sidebar').classList.add('open');
+            document.getElementById('menuClose').onclick = () => document.getElementById('sidebar').classList.remove('open');
         };
     </script>
 </body>
