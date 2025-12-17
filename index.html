@@ -3,40 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zhee Hong FX - Elite AI Trading Platform</title>
+    <title>Zhee Hong FX | Institutional AI Terminal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary-dark': '#081016', // Deep Midnight Blue
-                        'secondary-dark': '#111827', // Used for data panels
-                        'accent-primary': '#00D09C', // Luminous Teal (Positive/AI)
-                        'accent-secondary': '#FFB74D', // Sovereign Gold (Highlights/Guarantee)
-                        'accent-red': '#E53935', // Crimson Red (Negative)
+                        'cyber-black': '#05070a',
+                        'cyber-gray': '#0f172a',
+                        'neon-cyan': '#22d3ee',
+                        'neon-amber': '#fbbf24',
+                        'neon-red': '#f43f5e',
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['Space Mono', 'monospace'],
-                    },
-                    keyframes: {
-                        'scroll-up': {
-                            '0%': { transform: 'translateY(0%)' },
-                            '100%': { transform: 'translateY(-100%)' },
-                        },
-                        'pulse-teal': {
-                            '0%, 100%': { 'box-shadow': '0 0 10px 0 rgba(0, 208, 156, 0.5)' },
-                            '50%': { 'box-shadow': '0 0 25px 5px rgba(0, 208, 156, 0.9)' },
-                        }
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     animation: {
-                        'scroll-log': 'scroll-up 120s linear infinite', // 120s scroll speed
-                        'pulse-teal': 'pulse-teal 2s infinite',
+                        'glow-pulse': 'glow 3s infinite',
+                        'shimmer': 'shimmer 2.5s infinite linear',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%, 100%': { opacity: 1, filter: 'drop-shadow(0 0 5px #22d3ee)' },
+                            '50%': { opacity: 0.7, filter: 'drop-shadow(0 0 15px #22d3ee)' },
+                        },
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' }
+                        }
                     }
                 }
             }
@@ -44,208 +43,207 @@
     </script>
     <style>
         body {
-            background-color: var(--primary-dark);
-            color: #E0E0E0;
+            background-color: #05070a;
+            background-image: radial-gradient(circle at 50% 50%, #0f172a 0%, #05070a 100%);
+            color: #f8fafc;
+            overflow-x: hidden;
         }
-        .data-box {
-            background-color: var(--secondary-dark);
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .terminal-container {
+            height: 400px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #1e293b;
         }
         .gauge-ring {
             stroke-dasharray: 440;
-            stroke-dashoffset: 440; /* Start at 0% */
-            transition: stroke-dashoffset 1s ease-out;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        /* Sentinel Log Styles */
-        .sentinel-log-container {
-            height: 300px;
-            overflow: hidden;
-            background-color: var(--secondary-dark);
-            border-radius: 0.75rem;
-            border: 1px solid #1f2937;
-        }
-        .sentinel-log-feed {
-            animation: scroll-up 120s linear infinite; /* Adjusted speed for 500+ items */
-        }
-        .log-entry {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px dashed #1f2937;
-            font-family: 'Space Mono', monospace;
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
-<body class="font-sans text-white">
+<body class="font-sans antialiased">
 
-    <header class="bg-primary-dark shadow-xl sticky top-0 z-50 border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <span class="text-white text-2xl font-bold tracking-tight">Zhee Hong <span class="text-accent-secondary">FX</span></span>
+    <nav class="sticky top-0 z-50 glass-card border-b border-white/5 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-neon-cyan rounded flex items-center justify-center">
+                    <i class="fas fa-microchip text-cyber-black font-bold"></i>
                 </div>
-                <nav class="hidden sm:ml-6 sm:flex sm:space-x-8 items-center">
-                    <a href="#sentinel-hub" class="text-gray-300 hover:text-accent-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">AI Hub</a>
-                    <a href="#crypto" class="text-gray-300 hover:text-accent-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">Crypto Feed</a>
-                    <a href="#guarantee" class="text-gray-300 hover:text-accent-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">Guarantee</a>
-                    <a href="#testimonials" class="text-gray-300 hover:text-accent-primary px-3 py-2 rounded-md text-sm font-medium transition duration-150">Hong FX</a>
-                </nav>
-                <div class="flex space-x-3">
-                    <a href="login.html" class="bg-gray-700 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:bg-gray-600 transition duration-150">
-                        Login
-                    </a>
-                    <a href="register.html" class="bg-accent-primary text-primary-dark font-bold py-2 px-4 rounded-lg shadow-md hover:bg-opacity-80 transition duration-150">
-                        Register
-                    </a>
-                </div>
+                <span class="text-xl font-extrabold tracking-tighter uppercase italic">
+                    ZH <span class="text-neon-cyan">SENTINEL</span>
+                </span>
+            </div>
+            <div class="hidden md:flex gap-8 text-xs font-bold tracking-widest uppercase text-gray-400">
+                <a href="#hub" class="hover:text-neon-cyan transition">AI Hub</a>
+                <a href="#assets" class="hover:text-neon-cyan transition">Assets</a>
+                <a href="#logs" class="hover:text-neon-cyan transition">Ledger</a>
+            </div>
+            <div class="flex gap-4">
+                <a href="login.html" class="px-5 py-2 text-xs font-bold uppercase tracking-widest border border-white/20 rounded hover:bg-white/5 transition inline-block">
+                    Terminal Login
+                </a>
+                <a href="register.html" class="px-5 py-2 text-xs font-bold uppercase tracking-widest bg-neon-cyan text-cyber-black rounded hover:brightness-110 transition inline-block">
+                    Initialize Account
+                </a>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-
-        <section class="mb-12 bg-secondary-dark p-8 rounded-xl shadow-2xl border-t-4 border-accent-primary text-center">
-            <h1 class="text-3xl sm:text-4xl font-extrabold mb-4 text-accent-secondary">
-                Guaranteed Profit. AI Executed.
-            </h1>
-            <p class="text-xl font-light mb-6 text-gray-300 max-w-4xl mx-auto">
-                Zhee Hong Sentinel AI guarantees verified profit on qualifying investments. Focus on your life, while our proprietary model v4.1.2 handles the markets.
-            </p>
-            <div class="inline-block bg-primary-dark p-4 rounded-xl shadow-inner border border-gray-700 animate-pulse-teal">
-                 <p class="text-sm uppercase text-accent-primary font-medium mb-1">Total Verified Profit Paid Out (Last 24 Hrs)</p>
-                 <span class="text-4xl font-bold text-accent-secondary" id="profitPayout">$1,854,000</span>
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        
+        <section class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+            <div class="glass-card p-6 rounded-2xl relative overflow-hidden group border-t-2 border-neon-amber">
+                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
+                <p class="text-gray-400 text-[10px] uppercase tracking-[0.2em] mb-2">24H Verified Payouts</p>
+                <h2 class="text-3xl font-extrabold text-neon-amber" id="profitPayout">$1,854,000</h2>
+                <div class="flex items-center gap-2 mt-2 text-neon-cyan text-xs">
+                    <span class="flex h-2 w-2 rounded-full bg-neon-cyan animate-pulse"></span> Live Stream Active
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-2xl border-l-2 border-neon-cyan">
+                <p class="text-gray-400 text-[10px] uppercase tracking-[0.2em] mb-2">Active Trading Nodes</p>
+                <h2 class="text-3xl font-extrabold" id="activeTraders">24,500</h2>
+                <p class="text-[10px] text-gray-500 mt-2 font-mono">GLOBAL CLUSTER CONNECTED</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl">
+                <p class="text-gray-400 text-[10px] uppercase tracking-[0.2em] mb-2">Total Managed Liquidity</p>
+                <h2 class="text-3xl font-extrabold">$4.5B+</h2>
+                <p class="text-[10px] text-neon-cyan mt-2 font-mono">STABLE OPS</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl bg-neon-cyan/5 border border-neon-cyan/20">
+                <p class="text-cyan-400 text-[10px] uppercase tracking-[0.2em] mb-2">Monthly Guarantee Cap</p>
+                <h2 class="text-3xl font-extrabold text-white" id="monthlyWithdrawals">$4.8M</h2>
+                <p class="text-[10px] text-gray-400 mt-2 font-mono">RESERVE: 100% SECURED</p>
             </div>
         </section>
 
-        <section class="mb-12" id="sentinel-hub">
-            <h2 class="text-3xl font-extrabold mb-6 text-white border-b border-gray-700 pb-3">
-                The ZHC Hub: Core Performance 💻
-            </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                <div class="lg:col-span-1 data-box p-8 flex flex-col items-center justify-center text-center border-b-4 border-accent-primary">
-                    <h3 class="text-2xl font-bold mb-4 text-accent-primary">AI Confidence Score</h3>
-                    <div class="relative w-48 h-48 mb-6">
-                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 160 160">
-                            <circle cx="80" cy="80" r="70" fill="none" stroke="#1f2937" stroke-width="20" />
-                            <circle class="gauge-ring" cx="80" cy="80" r="70" fill="none" stroke="url(#gradientTeal)" stroke-width="20" id="aiGaugeRing"/>
-                            
-                            <defs>
-                                <linearGradient id="gradientTeal" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:#00D09C;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#00D09C;stop-opacity:0.5" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                        <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl font-extrabold text-accent-secondary" id="aiConfidence">98.7%</span>
-                    </div>
-                    <div class="font-mono text-sm space-y-1">
-                        <p class="text-accent-primary font-bold">LIVE STATUS: ACTIVE</p>
-                        <p class="text-gray-400">Model: <span class="text-white">v4.1.2 Low Latency</span></p>
-                        <p class="text-gray-400">Next Action: <span class="text-accent-primary" id="nextAction">AUD/USD - Signal: Buy (0:08)</span></p>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-2 grid grid-cols-2 gap-4">
-                    <div class="data-box p-6 border-l-4 border-accent-primary">
-                        <p class="text-gray-400 text-sm flex items-center mb-1"><i class="fas fa-users mr-2"></i> Active Traders (Day)</p>
-                        <p class="text-3xl font-extrabold text-accent-primary" id="activeTraders">24,500</p>
-                        <p class="text-xs text-gray-400">Verified Global Clients</p>
-                    </div>
-                    <div class="data-box p-6 border-l-4 border-accent-secondary">
-                        <p class="text-gray-400 text-sm flex items-center mb-1"><i class="fas fa-hand-holding-usd mr-2"></i> Guaranteed Payouts (Monthly)</p>
-                        <p class="text-3xl font-extrabold text-accent-secondary" id="monthlyWithdrawals">$4.8M</p>
-                        <p class="text-xs text-gray-400">Total Funds Disbursed</p>
-                    </div>
-                    <div class="data-box p-6 border-l-4 border-gray-600">
-                        <p class="text-gray-400 text-sm flex items-center mb-1"><i class="fas fa-wallet mr-2"></i> Trade Volume (24h)</p>
-                        <p class="text-3xl font-extrabold text-white">$4.5 Billion</p>
-                        <p class="text-xs text-gray-400">Total Liquidity Handled</p>
-                    </div>
-                    <div class="data-box p-6 border-l-4 border-gray-600">
-                        <p class="text-gray-400 text-sm flex items-center mb-1"><i class="fas fa-chart-line mr-2"></i> Zhee Hong Index</p>
-                        <p class="text-3xl font-extrabold text-white">4,250.88</p>
-                        <p class="text-xs text-accent-primary">+45.21 (+1.07%)</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <hr class="border-gray-800 my-10" />
-
-        <section class="mb-12" id="crypto">
-            <h2 class="text-3xl font-extrabold mb-6 text-white border-b border-gray-700 pb-3">
-                Digital Assets Real-Time Feed ₿
-            </h2>
-            <div class="data-box p-6 rounded-xl shadow-2xl overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-800">
-                    <thead>
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Asset</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price (USD)</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">24h Change</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">AI Risk Score</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-800" id="cryptoTableBody">
-                        </tbody>
-                </table>
-            </div>
-        </section>
-
-        <hr class="border-gray-800 my-10" />
-
-        <section class="py-10" id="testimonials">
-            <h2 class="text-3xl font-bold text-center mb-10 text-accent-secondary">The Sentinel Log: Verified Client Testimonials 🔐</h2>
-            <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="bg-secondary-dark p-6 rounded-xl border-l-4 border-accent-secondary">
-                    <p class="text-2xl font-bold mb-3 text-accent-secondary">Data Stream Status:</p>
-                    <p class="font-mono text-sm text-gray-300">
-                        <span class="text-accent-primary">LOG_STATUS: ALIVE</span><br>
-                        <span class="text-accent-primary">RECORDS: 500+</span><br>
-                        <span class="text-gray-400">DATA_INTEGRITY: SECURE</span>
-                    </p>
-                    <a href="register.html" class="mt-6 inline-block bg-accent-primary text-primary-dark font-extrabold py-2 px-6 rounded-lg shadow-lg hover:bg-opacity-80 transition duration-300">
-                        Start Your Own Log Entry &rarr;
-                    </a>
-                </div>
-                <div class="sentinel-log-container shadow-xl">
-                    <div class="sentinel-log-feed" id="testimonialFeed">
+            <div class="lg:col-span-8 flex flex-col gap-6" id="hub">
+                <section class="glass-card rounded-2xl p-8 border border-white/10">
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <h2 class="text-2xl font-black italic tracking-tighter uppercase">AI Intelligence Core <span class="text-neon-cyan">v4.1.2</span></h2>
+                            <p class="text-gray-400 text-sm">Neural network scanning 450+ market pairs per second.</p>
                         </div>
-                </div>
+                        <div class="text-right">
+                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded text-white uppercase font-mono tracking-tighter">Status: Nominal</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                        <div class="relative flex justify-center">
+                            <svg class="w-64 h-64 transform -rotate-90" viewBox="0 0 160 160">
+                                <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" />
+                                <circle class="gauge-ring" cx="80" cy="80" r="70" fill="none" stroke="#22d3ee" stroke-width="12" stroke-linecap="round" id="aiGaugeRing"/>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-5xl font-black font-mono tracking-tighter text-white" id="aiConfidence">98.7%</span>
+                                <span class="text-[10px] text-neon-cyan uppercase tracking-widest font-bold">Confidence Score</span>
+                            </div>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="p-4 bg-black/40 rounded-xl border border-white/5">
+                                <p class="text-[10px] uppercase text-gray-500 mb-1 font-bold">Next Scheduled Execution</p>
+                                <p class="text-lg font-mono font-bold text-neon-cyan" id="nextAction">AUD/USD - Signal: Buy (0:08)</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-[10px] text-gray-500 uppercase">Latency</p>
+                                    <p class="text-sm font-mono text-white">14.2ms</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-gray-500 uppercase">Risk Mode</p>
+                                    <p class="text-sm font-mono text-neon-amber">Hedged (Safe)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="glass-card rounded-2xl overflow-hidden" id="assets">
+                    <div class="px-6 py-4 border-b border-white/10 bg-white/5">
+                        <h3 class="text-xs font-black uppercase tracking-widest">Digital Asset Real-Time Stream</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-widest text-gray-500 border-b border-white/5">
+                                    <th class="px-6 py-4 font-bold">Asset</th>
+                                    <th class="px-6 py-4 font-bold">Market Price</th>
+                                    <th class="px-6 py-4 font-bold">Volatility</th>
+                                    <th class="px-6 py-4 font-bold text-right">Zhee AI Risk</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cryptoTableBody" class="font-mono text-sm divide-y divide-white/5">
+                                </tbody>
+                        </table>
+                    </div>
+                </section>
             </div>
-        </section>
 
-        <hr class="border-gray-800 my-10" />
+            <div class="lg:col-span-4 flex flex-col gap-6" id="logs">
+                <section class="glass-card rounded-2xl flex-grow overflow-hidden flex flex-col border-t-2 border-neon-cyan">
+                    <div class="p-4 border-b border-white/10 bg-white/5 flex items-center justify-between">
+                        <h3 class="text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-white">
+                            <i class="fas fa-database text-neon-cyan"></i> Sentinel Ledger Log
+                        </h3>
+                        <span class="text-[10px] font-mono text-gray-500">LIVE_FEED</span>
+                    </div>
+                    <div class="terminal-container flex-grow relative overflow-y-auto custom-scrollbar">
+                        <div id="testimonialFeed" class="p-4 space-y-3">
+                            </div>
+                    </div>
+                    <div class="p-4">
+                        <a href="register.html" class="w-full py-3 bg-neon-cyan text-cyber-black font-black text-xs uppercase tracking-widest rounded-lg hover:brightness-110 transition block text-center">
+                            Open Account &rarr;
+                        </a>
+                    </div>
+                </section>
 
-        <section class="py-10" id="about">
-            <h2 class="text-3xl font-bold text-center mb-10 text-accent-primary">Marcus Zhee Lee Hong: Founder & Strategist</h2>
-            <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-12 p-6 bg-secondary-dark rounded-xl border-b-4 border-accent-secondary">
-                <div class="md:w-1/4 flex justify-center">
-                    <img src="https://placehold.co/150x150/FFB74D/081016?text=Marcus+Z.L.H." alt="Portrait of Marcus Zhee Lee Hong" class="rounded-full border-4 border-gray-700 shadow-xl w-32 h-32 object-cover">
-                </div>
-                <div class="md:w-3/4 text-center md:text-left">
-                    <p class="text-xl font-medium mb-3">Based in Singapore, Marcus Zhee Lee Hong is the strategist behind the Sentinel AI.</p>
-                    <p class="text-md leading-relaxed text-gray-400">
-                        His proprietary trading algorithms, refined over a decade, form the bedrock of Zhee Hong Capital's success. This expertise is the only reason we can confidently offer a market-leading, guaranteed profit commitment to our valued investors.
+                <section class="glass-card rounded-2xl p-6 relative overflow-hidden">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full border-2 border-neon-cyan shadow-[0_0_10px_rgba(34,211,238,0.5)] overflow-hidden">
+                             <img src="https://placehold.co/100x100/22d3ee/05070a?text=MZH" alt="MZH">
+                        </div>
+                        <div>
+                            <p class="text-xs font-black uppercase italic tracking-tighter text-neon-cyan">Marcus Zhee Lee Hong</p>
+                            <p class="text-[10px] text-gray-400 uppercase">Chief Strategist & Founder</p>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-[11px] leading-relaxed text-gray-400 italic">
+                        "The intersection of data integrity and AI execution is where guaranteed wealth is built. We don't trade markets; we solve them."
                     </p>
-                </div>
+                </section>
             </div>
-        </section>
-
+        </div>
     </main>
 
-    <footer class="bg-primary-dark text-gray-500 py-8 mt-12 border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; <span id="currentYear"></span> Zhee Hong Capital. Marcus Zhee Lee Hong Enterprise, Singapore.</p>
-            <p class="mt-2 text-xs text-accent-red">Risk Warning: Trading contains inherent risks. The "Guaranteed Profit" applies only to qualifying investments under specific client agreements. Please read the terms before investing.</p>
+    <footer class="mt-20 border-t border-white/10 py-10 px-6 bg-cyber-black">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <p class="text-[10px] text-gray-500 uppercase tracking-widest">
+                &copy; <span id="currentYear"></span> Zhee Hong Capital. Singapore Institutional Trading Group.
+            </p>
+            <div class="flex gap-6 text-gray-500 text-[10px] uppercase font-bold tracking-widest">
+                <a href="#" class="hover:text-white transition">Privacy Protocol</a>
+                <a href="#" class="hover:text-white transition">Terms of Engagement</a>
+                <a href="#" class="text-neon-red">Risk Disclosure</a>
+            </div>
         </div>
     </footer>
 
     <script>
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         
-        // --- 1. Metrics and Gauge Simulation ---
+        // --- Metrics Simulation ---
         let aiConfidence = 98.7;
         let dailyTraders = 24500;
         let monthlyWithdrawals = 4800000;
@@ -254,31 +252,24 @@
         let nextActionIndex = 0;
 
         function updateMetrics() {
-            // AI Confidence: slight, positive wobble
             aiConfidence = Math.min(99.9, aiConfidence + (Math.random() * 0.2 - 0.1));
             document.getElementById('aiConfidence').textContent = aiConfidence.toFixed(1) + '%';
             
-            // Update Gauge visual
             const gaugeRing = document.getElementById('aiGaugeRing');
-            const circumference = 440; // 2 * pi * 70
-            // Map 98.7% (or 90% to 100%) to dash offset for visual effect
-            const percentage = (aiConfidence - 90) * 10; // Normalize to 0-100 for the visible range
-            const offset = circumference * (1 - (percentage / 100)); 
+            const circumference = 440;
+            const percentage = (aiConfidence - 90) * 10; 
+            const offset = circumference * (1 - (Math.max(0, percentage) / 100)); 
             gaugeRing.style.strokeDashoffset = offset;
             
-            // Active Traders
             dailyTraders += Math.floor((Math.random() * 30 - 10)); 
             document.getElementById('activeTraders').textContent = dailyTraders.toLocaleString();
 
-            // Withdrawals (Payouts)
             monthlyWithdrawals += Math.floor(Math.random() * 15000); 
             document.getElementById('monthlyWithdrawals').textContent = '$' + (monthlyWithdrawals / 1000000).toFixed(2) + 'M';
             
-            // 24H Profit Payout
             profitPayout += Math.floor(Math.random() * 10000);
             document.getElementById('profitPayout').textContent = '$' + profitPayout.toLocaleString();
 
-            // Next Action Update
             nextActionIndex = (nextActionIndex + 1) % instrumentPairs.length;
             const pair = instrumentPairs[nextActionIndex];
             const signal = Math.random() > 0.5 ? 'Buy' : 'Sell';
@@ -286,103 +277,67 @@
             document.getElementById('nextAction').textContent = `${pair} - Signal: ${signal} (0:${countdown.toString().padStart(2, '0')})`;
         }
 
-        // --- 2. Crypto Price List Simulation ---
+        // --- Crypto Simulation ---
         let cryptoData = [
-            { name: 'Bitcoin (BTC)', price: 68000.00, volume: '5.2B' },
-            { name: 'Ethereum (ETH)', price: 4500.00, volume: '2.8B' },
-            { name: 'Solana (SOL)', price: 210.00, volume: '1.1B' },
-            { name: 'Chainlink (LINK)', price: 18.00, volume: '0.5B' },
-            { name: 'XRP (XRP)', price: 0.5500, volume: '0.7B' },
+            { name: 'Bitcoin (BTC)', price: 68000.00 },
+            { name: 'Ethereum (ETH)', price: 4500.00 },
+            { name: 'Solana (SOL)', price: 210.00 },
+            { name: 'Chainlink (LINK)', price: 18.00 },
+            { name: 'XRP (XRP)', price: 0.5500 }
         ];
-        
-        function getRiskScore(change) {
-            if (change > 2) return '<span class="text-accent-red font-bold">HIGH (7.5)</span>';
-            if (change < -1) return '<span class="text-accent-red font-bold">HIGH (6.2)</span>';
-            if (change > 0.5) return '<span class="text-accent-secondary">MODERATE (4.1)</span>';
-            return '<span class="text-accent-primary">LOW (2.8)</span>';
-        }
 
         function updateCryptoPrices() {
             const tableBody = document.getElementById('cryptoTableBody');
             tableBody.innerHTML = '';
-
-            cryptoData = cryptoData.map(crypto => {
-                let change = (Math.random() - 0.5) * (crypto.price * 0.002); // 0.2% max change
-                let percentChange = (change / crypto.price) * 100;
-                let newPrice = crypto.price + change;
-                crypto.price = newPrice;
-                
-                const changeColor = percentChange >= 0 ? 'text-accent-primary' : 'text-accent-red';
-                const priceFormatted = newPrice >= 1 ? newPrice.toFixed(2) : newPrice.toFixed(4);
+            cryptoData.forEach(crypto => {
+                let changePercent = (Math.random() - 0.5) * 0.004;
+                crypto.price *= (1 + changePercent);
+                const pColor = changePercent >= 0 ? 'text-neon-cyan' : 'text-neon-red';
+                const risk = changePercent >= 0 ? '<span class="text-neon-cyan">LOW</span>' : '<span class="text-neon-red">VOLATILE</span>';
 
                 tableBody.innerHTML += `
-                    <tr>
-                        <td class="px-6 py-3 whitespace-nowrap text-sm font-medium text-white">${crypto.name}</td>
-                        <td class="px-6 py-3 whitespace-nowrap text-sm ${changeColor} font-bold">$${priceFormatted}</td>
-                        <td class="px-6 py-3 whitespace-nowrap text-sm ${changeColor} font-mono">
-                            ${percentChange >= 0 ? '▲' : '▼'} ${percentChange.toFixed(2)}%
-                        </td>
-                         <td class="px-6 py-3 whitespace-nowrap text-sm">${getRiskScore(percentChange)}</td>
+                    <tr class="hover:bg-white/5 transition group">
+                        <td class="px-6 py-4 font-bold text-white uppercase italic text-[12px]">${crypto.name}</td>
+                        <td class="px-6 py-4 ${pColor}">$${crypto.price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td class="px-6 py-4 text-gray-500 text-xs font-mono">${(Math.random() * 2).toFixed(2)}%</td>
+                        <td class="px-6 py-4 text-right font-black text-[10px]">${risk}</td>
                     </tr>
                 `;
-                return crypto;
             });
         }
 
-        // --- 3. Sentinel Log (Testimonial Feed) Simulation ---
-        const FIRST_NAMES = ["Liam", "Olivia", "Noah", "Emma", "Oliver", "Ava", "Elijah", "Sophia", "William", "Isabella", "James", "Charlotte", "Benjamin", "Amelia", "Lucas", "Mia", "Henry", "Evelyn", "Alexander", "Harper", "Ethan", "Abigail", "Jacob", "Emily", "Michael", "Ella"];
-        const COMMENTS = [
-            { text: "The guaranteed profit is absolutely real. Never been happier with an investment.", minProfit: 100, maxProfit: 500 },
-            { text: "Sentinel AI is flawless. I get my payout every Saturday morning.", minProfit: 200, maxProfit: 1000 },
-            { text: "My portfolio is up thanks to Marcus's strategy. Trust the process!", minProfit: 50, maxProfit: 200 },
-            { text: "Consistent, reliable returns. The best passive income source I've found.", minProfit: 150, maxProfit: 700 },
-            { text: "I was skeptical, but the Sentinel log proved me wrong. Payouts are instant.", minProfit: 300, maxProfit: 1500 },
-            { text: "Finally, stress-free trading. The AI score gives me full confidence.", minProfit: 75, maxProfit: 350 },
-            { text: "Highly recommend. Moved all my funds to ZHC.", minProfit: 250, maxProfit: 1200 },
-        ];
+        // --- Terminal Log Simulation ---
+        const NAMES = ["CLT-88", "CLT-12", "NOD-X", "ZH-USER", "VIP-SGP"];
+        const LOGS = ["Guaranteed payout confirmed.", "Node sync complete.", "Neural scan profitable.", "Liquidity verified.", "Trade executed successfully."];
         
-        function generateTestimonialHTML(index) {
-            const name = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)];
-            const commentObj = COMMENTS[Math.floor(Math.random() * COMMENTS.length)];
-            
-            // Randomly generate profit amount
-            const profit = Math.floor(Math.random() * (commentObj.maxProfit - commentObj.minProfit + 1)) + commentObj.minProfit;
-            const formattedProfit = profit.toLocaleString();
-            
-            const timestamp = new Date(Date.now() - Math.floor(Math.random() * 86400000)).toLocaleTimeString('en-US'); // Last 24 hours
-            const clientHash = `CLT-FX-${Math.floor(Math.random() * 9000) + 1000}`;
-
-            const commentText = commentObj.text.replace("profit", `<span class="text-accent-secondary">$${formattedProfit}</span> profit`);
-
-            return `
-                <div class="log-entry text-xs text-gray-400">
-                    [${timestamp}] | ${clientHash} | <span class="text-white">${commentText}</span>
-                    <span class="text-accent-primary float-right"> <i class="fas fa-check-circle"></i> VERIFIED </span>
-                </div>
-            `;
-        }
-        
-        function renderSentinelLog() {
+        function addLogEntry() {
             const container = document.getElementById('testimonialFeed');
-            let htmlContent = '';
-            // Generate 550 entries (500+ requirement)
-            for (let i = 0; i < 550; i++) {
-                htmlContent += generateTestimonialHTML(i);
-            }
-            container.innerHTML = htmlContent;
+            const log = LOGS[Math.floor(Math.random() * LOGS.length)];
+            const user = NAMES[Math.floor(Math.random() * NAMES.length)];
+            const timestamp = new Date().toLocaleTimeString('en-GB', { hour12: false });
+            
+            const entry = document.createElement('div');
+            entry.className = 'text-[10px] font-mono leading-tight border-l border-white/10 pl-2 py-1';
+            entry.innerHTML = `
+                <span class="text-gray-600">[${timestamp}]</span> 
+                <span class="text-neon-cyan font-bold">${user}</span>: 
+                <span class="text-gray-300 uppercase">${log}</span>
+            `;
+            
+            container.prepend(entry);
+            if(container.children.length > 50) container.lastChild.remove();
         }
 
-        // Initialization and Main Loop
         window.onload = () => {
-            renderSentinelLog();
+            // Initial setup
             updateMetrics();
             updateCryptoPrices();
+            for(let i=0; i<15; i++) addLogEntry();
 
-            // Run all dynamic updates every 2 seconds
-            setInterval(() => {
-                updateMetrics();
-                updateCryptoPrices();
-            }, 2000); 
+            // Intervals
+            setInterval(updateMetrics, 3000);
+            setInterval(updateCryptoPrices, 4000);
+            setInterval(addLogEntry, 2000);
         };
     </script>
 </body>
