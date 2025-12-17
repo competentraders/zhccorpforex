@@ -3,127 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile | ZHC</title>
+    <title>ZHC | Secure Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root {
-            --primary-dark: #0C1218;
-            --secondary-dark: #151F28;
-            --accent-green: #10b981;
-            --secondary-gold: #FFD700;
+        body { 
+            background-color: #080C10; 
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at top right, #10b98110, transparent);
         }
-        body { background-color: var(--primary-dark); font-family: 'Inter', sans-serif; }
-        .bg-primary-dark { background-color: var(--primary-dark); }
-        .bg-secondary-dark { background-color: var(--secondary-dark); }
-        .text-secondary-gold { color: var(--secondary-gold); }
-        .text-accent-green { color: var(--accent-green); }
-        .menu-item { padding: 0.75rem 1.25rem; border-radius: 0.5rem; transition: background-color 0.15s, color 0.15s; font-weight: 500; display: flex; align-items: center; }
-        .copy-modal { visibility: hidden; opacity: 0; }
-        .copy-modal.show { visibility: visible; opacity: 1; }
-        @media (max-width: 1023px) {
-            #sidebar { transform: translateX(-100%); pointer-events: none; }
-            #sidebar.translate-x-0 { transform: translateX(0); pointer-events: auto; }
+        .glass-card {
+            background: rgba(21, 31, 40, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .sidebar-gradient {
+            background: linear-gradient(180deg, #151F28 0%, #0C1218 100%);
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 1rem;
+            border-left: 3px solid #10b981;
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+        .menu-item {
+            transition: all 0.2s ease;
+        }
+        .menu-item:hover {
+            background: rgba(16, 185, 129, 0.1);
+            padding-left: 1.5rem;
         }
     </style>
 </head>
-<body class="text-white min-h-screen flex">
-    <div id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-secondary-dark z-50 shadow-2xl overflow-y-auto lg:static lg:w-64 transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0">
-        <div class="p-6">
-            <h2 class="text-2xl font-extrabold text-secondary-gold mb-8 border-b border-gray-700 pb-4"><i class="fas fa-lock text-accent-green mr-2"></i> ZHC Menu</h2>
-            <ul class="space-y-3" id="nav-list">
-                </ul>
-        </div>
-    </div>
+<body class="text-slate-200 min-h-screen flex">
 
-    <div id="mainContent" class="flex-1 min-h-screen">
+    <aside id="sidebar" class="fixed hidden lg:flex flex-col w-72 h-screen sidebar-gradient border-r border-gray-800 z-50">
+        <div class="p-8">
+            <div class="flex items-center space-x-3 mb-10">
+                <div class="bg-emerald-500 p-2 rounded-lg">
+                    <i class="fas fa-shield-halved text-primary-dark text-xl text-black"></i>
+                </div>
+                <span class="text-2xl font-black tracking-tighter text-white">ZHC<span class="text-emerald-500">PRO</span></span>
+            </div>
+            
+            <nav id="nav-list" class="space-y-2">
+                </nav>
+        </div>
         
-        <header class="bg-secondary-dark shadow-lg sticky top-0 z-40">
-            <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <span class="text-white text-lg sm:text-2xl font-bold tracking-tight">User Profile</span>
-                
-                <div class="flex items-center space-x-3 text-right">
-                    <div class="flex items-center space-x-2 bg-gray-800 p-2 rounded-xl shadow-inner border border-gray-700">
-                        <div class="text-sm font-medium text-gray-400 flex items-center">
-                            <i class="fas fa-wallet text-gray-400 mr-2"></i>Balance:
-                        </div>
-                        <span class="text-lg font-extrabold text-white">
-                            $0.00
-                        </span>
-                    </div>
-                    <div class="flex items-center space-x-2 bg-gray-800 p-2 rounded-xl shadow-inner border border-secondary-gold">
-                        <div class="text-sm font-medium text-gray-400 flex items-center">
-                            <i class="fas fa-gift text-secondary-gold mr-2"></i>Bonus:
-                        </div>
-                        <span class="text-lg font-extrabold text-secondary-gold">
-                            $800.00
-                        </span>
-                    </div>
+        <div class="mt-auto p-6 border-t border-gray-800">
+            <div class="flex items-center space-x-3 p-3 bg-black/30 rounded-xl">
+                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="text-xs font-semibold text-emerald-500 uppercase tracking-widest">System Online</span>
+            </div>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col lg:ml-72">
+        
+        <header class="h-20 border-b border-gray-800 flex items-center justify-between px-8 sticky top-0 bg-[#080C10]/80 backdrop-blur-md z-40">
+            <div>
+                <h2 class="text-sm font-medium text-gray-500 uppercase tracking-widest">Terminal</h2>
+                <h1 class="text-xl font-bold text-white">Security Profile</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center bg-gray-900 rounded-full px-4 py-1.5 border border-gray-800">
+                    <i class="fas fa-wallet text-emerald-500 mr-3 text-sm"></i>
+                    <span class="text-sm font-bold">$0.00</span>
+                </div>
+                <div class="flex items-center bg-emerald-500/10 text-emerald-500 rounded-full px-4 py-1.5 border border-emerald-500/20">
+                    <i class="fas fa-bolt mr-2 text-sm"></i>
+                    <span class="text-sm font-black">$10,000.00</span>
                 </div>
             </div>
         </header>
 
-        <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <h1 class="text-4xl font-extrabold mb-8 text-secondary-gold border-b border-gray-700 pb-2">Account Settings & Profile</h1>
-
-            <div class="bg-secondary-dark p-8 rounded-xl shadow-2xl space-y-8">
-                
-                <div class="flex items-center space-x-6 pb-6 border-b border-gray-700">
-                    <div class="relative">
-                        <img id="user-avatar" class="h-20 w-20 rounded-full object-cover border-4 border-accent-green" src="https://placehold.co/80x80/10b981/ffffff?text=U" alt="User Avatar" />
-                        <span class="absolute bottom-0 right-0 h-4 w-4 bg-accent-green rounded-full ring-2 ring-secondary-dark"></span>
+        <main class="p-6 lg:p-12 max-w-5xl">
+            <section class="glass-card rounded-3xl p-8 mb-8 relative overflow-hidden">
+                <div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                        <img id="user-avatar" class="relative h-28 w-28 rounded-full object-cover border-4 border-gray-900 shadow-2xl" src="https://placehold.co/120x120/10b981/ffffff?text=U" alt="Avatar" />
                     </div>
-                    <div>
-                        <p id="display-username" class="text-2xl font-bold">User Name</p>
-                        <p class="text-gray-text">user-id: <span class="text-sm" id="user-id">Loading...</span></p>
-                        <p class="text-sm font-medium text-secondary-gold mt-1"><i class="fas fa-shield-alt mr-1"></i> Authenticated Client</p>
+                    
+                    <div class="text-center md:text-left flex-1">
+                        <div class="flex items-center justify-center md:justify-start gap-3 mb-1">
+                            <h2 id="display-username" class="text-3xl font-black text-white">User Name</h2>
+                            <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">VERIFIED</span>
+                        </div>
+                        <p class="text-gray-500 font-mono text-sm mb-4">UID: <span id="user-id" class="text-gray-300">...</span></p>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="stat-card">
+                                <p class="text-[10px] text-gray-400 uppercase font-bold">Account Tier</p>
+                                <p class="text-emerald-500 font-bold">Executive Platinum</p>
+                            </div>
+                            <div class="stat-card">
+                                <p class="text-[10px] text-gray-400 uppercase font-bold">Network Status</p>
+                                <p class="text-blue-400 font-bold">Encrypted Node</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <div class="glass-card rounded-2xl p-8">
+                        <h3 class="text-lg font-bold text-white mb-6 flex items-center">
+                            <i class="fas fa-cog mr-3 text-emerald-500"></i> Local Preferences
+                        </h3>
+                        
+                        <form id="profile-form" class="space-y-6">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-400 uppercase mb-2 ml-1">Identity Display Name</label>
+                                <div class="relative">
+                                    <i class="fas fa-at absolute left-4 top-4 text-gray-600"></i>
+                                    <input
+                                        type="text"
+                                        id="user_name_input"
+                                        class="w-full pl-12 pr-4 py-3.5 bg-black/40 border border-gray-800 rounded-xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all text-white"
+                                        placeholder="Enter alias..."
+                                    />
+                                </div>
+                                <p class="text-[11px] text-gray-500 mt-3 italic">
+                                    <i class="fas fa-info-circle mr-1"></i> Changes are persistent to this browser session.
+                                </p>
+                            </div>
+
+                            <button type="submit" id="save-button" class="btn-glow w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-black rounded-xl transition-all flex items-center justify-center gap-2">
+                                <i class="fas fa-save"></i> UPDATE IDENTITY
+                            </button>
+                        </form>
                     </div>
                 </div>
 
-                <form id="profile-form" class="space-y-6">
-                    <div>
-                        <label for="user_name_input" class="block text-sm font-medium text-gray-400 mb-1">Display Name (Saves Permanently Locally)</label>
-                        <input
-                            type="text"
-                            id="user_name_input"
-                            placeholder="Enter your unique user name"
-                            class="w-full p-3 bg-primary-dark border border-gray-700 rounded-lg focus:ring-secondary-gold focus:border-secondary-gold"
-                        />
-                        <p class="text-xs text-red-400 mt-1">⚠️ This data is only meant for you</p>
+                <div class="space-y-6">
+                    <div class="glass-card rounded-2xl p-6 border-l-4 border-yellow-500">
+                        <h4 class="text-yellow-500 font-bold text-sm mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Security Notice</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">Ensure you do not share your Client ID with unauthorized parties. Terminal data is locally encrypted.</p>
                     </div>
-
-                    <div class="pt-4">
-                        <button type="submit" id="save-button" class="px-6 py-3 bg-accent-green text-primary-dark font-bold rounded-lg shadow-lg hover:bg-green-600 transition duration-150">
-                            Save Changes
+                    
+                    <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 shadow-xl">
+                        <h4 class="text-white font-bold mb-1">Referral Program</h4>
+                        <p class="text-white/70 text-xs mb-4">Invite others and earn 5% on every deposit.</p>
+                        <button class="w-full py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-lg transition-all border border-white/20">
+                            VIEW DETAILS
                         </button>
                     </div>
-                </form>
-
+                </div>
             </div>
-
         </main>
-        
-        <footer class="bg-secondary-dark mt-12 py-6 border-t border-gray-700">
-            <div class="text-center text-gray-400 text-sm">
-                Client ID: <span class="text-xs text-gray-500" id="footer-user-id">Loading...</span> | &copy; 2026 Zhee Hong FX.
-            </div>
+
+        <footer class="mt-auto p-8 border-t border-gray-800 text-center">
+            <p class="text-gray-600 text-[10px] uppercase tracking-[0.2em]">
+                &copy; 2026 Zhee Hong FX &bull; Client Hash: <span id="footer-user-id" class="text-gray-500">...</span>
+            </p>
         </footer>
     </div>
 
     <script>
         const NAV_ITEMS = [
-            { id: 'profile.html', icon: 'fas fa-user', label: 'User Profile' },
-            { id: 'referrals.html', icon: 'fas fa-share-alt', label: 'Referrals' },
-            { id: 'dashboard.html', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
+            { id: 'profile.html', icon: 'fas fa-id-card', label: 'Identity' },
+            { id: 'dashboard.html', icon: 'fas fa-chart-pie', label: 'Overview' },
+            { id: 'referrals.html', icon: 'fas fa-users', label: 'Network' },
             { isDivider: true },
-            { id: 'wallet.html', icon: 'fas fa-wallet', label: 'Wallet' },
-            { id: 'amount.html', icon: 'fas fa-money-bill-alt', label: 'Current Assets' },
-            { id: '#', icon: 'fas fa-arrow-down', label: 'Withdraw', color: 'text-red-500' },
-            { id: '#', icon: 'fas fa-arrow-up', label: 'Deposit', color: 'text-green-500' },
+            { id: 'wallet.html', icon: 'fas fa-vault', label: 'Secure Wallet' },
+            { id: 'amount.html', icon: 'fas fa-coins', label: 'Asset Management' },
+            { id: 'Dashboard_forex.html', icon: 'fas fa-terminal', label: 'Trading Engine' },
             { isDivider: true },
-            { id: 'Dashboard_forex.html', icon: 'fas fa-chart-line', label: 'Forex Trading Terminal' },
-            { isDivider: true },
-            { id: 'logout', icon: 'fas fa-sign-out-alt', label: 'Log Out', color: 'text-gray-400' },
+            { id: 'logout', icon: 'fas fa-power-off', label: 'Terminate Session', color: 'text-red-400' },
         ];
         
         const CURRENT_PAGE = 'profile.html';
@@ -131,33 +184,30 @@
         function renderNav() {
             const navList = document.getElementById('nav-list');
             navList.innerHTML = NAV_ITEMS.map(item => {
-                if (item.isDivider) {
-                    return `<li class="border-t border-gray-700 pt-3"></li>`;
-                }
+                if (item.isDivider) return `<div class="h-px bg-gray-800 my-4 mx-2"></div>`;
+                
                 const isActive = item.id === CURRENT_PAGE;
-                const activeClass = isActive ? 'bg-gray-700 text-white' : 'hover:bg-gray-700 hover:text-white';
+                const activeStyle = isActive 
+                    ? 'bg-emerald-500/10 text-emerald-500 border-l-4 border-emerald-500' 
+                    : 'text-gray-500 hover:text-white';
+                
                 return `
-                    <li>
-                        <a href="${item.id}" class="menu-item w-full text-left ${item.color || 'text-gray-400'} ${activeClass}">
-                            <i class="${item.icon} mr-3"></i> ${item.label}
-                        </a>
-                    </li>
+                    <a href="${item.id}" class="menu-item flex items-center px-4 py-3 rounded-lg text-sm font-semibold ${activeStyle} ${item.color || ''}">
+                        <i class="${item.icon} w-6"></i>
+                        <span>${item.label}</span>
+                    </a>
                 `;
             }).join('');
         }
 
         function loadUserData() {
-            // Simulate unique user ID (using a basic UUID if needed)
-            let userId = localStorage.getItem('localUserId');
-            if (!userId) {
-                userId = crypto.randomUUID();
-                localStorage.setItem('localUserId', userId);
-            }
+            let userId = localStorage.getItem('localUserId') || crypto.randomUUID().split('-')[0].toUpperCase();
+            if (!localStorage.getItem('localUserId')) localStorage.setItem('localUserId', userId);
+            
             document.getElementById('user-id').textContent = userId;
             document.getElementById('footer-user-id').textContent = userId;
 
-            // Load saved user name
-            let userName = localStorage.getItem('userName') || 'User Name';
+            let userName = localStorage.getItem('userName') || 'Alpha_User';
             document.getElementById('user_name_input').value = userName;
             updateDisplay(userName);
         }
@@ -165,23 +215,27 @@
         function updateDisplay(userName) {
             document.getElementById('display-username').textContent = userName;
             const initial = userName.charAt(0).toUpperCase();
-            document.getElementById('user-avatar').src = `https://placehold.co/80x80/10b981/ffffff?text=${initial}`;
+            document.getElementById('user-avatar').src = `https://placehold.co/120x120/10b981/000000?text=${initial}`;
         }
 
         document.getElementById('profile-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const input = document.getElementById('user_name_input');
-            let newName = input.value.trim() || 'User Name';
+            let newName = input.value.trim() || 'Alpha_User';
             
             localStorage.setItem('userName', newName);
             updateDisplay(newName);
             
             const button = document.getElementById('save-button');
-            button.textContent = 'Saved!';
-            setTimeout(() => { button.textContent = 'Save Changes'; }, 1500);
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i> SYNCED';
+            button.classList.replace('bg-emerald-500', 'bg-blue-500');
+            
+            setTimeout(() => { 
+                button.innerHTML = originalText;
+                button.classList.replace('bg-blue-500', 'bg-emerald-500');
+            }, 2000);
         });
-
-        // Removed the event listener for menuToggle
 
         window.onload = () => {
             renderNav();
