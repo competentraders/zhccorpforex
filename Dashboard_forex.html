@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elite Dashboard - Zhee Hong FX Trading</title>
-    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -80,32 +79,41 @@
             display: block; 
         }
     </style>
-    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="bg-primary-dark font-sans text-white min-h-screen overflow-x-hidden">
 
-    <!-- Hamburger Menu (Sidebar) -->
+    <div id="welcomePopup" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-80 px-4">
+        <div class="bg-secondary-dark border-2 border-secondary-gold rounded-2xl p-8 max-w-md w-full text-center shadow-2xl transform transition-all">
+            <div class="text-secondary-gold text-5xl mb-4">
+                <i class="fas fa-gift"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-4 text-white">Exclusive Offer!</h2>
+            <p class="text-gray-300 mb-6 leading-relaxed">
+                Welcome new users, a $10,000 Dollar has been credited to you ,and you can withdraw it immediately when you deposit $3000 ,this offer is for first timer.
+            </p>
+            <button onclick="closePopup()" class="w-full bg-secondary-gold text-primary-dark font-extrabold py-3 rounded-lg hover:bg-yellow-400 transition duration-200">
+                CLAIM NOW
+            </button>
+        </div>
+    </div>
+
     <div id="sidebar" class="sidebar fixed top-0 left-0 w-64 h-full bg-secondary-dark z-50 shadow-2xl overflow-y-auto scroll-container lg:static lg:w-64 lg:transform-none">
         <div class="p-6">
-            <!-- Menu Header with Close Button -->
             <div class="flex justify-between items-center mb-8 border-b border-gray-700 pb-4">
                 <h2 class="text-2xl font-extrabold text-secondary-gold">
                     <i class="fas fa-lock text-accent-green mr-2"></i> USERS PROFILE MENU
                 </h2>
-                <!-- Close Button (Visible when open on mobile) -->
                 <button id="menuClose" class="lg:hidden text-gray-400 text-xl p-2 rounded-lg hover:bg-gray-700">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
             <ul class="space-y-3">
-                <!-- User Specifics -->
                 <li><a href="profile.html" class="menu-item"><i class="fas fa-user mr-3"></i> User Profile</a></li>
                 <li><a href="referrals.html" class="menu-item"><i class="fas fa-share-alt mr-3"></i> Referrals</a></li>
                 <li><a href="dashboard.html" class="menu-item"><i class="fas fa-tachometer-alt mr-3"></i> Dashboard</a></li>
                 <li class="border-t border-gray-700 pt-3"></li>
-                <!-- Financials -->
                 <li><a href="wallet.html" class="menu-item"><i class="fas fa-wallet mr-3"></i> Wallet</a></li>
 
 
@@ -117,7 +125,6 @@
                 <li><a href="deposit.html" class="menu-item text-accent-green hover:text-green-400"><i class="fas fa-arrow-up mr-3"></i> Deposit</a></li>
 
                 <li class="border-t border-gray-700 pt-3"></li>
-                <!-- Marcus Zee AI Features -->
                 <li><a href="marcus.html" class="menu-item font-bold text-secondary-gold"><i class="fas fa-robot mr-3"></i> Marcus Zee A.I</a></li>
 
 
@@ -145,7 +152,6 @@
 
 
 
-                <!-- Company & Info -->
                 <li><a href="about_marcus.html" class="menu-item"><i class="fas fa-info-circle mr-3"></i> About Marcus Zee</a></li>
                 <li><a href="focus.html" class="menu-item"><i class="fas fa-bullseye mr-3"></i> Our Focus</a></li>
                 <li><a href="sponsor.html" class="menu-item"><i class="fas fa-handshake mr-3"></i> Sponsor</a></li>
@@ -153,7 +159,6 @@
                 <li><a href="awards.html" class="menu-item"><i class="fas fa-trophy mr-3"></i> Awards</a></li>
                 <li><a href="ceo.html" class="menu-item"><i class="fas fa-user-tie mr-3"></i> Founder and CEO</a></li>
                 <li class="border-t border-gray-700 pt-3"></li>
-                <!-- Support & Social -->
                 <li><a href="mailto:imarket247weekly@gmail.com" class="menu-item"><i class="fas fa-envelope mr-3"></i> Marcus Zee Direct Mail</a></li>
 
 
@@ -172,41 +177,32 @@
 
                 <li><a href="https://www.facebook.com/profile.php?id=61584454134265" class="menu-item"><i class="fab fa-facebook mr-3"></i> Facebook Account</a></li>
                 
-                <!-- Logout -->
                 <li><a href="login.html" onclick="logout()" class="menu-item text-gray-400 hover:text-white"><i class="fas fa-sign-out-alt mr-3"></i> Log Out</a></li>
             </ul>
         </div>
     </div>
 
-    <!-- Main Content Wrapper -->
     <div id="mainContent" class="lg:ml-64 transition-all duration-300 min-h-screen">
 
-        <!-- Header/Account Bar -->
         <header class="bg-secondary-dark shadow-lg sticky top-0 z-40">
             <div class="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 
-                <!-- Hamburger Button (Mobile) -->
                 <button id="menuToggle" class="lg:hidden text-white text-xl p-2 rounded-lg hover:bg-gray-700">
                     <i class="fas fa-bars"></i>
                 </button>
                 
-                <!-- Logo/Title -->
                 <span class="text-white text-2xl font-bold tracking-tight hidden sm:block">ZHC USERS Dashboard</span>
 
-                <!-- User Account Balance & Action Buttons -->
                 <div class="flex items-center space-x-3 text-right">
                     
-                    <!-- Deposit Button -->
                     <a href="deposit.html" class="bg-accent-green hover:bg-green-600 text-primary-dark font-semibold py-2 px-3 rounded-lg text-xs sm:text-sm transition duration-150 shadow-md whitespace-nowrap">
                         <i class="fas fa-plus mr-1"></i> Deposit
                     </a>
 
-                    <!-- Withdraw Button -->
                     <a href="withdraw.html" class="bg-accent-red hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-lg text-xs sm:text-sm transition duration-150 shadow-md whitespace-nowrap">
                         <i class="fas fa-minus mr-1"></i> Withdraw
                     </a>
 
-                    <!-- Balance Display -->
                     <div class="flex items-center space-x-2 bg-gray-800 p-2 rounded-xl shadow-inner border border-secondary-gold">
                         <div class="text-sm font-medium text-gray-400 flex items-center">
                             <i class="fas fa-wallet text-secondary-gold mr-2"></i>
@@ -218,7 +214,6 @@
             </div>
         </header>
 
-        <!-- Dynamic Forex Chart Simulator (New Location: Immediately after Header) -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8">
             <div class="bg-secondary-dark rounded-xl p-6 shadow-2xl border-l-4 border-accent-green">
                 <div class="flex justify-between items-center mb-4">
@@ -234,16 +229,13 @@
                 </div>
             </div>
         </div>
-        <!-- End of Forex Chart -->
 
 
-        <!-- Main Body Content -->
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-0">
             
             <h1 class="text-3xl font-extrabold mb-4 text-secondary-gold">Elite Investor Portal</h1>
             <p id="userNameDisplay" class="text-gray-400 mb-6">Welcome back, Investor! Your financial freedom awaits.</p>
 
-            <!-- Withdrawal Rule Banner -->
             <a href="withdraw.html">
                 <div class="pulsing-ad bg-accent-red bg-opacity-20 text-accent-red font-medium p-4 rounded-xl mb-8 border-l-4 border-accent-red shadow-2xl transition duration-300 hover:bg-opacity-30">
                     <i class="fas fa-exclamation-triangle mr-2"></i>
@@ -251,12 +243,10 @@
                 </div>
             </a>
 
-            <!-- Investment Options Section -->
             <h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-2">Marcus Zee Guaranteed Investment Plans</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 
-                <!-- Investment Card Template -->
                 <template id="investmentCardTemplate">
                     <div class="bg-secondary-dark rounded-xl p-6 shadow-xl flex flex-col justify-between border-t-4 hover:border-secondary-gold transition duration-300">
                         <div class="text-center mb-4">
@@ -281,7 +271,6 @@
                 
             </div>
             
-            <!-- Invest 4 Me Plan (Highlight) -->
             <div class="mt-12">
                 <div class="bg-secondary-dark rounded-xl p-8 shadow-2xl border-4 border-secondary-gold text-center">
                     <h2 class="text-3xl font-extrabold text-secondary-gold mb-2">Invest 4 Me - 3 Year Plan</h2>
@@ -295,19 +284,16 @@
                 </div>
             </div>
             
-            <!-- Cryptocurrency List (New Location: Before Footer) -->
             <div class="mt-12 mb-8">
                 <h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-2">Top Cryptocurrency Movers</h2>
                 <div class="bg-secondary-dark rounded-xl p-6 shadow-xl border-l-4 border-secondary-gold">
                     <div id="cryptoList" class="space-y-3 scroll-container max-h-96 overflow-y-auto pr-2">
-                        <!-- Crypto items will be injected here dynamically -->
                     </div>
                 </div>
             </div>
 
         </main>
 
-        <!-- Footer -->
         <footer class="bg-secondary-dark mt-12 py-8 border-t border-gray-700">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
                 <p>&copy; <span id="currentYear"></span> Zhee Hong Capital. All rights reserved. Trading with Marcus Zee AI is managed for guaranteed returns.</p>
@@ -322,9 +308,12 @@
 
     </div>
 
-    <!-- JavaScript for Dynamics and Logic -->
     <script>
-        // --- Configuration Data ---
+        // NEW: Function to close the welcome popup
+        function closePopup() {
+            document.getElementById('welcomePopup').style.display = 'none';
+        }
+
         const investmentPlans = [
             { title: "Weekly Return", duration: "7 Days Term", min: 500, max: 1000, roi: 0.20 },
             { title: "Bi-Weekly Amount", duration: "14 Days Term", min: 1000, max: 5000, roi: 0.45 },
@@ -342,13 +331,10 @@
             { name: "ADA/USD", price: 0.45, change: 0.02 },
         ];
         
-        // Candlestick data structure: Open, High, Low, Close
         const MAX_CANDLES = 40;
         let candleHistory = [];
         let currentPrice = 1.08345;
         let initialPrice = 1.08345;
-
-        // --- Utility Functions ---
 
         function formatCurrency(amount) {
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(amount);
@@ -358,10 +344,7 @@
             return price.toFixed(5);
         }
 
-        // --- Chart Simulation Functions ---
-
         function initializeCandleHistory() {
-            // Create initial varied candles for a better starting view
             for (let i = 0; i < MAX_CANDLES; i++) {
                 currentPrice += (Math.random() - 0.5) * 0.0001;
                 candleHistory.push({
@@ -375,156 +358,92 @@
         }
 
         function generateNewCandle() {
-            // Remove the oldest candle
             if (candleHistory.length >= MAX_CANDLES) {
                 candleHistory.shift();
             }
-
             const lastClose = candleHistory.length > 0 ? candleHistory[candleHistory.length - 1].close : currentPrice;
             const volatility = 0.00015;
-            
             const open = lastClose + (Math.random() - 0.5) * volatility * 0.1;
             const bias = (Math.random() < 0.5) ? -1 : 1;
             const closeChange = (Math.random() * volatility * 1.5) * bias;
             let close = open + closeChange;
-
             const bodyMin = Math.min(open, close);
             const bodyMax = Math.max(open, close);
-
             const highWick = Math.random() * volatility * 0.7;
             const lowWick = Math.random() * volatility * 0.7;
-
             const high = bodyMax + highWick;
             const low = bodyMin - lowWick;
-
             currentPrice = close;
             const newCandle = { open, high, low, close };
             candleHistory.push(newCandle);
-
             updateForexUi(open, close);
-            
-            // Use requestAnimationFrame for smooth redrawing
             requestAnimationFrame(drawCandlestickChart);
         }
 
         function updateForexUi(open, close) {
             const priceElement = document.getElementById('forexPrice');
             const changeElement = document.getElementById('forexChange');
-
             const isBullish = close > open;
             const color = isBullish ? 'var(--tw-colors-accent-green)' : 'var(--tw-colors-accent-red)';
             const totalChange = ((currentPrice - initialPrice) / initialPrice) * 100;
-            
             priceElement.textContent = formatForexPrice(currentPrice);
             priceElement.style.color = color;
-            
             changeElement.textContent = `${totalChange >= 0 ? '+' : ''}${totalChange.toFixed(2)}%`;
             changeElement.className = `text-base font-bold ${isBullish ? 'text-accent-green' : 'text-accent-red'}`;
-
         }
 
         function drawCandlestickChart() {
             const canvas = document.getElementById('forexChartCanvas');
             const container = document.getElementById('chartContainer');
             if (!canvas || !container) return;
-
-            // FIX: Explicitly set canvas size based on container client dimensions
-            const containerWidth = container.clientWidth;
-            const containerHeight = container.clientHeight; 
-            
-            if (containerWidth === 0 || containerHeight === 0) {
-                // Fallback dimensions if container is not rendered yet, though Tailwind should handle this.
-                canvas.width = 600; 
-                canvas.height = 320;
-            } else {
-                canvas.width = containerWidth;
-                canvas.height = containerHeight;
-            }
-            
+            canvas.width = container.clientWidth || 600;
+            canvas.height = container.clientHeight || 320;
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             if (candleHistory.length === 0) return;
-
-            // Find max and min price across the visible candles
             const visibleCandles = candleHistory.slice(-MAX_CANDLES);
             let maxPrice = -Infinity;
             let minPrice = Infinity;
-
             visibleCandles.forEach(c => {
                 maxPrice = Math.max(maxPrice, c.high);
                 minPrice = Math.min(minPrice, c.low);
             });
-            
             const priceRangeBuffer = (maxPrice - minPrice) * 0.05;
             maxPrice += priceRangeBuffer;
             minPrice -= priceRangeBuffer;
             const priceRange = maxPrice - minPrice;
-            
             if (priceRange <= 0) return;
-
-            // Configuration for drawing
             const padding = 10;
             const priceLabelWidth = 60; 
-            const chartAreaWidth = canvas.width - (2 * padding);
-            const chartAreaInnerWidth = chartAreaWidth - priceLabelWidth; 
+            const chartAreaInnerWidth = canvas.width - (2 * padding) - priceLabelWidth; 
             const chartAreaHeight = canvas.height - (2 * padding);
-            
             const candleSpacing = chartAreaInnerWidth / MAX_CANDLES;
-            const candleWidth = Math.max(3, candleSpacing * 0.75); // Slightly wider candles
+            const candleWidth = Math.max(3, candleSpacing * 0.75);
             const gap = candleSpacing - candleWidth;
-            
             const greenColor = '#10b981';
             const redColor = '#ef4444';
-            const gridColor = '#FFFFFF05'; // Very subtle grid
-
-            // Function to map price to Y-coordinate
             const getY = (price) => {
                 const normalizedY = (price - minPrice) / priceRange; 
                 return padding + chartAreaHeight * (1 - normalizedY);
             };
-            
-            // Draw horizontal grid lines (for context)
-            ctx.strokeStyle = gridColor;
-            ctx.lineWidth = 1;
-            for (let i = 0; i <= 5; i++) {
-                const y = padding + i * (chartAreaHeight / 5);
-                ctx.beginPath();
-                ctx.moveTo(padding, y);
-                ctx.lineTo(canvas.width - priceLabelWidth, y);
-                ctx.stroke();
-            }
-
-            // Draw Candlesticks
             visibleCandles.forEach((candle, index) => {
                 const x = padding + index * candleSpacing + (gap / 2);
-
                 let bodyY1 = getY(candle.open);
                 let bodyY2 = getY(candle.close);
                 let color = candle.close >= candle.open ? greenColor : redColor;
-
                 let bodyTop = Math.min(bodyY1, bodyY2);
                 let bodyBottom = Math.max(bodyY1, bodyY2);
                 let bodyHeight = Math.max(1, bodyBottom - bodyTop);
-
-                // 1. Draw the Wick (High/Low)
                 ctx.strokeStyle = color;
                 ctx.lineWidth = 1;
                 ctx.beginPath();
-                ctx.moveTo(x + candleWidth / 2, getY(candle.high)); // High
-                ctx.lineTo(x + candleWidth / 2, getY(candle.low));  // Low
+                ctx.moveTo(x + candleWidth / 2, getY(candle.high));
+                ctx.lineTo(x + candleWidth / 2, getY(candle.low));
                 ctx.stroke();
-
-                // 2. Draw the Body (Open/Close box)
                 ctx.fillStyle = color;
                 ctx.fillRect(x, bodyTop, candleWidth, bodyHeight);
-                ctx.strokeStyle = color; 
-                ctx.strokeRect(x, bodyTop, candleWidth, bodyHeight);
             });
-            
-            // Draw the current price line (Horizontal line)
-            ctx.strokeStyle = currentPrice >= candleHistory[candleHistory.length - 2].close ? greenColor : redColor;
-            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#FFFFFF15';
             ctx.setLineDash([5, 5]); 
             ctx.beginPath();
             const currentY = getY(currentPrice);
@@ -532,156 +451,51 @@
             ctx.lineTo(canvas.width - priceLabelWidth, currentY); 
             ctx.stroke();
             ctx.setLineDash([]); 
-
-            // Draw the current price label on the right edge
-            ctx.fillStyle = ctx.strokeStyle;
-            ctx.fillRect(canvas.width - priceLabelWidth + 5, currentY - 7, priceLabelWidth - 10, 14); 
-            ctx.fillStyle = 'white';
-            ctx.font = '10px Inter';
-            ctx.fillText(formatForexPrice(currentPrice), canvas.width - priceLabelWidth + 8, currentY + 3);
         }
-        
-        // --- Crypto Simulation Function ---
         
         function updateCryptoPrices() {
             const listContainer = document.getElementById('cryptoList');
             if (!listContainer) return;
             listContainer.innerHTML = ''; 
-
             cryptoPairs.forEach(pair => {
                 const volatility = pair.price * 0.012; 
                 const randomChange = (Math.random() - 0.5) * volatility;
-                
-                const oldPrice = pair.price;
-                const newPrice = pair.price + randomChange;
-                
-                const percentageChange = ((newPrice - oldPrice) / oldPrice) * 100;
-                
-                pair.price = newPrice; 
-                
-                const colorClass = percentageChange >= 0 ? 'text-accent-green' : 'text-accent-red';
-                const icon = percentageChange >= 0 ? '<i class="fas fa-caret-up"></i>' : '<i class="fas fa-caret-down"></i>';
-
+                pair.price += randomChange;
                 const item = document.createElement('div');
-                item.className = 'flex justify-between items-center p-3 rounded-lg bg-gray-700/50 shadow-sm transition duration-300 ease-in-out transform hover:scale-[1.01]';
-                item.innerHTML = `
-                    <span class="font-medium text-white">${pair.name}</span>
-                    <div class="text-right">
-                        <span class="text-sm font-semibold text-gray-300">${formatCurrency(newPrice)}</span>
-                        <span class="text-xs ml-2 ${colorClass} font-bold">${icon} ${Math.abs(percentageChange).toFixed(2)}%</span>
-                    </div>
-                `;
+                item.className = 'flex justify-between items-center p-3 rounded-lg bg-gray-700/50';
+                item.innerHTML = `<span class="font-medium">${pair.name}</span><span>${formatCurrency(pair.price)}</span>`;
                 listContainer.appendChild(item);
             });
         }
-
-        // --- Investment Plan Rendering ---
 
         function renderInvestmentPlans() {
             const container = document.querySelector('.grid.gap-6');
             const template = document.getElementById('investmentCardTemplate');
             if (!container || !template) return;
             container.innerHTML = ''; 
-
             investmentPlans.forEach(plan => {
                 const card = template.content.cloneNode(true);
-                const roiMin = plan.min * (1 + plan.roi);
-                const roiMax = plan.max * (1 + plan.roi);
-
                 card.querySelector('.plan-title').textContent = plan.title;
                 card.querySelector('.plan-duration').textContent = `Duration: ${plan.duration}`;
-                
                 card.querySelector('.plan-invest-range').textContent = formatCurrency(plan.min) + ' - ' + formatCurrency(plan.max);
-                card.querySelector('.plan-withdraw-range').textContent = formatCurrency(roiMin) + ' - ' + formatCurrency(roiMax);
-                card.querySelector('.border-t-4').classList.add('border-accent-green'); 
-
-                if (plan.title.includes('Bi-Weekly')) {
-                    card.querySelector('.border-t-4').classList.replace('border-accent-green', 'border-accent-red');
-                } else if (plan.title.includes('Monthly')) {
-                    card.querySelector('.border-t-4').classList.replace('border-accent-green', 'border-secondary-gold');
-                }
-
+                card.querySelector('.plan-withdraw-range').textContent = formatCurrency(plan.min * (1+plan.roi)) + ' - ' + formatCurrency(plan.max * (1+plan.roi));
                 container.appendChild(card);
             });
         }
 
-        // --- General App Logic ---
-
-        function setupMenuToggle() {
-            const sidebar = document.getElementById('sidebar');
-            const menuToggle = document.getElementById('menuToggle');
-            const menuClose = document.getElementById('menuClose');
-
-            function toggleMenu() {
-                sidebar.classList.toggle('open');
-                document.getElementById('mainContent').setAttribute('aria-hidden', sidebar.classList.contains('open'));
-            }
-
-            if (menuToggle) {
-                menuToggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleMenu();
-                });
-            }
-            
-            if (menuClose) {
-                menuClose.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleMenu();
-                });
-            }
-            
-            let userName = "Investor";
-            if (typeof window.__registered_user_data !== 'undefined' && Object.keys(window.__registered_user_data).length > 0) {
-                 const firstUser = window.__registered_user_data[Object.keys(window.__registered_user_data)[0]];
-                 if (firstUser && firstUser.firstName) {
-                     userName = firstUser.firstName;
-                 }
-            }
-            document.getElementById('userNameDisplay').textContent = `Welcome back, ${userName}! Your financial freedom awaits.`;
-        }
-
-        function logout() {
-            window.location.href = 'login.html';
-        }
-
-
-        // --- Initialization ---
-
         window.onload = function() {
             document.getElementById('currentYear').textContent = new Date().getFullYear();
-            
-            setupMenuToggle();
             renderInvestmentPlans();
-
-            // Initialize dynamic market data
             initializeCandleHistory();
-            
-            // Initial draw call
             requestAnimationFrame(drawCandlestickChart);
             updateCryptoPrices();
-
-            // Set update intervals for simulation
-            // Forex updates every 1.5 seconds (generating a new candle)
             setInterval(generateNewCandle, 1500); 
-            // Crypto updates every 3 seconds
             setInterval(updateCryptoPrices, 3000); 
             
-            // Re-draw chart on window resize to maintain responsiveness
-            window.addEventListener('resize', drawCandlestickChart);
+            const sidebar = document.getElementById('sidebar');
+            document.getElementById('menuToggle').onclick = () => sidebar.classList.add('open');
+            document.getElementById('menuClose').onclick = () => sidebar.classList.remove('open');
         };
-
-        // Add event listeners to all menu items to close the sidebar on mobile when clicked
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const sidebar = document.getElementById('sidebar');
-                if (sidebar.classList.contains('open')) {
-                    sidebar.classList.remove('open');
-                }
-            });
-        });
     </script>
-
 </body>
 </html>
-
